@@ -21,14 +21,17 @@ app.use(function(req, res, next) {
   next();
 });
 
+var staticPath = path.join(process.env.PWD, 'public');
+console.log(staticPath);
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api', posts);
-app.use(express.static(path.join(process.env.PWD, 'public')));
-
+app.use(express.static(staticPath));
+app.use('/', express.static(staticPath));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
