@@ -26291,8 +26291,7 @@
 	var DELETE_POST_FAILURE = exports.DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
 	var RESET_DELETED_POST = exports.RESET_DELETED_POST = 'RESET_DELETED_POST';
 
-	var ROOT_URL = 'http://localhost:3000/api';
-
+	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
 	function fetchPosts() {
 	  var request = _axios2.default.get(ROOT_URL + '/posts');
 
