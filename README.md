@@ -26,5 +26,33 @@ In production, we need to compile the **latest** client js and place it to `publ
 3. Open browser and go to : `localhost:3000`.
 
 
+#### Deploying this to Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+
+####Cloning And Heroku
+Running your own instance on <a href="https://heroku.com">Heroku</a>.
+
+1. `git clone https://github.com/rajaraodv/react-redux-blog.git`
+2. `cd react-redux-blog`
+3. `heroku login` (enter heroku credentials)
+4. `heroku init`
+5. `heroku create` 
+6. `heroku addons:create mongolab`  <-- Add Mongolab test DB
+7. `git push heroku master`
+
+
+#####Making changes to your app and pushing it to Heroku
+Everytime you make changes to the front end, you need to build it, and do git commit before pushing it to Heroku test server.
+
+1. `npm run build` #build new React app JS
+2. `git add .` #Add change to git
+3. `git commit -m "<your comment>" 
+4. `git push heroku master`
+5. `heroku open`
+
+I usually have something like below that combines all the steps. I just change the commit message everytime.
+
+`npm run build && git add . && git commit -m "made changes" && git push heroku master && heroku open`
 
 
