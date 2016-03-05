@@ -1,5 +1,9 @@
 # React Redux CRUD App
 
+#Live App
+https://protected-escarpment-79486.herokuapp.com/
+
+
 #Installation
 1. Install <a href="https://nodejs.org" target="_blank">Node.js</a> 
 2. Install <a target="_blank" href="https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/#install-mongodb-community-edition-with-homebrew">MongoDB</a>
@@ -7,8 +11,8 @@
 4. `cd react-redux-blog`
 5. `npm install`
 
-
 #Running On Heroku
+You can create your own version of the app (w/ everyting adding MongoDB!)
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 #Running Locally
