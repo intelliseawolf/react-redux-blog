@@ -25,7 +25,7 @@ export const DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
 export const RESET_DELETED_POST = 'RESET_DELETED_POST';
 
 
-const ROOT_URL = 'http://localhost:3000/api';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
 
 export function fetchPosts() {
   const request = axios.get(`${ROOT_URL}/posts`);
