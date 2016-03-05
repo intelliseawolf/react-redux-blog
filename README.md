@@ -8,7 +8,10 @@
 5. `npm install`
 
 
-#Running
+#Running On Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+#Running Locally
 You need two terminals, one for client and the other for server.
 
 ####Development
@@ -26,11 +29,8 @@ In production, we need to compile the **latest** client js and place it to `publ
 3. Open browser and go to : `localhost:3000`.
 
 
-#### Deploying this to Heroku
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-
-####Cloning And Heroku
+####Cloning Locally And Pushing To Heroku
 Running your own instance on <a href="https://heroku.com">Heroku</a>.
 
 1. `git clone https://github.com/rajaraodv/react-redux-blog.git`
