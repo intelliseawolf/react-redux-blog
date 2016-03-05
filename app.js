@@ -21,8 +21,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-var staticPath = path.join(process.env.PWD, 'public');
-console.log(staticPath);
+var staticPath = 'public';
+console.log("staticPath = " + staticPath);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
