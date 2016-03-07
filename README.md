@@ -3,6 +3,8 @@
 #Live App
 https://protected-escarpment-79486.herokuapp.com/
 
+#Blog
+Please check out the blog for all the detals: <a href="https://medium.com/@rajaraodv/a-guide-for-building-a-react-redux-crud-app-7fe0b8943d0f#.kjkfygy88" target="_blank">A Guide For Building A React Redux CRUD App</a>
 
 #Installation
 1. Install <a href="https://nodejs.org" target="_blank">Node.js</a> 
@@ -13,6 +15,7 @@ https://protected-escarpment-79486.herokuapp.com/
 
 #Running On Heroku
 You can create your own version of the app (w/ everyting adding MongoDB!)
+<br/>
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 #Running Locally
@@ -34,7 +37,7 @@ In production, we need to compile the **latest** client js and place it to `publ
 
 
 
-####Cloning Locally And Pushing To Heroku
+#Cloning Locally And Pushing To Heroku
 Running your own instance on <a href="https://heroku.com">Heroku</a>.
 
 1. `git clone https://github.com/rajaraodv/react-redux-blog.git`
@@ -46,7 +49,7 @@ Running your own instance on <a href="https://heroku.com">Heroku</a>.
 7. `git push heroku master`
 
 
-#####Making changes to your app and pushing it to Heroku
+###Making changes to your app and pushing it to Heroku
 Everytime you make changes to the front end, you need to build it, and do git commit before pushing it to Heroku test server.
 
 1. `npm run build` #build new React app JS
