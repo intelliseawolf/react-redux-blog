@@ -32,6 +32,8 @@ app.use(cookieParser());
 app.use('/api', posts);
 app.use(express.static(staticPath));
 app.use('/', express.static(staticPath));
+app.use('/posts/*', express.static(staticPath));
+app.use('/new/*', express.static(staticPath));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
