@@ -26209,7 +26209,7 @@
 	    case _index.CREATE_POST_SUCCESS:
 	      return _extends({}, state, { newPost: { post: action.payload, error: null, loading: false } });
 	    case _index.CREATE_POST_FAILURE:
-	      return _extends({}, state, { newPost: { post: null, error: action.payload, loading: false } });
+	      return _extends({}, state, { newPost: { post: null, error: action.payload.data, loading: false } });
 	    case _index.RESET_NEW_POST:
 	      return _extends({}, state, { newPost: { post: null, error: null, loading: false } });
 
@@ -26223,14 +26223,15 @@
 	      return _extends({}, state, { deletedPost: { post: null, error: null, loading: false } });
 
 	    case _index.VALIDATE_POST_FIELDS:
-	      return _extends({}, state, { postFieldsError: { title: null, categories: null, description: null, loading: true } });
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: true }) });
 	    case _index.VALIDATE_POST_FIELDS_SUCCESS:
-	      return _extends({}, state, { postFieldsError: { title: null, categories: null, description: null, loading: false } });
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: false }) });
 	    case _index.VALIDATE_POST_FIELDS_FAILURE:
-	      var result = action.payload;
-	      return _extends({}, state, { postFieldsError: { title: result.title, categories: result.categories, description: result.description, loading: false } });
+	      var result = action.payload.data;
+	      var error = { title: result.title, categories: result.categories, description: result.description };
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: error, loading: false }) });
 	    case _index.RESET_POST_FIELDS:
-	      return _extends({}, state, { postFieldsError: { title: null, categories: null, description: null, loading: false } });
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: null }) });
 	    default:
 	      return state;
 	  }
@@ -26241,8 +26242,7 @@
 	var INITIAL_STATE = { postsList: { posts: [], error: null, loading: false },
 	  newPost: { post: null, error: null, loading: false },
 	  activePost: { post: null, error: null, loading: false },
-	  deletedPost: { post: null, error: null, loading: false },
-	  postFieldsError: { title: null, categories: null, description: null, loading: false }
+	  deletedPost: { post: null, error: null, loading: false }
 	};
 
 /***/ },
@@ -31184,14 +31184,15 @@
 	  return errors;
 	}
 
+	//For instant async server validation
 	var asyncValidate = function asyncValidate(values, dispatch) {
 
 	  return new Promise(function (resolve, reject) {
 
 	    dispatch((0, _index.validatePostFields)(values)).then(function (response) {
 	      var data = response.payload.data;
-	      //if any one of these exist, then there is a field error
-	      if (data.title || data.categories || data.description) {
+	      //if status is not 200 or any one of the fields exist, then there is a field error
+	      if (response.payload.status != 200 || data.title || data.categories || data.description) {
 	        //let other components know of error by updating the redux` state
 	        dispatch((0, _index.validatePostFieldsFailure)(response.payload));
 	        reject(data); //this is for redux-form itself
@@ -31204,13 +31205,37 @@
 	  });
 	};
 
+	//For any field errors upon submission (i.e. not instant check)
+	var validateAndCreatePost = function validateAndCreatePost(values, dispatch) {
+
+	  return new Promise(function (resolve, reject) {
+
+	    dispatch((0, _index.createPost)(values)).then(function (response) {
+	      var data = response.payload.data;
+	      //if any one of these exist, then there is a field error
+	      if (response.payload.status != 200) {
+	        //let other components know of error by updating the redux` state
+	        dispatch((0, _index.createPostFailure)(response.payload));
+	        reject(data); //this is for redux-form itself
+	      } else {
+	          //let other components know that everything is fine by updating the redux` state
+	          dispatch((0, _index.createPostSuccess)(response.payload));
+	          resolve(); //this is for redux-form itself
+	        }
+	    });
+	  });
+	};
+
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    createPost: function createPost(props) {
-	      dispatch((0, _index.createPost)(props)).then(function (data) {
-	        dispatch((0, _index.createPostSuccess)(data.payload));
-	      });
-	    },
+	    //  createPost: (props) => {
+	    //  	dispatch(createPost(props))
+	    //   .then((data) =>
+	    //   {
+	    //    dispatch(createPostSuccess(data.payload));
+	    //  });
+	    // },
+	    createPost: validateAndCreatePost,
 	    resetMe: function resetMe() {
 	      dispatch((0, _index.resetNewPost)());
 	    }
@@ -31298,6 +31323,7 @@
 	      var categories = _props$fields.categories;
 	      var content = _props$fields.content;
 	      var handleSubmit = _props.handleSubmit;
+	      var submitting = _props.submitting;
 
 
 	      return _react2.default.createElement(
@@ -31358,7 +31384,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { type: 'submit', className: 'btn btn-primary' },
+	            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
 	            'Submit'
 	          ),
 	          _react2.default.createElement(
@@ -31376,7 +31402,11 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'panel-heading' },
-	            'Check out Form Validations!'
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              'Check out Form Validations!'
+	            )
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -31387,8 +31417,11 @@
 	              _react2.default.createElement(
 	                'li',
 	                null,
-	                'Client Side Validation:',
-	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                  'h4',
+	                  null,
+	                  'Client Side Validation:'
+	                ),
 	                '1. Click on ',
 	                _react2.default.createElement(
 	                  'b',
@@ -31404,34 +31437,68 @@
 	                  'b',
 	                  null,
 	                  'Result: "Enter a Title"'
-	                )
+	                ),
+	                _react2.default.createElement('br', null)
 	              ),
 	              _react2.default.createElement(
 	                'li',
 	                null,
-	                'Instant Server Side Validation:',
+	                _react2.default.createElement(
+	                  'h4',
+	                  null,
+	                  '"Instant" Server Side Validation:'
+	                ),
+	                'Calls server w/ field values when a field is blurred (even before submitting the form).',
 	                _react2.default.createElement('br', null),
-	                '1. Enter "redux" in the ',
+	                '1. Create a post',
+	                _react2.default.createElement('br', null),
+	                '2. Try to create another w/ the same ',
 	                _react2.default.createElement(
 	                  'b',
 	                  null,
 	                  'Title'
 	                ),
-	                ' field.',
 	                _react2.default.createElement('br', null),
-	                '2. Then click on Categories field (to trigger blur).',
+	                '3. Then click on Categories field (to trigger blur).',
 	                _react2.default.createElement('br', null),
 	                ' ',
 	                _react2.default.createElement(
 	                  'b',
 	                  null,
-	                  'Result: Title "redux" is not unique!'
+	                  'Result: You\'ll get error from the server saying "Title is not unique"'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                null,
+	                _react2.default.createElement(
+	                  'h4',
+	                  null,
+	                  '"onSubmit" Server Side Validation:'
+	                ),
+	                'This is the common scenario where the server throws some error when user clicks on submit button.',
+	                _react2.default.createElement('br', null),
+	                '1. Enter ',
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'test'
+	                ),
+	                ' in all the above fields .',
+	                _react2.default.createElement('br', null),
+	                '2. Press the Submit button.',
+	                _react2.default.createElement('br', null),
+	                ' ',
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'Result: Errors below every field'
 	                ),
 	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                  'i',
 	                  null,
-	                  'Note: We ask server to see if a post w/ title "redux" is unique. The server is hardcoded to return "Title "redux" is not unique!" if the title is "redux" for demo purposes'
+	                  'Note: The server is hardcoded to return this error for for demo purposes'
 	                )
 	              )
 	            )
