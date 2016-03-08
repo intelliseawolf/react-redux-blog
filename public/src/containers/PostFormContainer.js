@@ -2,8 +2,10 @@ import PostsForm from '../components/PostsForm.js';
 import { createPost, createPostSuccess, createPostFailure, resetNewPost, validatePostFields, validatePostFieldsSuccess, validatePostFieldsFailure } from '../actions/index';
 import { reduxForm } from 'redux-form';
 
+//Client side validation
 function validate(values) {
   const errors = {};
+
   if (!values.title || values.title.trim() === '') {
     errors.title = 'Enter a Title';
   }
@@ -65,18 +67,11 @@ const validateAndCreatePost = (values, dispatch) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-   //  createPost: (props) => {
-   //  	dispatch(createPost(props))
-   //   .then((data) => 
-   //   {
-   //    dispatch(createPostSuccess(data.payload));
-   //  });
-   // },
    createPost: validateAndCreatePost,
    resetMe: () =>{
-    dispatch(resetNewPost());
+      dispatch(resetNewPost());
+    }
   }
-}
 }
 
 
@@ -90,9 +85,9 @@ function mapStateToProps(state, ownProps) {
 // connect: first argument is mapStateToProps, 2nd is mapDispatchToProps
 // reduxForm: 1st is form config, 2nd is mapStateToProps, 3rd is mapDispatchToProps
 export default reduxForm({
-  form: 'PostsNewForm',
-  fields: ['title', 'categories', 'content'],
+  form: 'PostsNewForm', 
+  fields: ['title', 'categories', 'content'], 
   asyncValidate,
   asyncBlurFields: ['title'],
-  validate
+  validate 
 }, mapStateToProps, mapDispatchToProps)(PostsForm);

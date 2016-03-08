@@ -37,7 +37,7 @@ class PostsForm extends Component {
         </div>
 
         <div className={`form-group ${categories.touched && categories.invalid ? 'has-error' : ''}`}>
-          <label>Categories*</label>
+          <label className="control-label">Categories*</label>
           <input type="text" className="form-control" {...categories} />
           <div className="help-block">
             {categories.touched ? categories.error : ''}
@@ -45,7 +45,7 @@ class PostsForm extends Component {
         </div>
 
         <div className={`form-group ${content.touched && content.invalid ? 'has-error' : ''}`}>
-          <label>Content*</label>
+          <label className="control-label">Content*</label>
           <textarea className="form-control" {...content} />
           <div className="help-block">
             {content.touched ? content.error : ''}
@@ -64,6 +64,7 @@ class PostsForm extends Component {
       <div className="panel panel-default">
       <div className="panel-heading"><h3>Check out Form Validations!</h3></div>
       <div className="panel-body">
+        <b>Learn how to implement it by going through: <a href="https://medium.com/@rajaraodv/adding-a-robust-form-validation-to-react-redux-apps-616ca240c124" target="_blank">Adding A Robust Form Validation To React Redux Apps</a></b> 
         <ol>
          <li><h4>Client Side Validation:</h4>
               1. Click on <b>Title</b> field and leave it empty.
@@ -86,7 +87,7 @@ class PostsForm extends Component {
               <br/>1. Enter <b>test</b> in all the above fields . 
               <br/>2. Press the Submit button. 
               <br/> <b>Result: Errors below every field</b>
-               <br/><i>Note: The server is hardcoded to return this error for for demo purposes</i>
+               <br/><i>Note: The server is hardcoded to return this error for demo purposes</i>
         </li>        
         </ol>
 

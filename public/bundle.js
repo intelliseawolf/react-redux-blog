@@ -26158,8 +26158,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
-	  posts: _reducer_posts2.default,
-	  form: _reduxForm.reducer
+	  posts: _reducer_posts2.default, //<-- Posts
+	  form: _reduxForm.reducer // <-- redux-form
 	});
 
 	exports.default = rootReducer;
@@ -31169,8 +31169,10 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	//Client side validation
 	function validate(values) {
 	  var errors = {};
+
 	  if (!values.title || values.title.trim() === '') {
 	    errors.title = 'Enter a Title';
 	  }
@@ -31228,13 +31230,6 @@
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    //  createPost: (props) => {
-	    //  	dispatch(createPost(props))
-	    //   .then((data) =>
-	    //   {
-	    //    dispatch(createPostSuccess(data.payload));
-	    //  });
-	    // },
 	    createPost: validateAndCreatePost,
 	    resetMe: function resetMe() {
 	      dispatch((0, _index.resetNewPost)());
@@ -31357,7 +31352,7 @@
 	            { className: 'form-group ' + (categories.touched && categories.invalid ? 'has-error' : '') },
 	            _react2.default.createElement(
 	              'label',
-	              null,
+	              { className: 'control-label' },
 	              'Categories*'
 	            ),
 	            _react2.default.createElement('input', _extends({ type: 'text', className: 'form-control' }, categories)),
@@ -31372,7 +31367,7 @@
 	            { className: 'form-group ' + (content.touched && content.invalid ? 'has-error' : '') },
 	            _react2.default.createElement(
 	              'label',
-	              null,
+	              { className: 'control-label' },
 	              'Content*'
 	            ),
 	            _react2.default.createElement('textarea', _extends({ className: 'form-control' }, content)),
@@ -31411,6 +31406,16 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'panel-body' },
+	            _react2.default.createElement(
+	              'b',
+	              null,
+	              'Learn how to implement it by going through: ',
+	              _react2.default.createElement(
+	                'a',
+	                { href: 'https://medium.com/@rajaraodv/adding-a-robust-form-validation-to-react-redux-apps-616ca240c124', target: '_blank' },
+	                'Adding A Robust Form Validation To React Redux Apps'
+	              )
+	            ),
 	            _react2.default.createElement(
 	              'ol',
 	              null,
@@ -31498,7 +31503,7 @@
 	                _react2.default.createElement(
 	                  'i',
 	                  null,
-	                  'Note: The server is hardcoded to return this error for for demo purposes'
+	                  'Note: The server is hardcoded to return this error for demo purposes'
 	                )
 	              )
 	            )

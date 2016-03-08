@@ -3,8 +3,12 @@
 #Live App
 https://protected-escarpment-79486.herokuapp.com/
 
-#Blog
-Please check out the blog for all the detals: <a href="https://medium.com/@rajaraodv/a-guide-for-building-a-react-redux-crud-app-7fe0b8943d0f#.kjkfygy88" target="_blank">A Guide For Building A React Redux CRUD App</a>
+#Blogs
+Please check out the following blogs for all the detals: 
+
+1. <a href="https://medium.com/@rajaraodv/a-guide-for-building-a-react-redux-crud-app-7fe0b8943d0f#.kjkfygy88" target="_blank">A Guide For Building A React Redux CRUD App</a>
+2. <a href="https://medium.com/@rajaraodv/adding-a-robust-form-validation-to-react-redux-apps-616ca240c124" target="_blank">Adding A Robust Form Validation To React Redux Apps</a></b> 
+
 
 #Running On Heroku
 You can create your own version of the app (including MongoDB!)
