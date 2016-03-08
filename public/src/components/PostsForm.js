@@ -20,7 +20,7 @@ class PostsForm extends Component {
   }
 
   render() {
-    const {asyncValidating, fields: { title, categories, content }, handleSubmit } = this.props;
+    const {asyncValidating, fields: { title, categories, content }, handleSubmit, submitting } = this.props;
 
     return (
       <div>
@@ -52,9 +52,11 @@ class PostsForm extends Component {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary"  disabled={submitting} >Submit</button>
         <Link to="/" className="btn btn-error">Cancel</Link>
       </form>
+
+
       <br/>
       <br/>
       <br/>
@@ -70,15 +72,17 @@ class PostsForm extends Component {
          </li>
 
          <li>Instant Server Side Validation:
+              <br/>Create two posts w/ the same <b>Title</b>, you'll get error on the 2nd one from the server!
+              <br/><b>OR:</b>
               <br/>1. Enter "redux" in the <b>Title</b> field. 
               <br/>2. Then click on Categories field (to trigger blur). 
               <br/> <b>Result: Title "redux" is not unique!</b>
-               <br/><i>Note: We ask server to see if a post w/ title "redux" is unique. The server is hardcoded to return "Title "redux" is not unique!" if the title is "redux" for demo purposes</i>
+               <br/><i>The server is hardcoded to return "Title "redux" is not unique!" if the title is "redux" for demo purposes</i>
         </li>
-         </ol>
+        </ol>
 
+        </div>
       </div>
-</div>
 
       </div>
 

@@ -8,10 +8,9 @@ import {
 
 
 	const INITIAL_STATE = { postsList: {posts: [], error:null, loading: false},  
-							newPost:{post:null, error:null, loading: false}, 
+							newPost:{post:null, error: null, loading: false}, 
 							activePost:{post:null, error:null, loading: false}, 
 							deletedPost: {post: null, error:null, loading: false},
-              postFieldsError:{title: null, categories: null, description: null, loading: false}
 						};
 
 export default function(state = INITIAL_STATE, action) {
@@ -40,7 +39,7 @@ export default function(state = INITIAL_STATE, action) {
   case CREATE_POST_SUCCESS:
   	return {...state, newPost: {post:action.payload, error:null, loading: false}}
   case CREATE_POST_FAILURE:
-  	return {...state, newPost: {post:null, error:action.payload, loading: false}}
+  	return {...state, newPost: {post:null, error:action.payload.data, loading: false}}
   case RESET_NEW_POST:
   	return {...state,  newPost:{post:null, error:null, loading: false}}
 
@@ -55,14 +54,15 @@ export default function(state = INITIAL_STATE, action) {
   	return {...state,  deletedPost:{post:null, error:null, loading: false}}
 
   case VALIDATE_POST_FIELDS:
-    return {...state, postFieldsError:{title: null, categories: null, description: null, loading: true}}
+    return {...state, newPost:{...state.newPost, error: null, loading: true}}
   case VALIDATE_POST_FIELDS_SUCCESS:
-        return {...state, postFieldsError:{title: null, categories: null, description: null, loading: false}}
+    return {...state, newPost:{...state.newPost, error: null, loading: false}}
   case VALIDATE_POST_FIELDS_FAILURE:
-        let result = action.payload;
-        return {...state, postFieldsError:{title: result.title, categories: result.categories, description: result.description, loading: false}}
+    let result = action.payload.data;
+    let error = {title: result.title, categories: result.categories, description: result.description};
+    return {...state, newPost:{...state.newPost, error: error, loading: false}}
   case RESET_POST_FIELDS:
-      return {...state, postFieldsError:{title: null, categories: null, description: null, loading: false}}
+    return {...state, newPost:{...state.newPost, error: null, loading: null}}
   default:
     return state;
   }

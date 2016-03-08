@@ -31,7 +31,7 @@ router.get('/posts', function(req, res, next) {
 	.exec(function(err, posts) {
 		if (err) {
 			console.log(err);
-			return res.json({error: 'Could not retrieve posts'});
+			return res.status(500).json({error: 'Could not retrieve posts'});
 		}
 		res.json(posts);  
 	});00
@@ -40,6 +40,13 @@ router.get('/posts', function(req, res, next) {
 
 router.post('/posts', function(req, res, next) {
 	var body = req.body;
+
+	//simulate error if title, categories and content are all "test"
+	//This is demo field-validation error upon submission. 
+	if(body.title === 'test' && body.categories === 'test' && body.content === 'test') {
+		return res.status(403).json({title:'Title Error', categories: 'Categories Error', content: 'Content Error', submitError: 'Ultimate Error!'});
+	}
+
 	var post = new Post({
 		title: body.title,
 		categories: body.categories.split(','),
@@ -52,7 +59,7 @@ router.post('/posts', function(req, res, next) {
 
 		if (err) {
 			console.log(err);
-			return res.json({error: 'Could not save post'});
+			return res.status(500).json({error: 'Could not save post'});
 		}
 		res.json(post);
 	});
@@ -62,7 +69,7 @@ router.get('/posts/:id', function(req, res, next) {
 	Post.findById({'_id': req.params.id}, function(err, post){
 		if (err) {
 			console.log(err);
-			return res.json({error: 'Could not retrieve post'});
+			return res.status(500).json({error: 'Could not retrieve post'});
 		}
 		res.json(post);
 	});
@@ -77,7 +84,7 @@ router.delete('/posts/:id', function(req, res, next) {
 	Post.remove({'_id': id}, function(err, post) {
 		if (err) {
 			console.log(err);
-			return res.json({error: 'could not delete post'});
+			return res.status(500).json({error: 'could not delete post'});
 		}
 		res.json({result: 'Deleted Post'});
 	});
@@ -85,17 +92,26 @@ router.delete('/posts/:id', function(req, res, next) {
 
 router.post('/validatePostFields', function(req, res, next){
 	var body = req.body;
+	var title = body.title ? body.title.trim() : '';
 
 	//Simulating field error instead of actually going to DB.
 	//Returns 'title is not unique'if the post title = 'redux'
-	if(body.title && body.title.toLowerCase() === 'redux') {
-		return res.json({'title': 'Title "'+body.title+'" is not unique!'});
+	if(title.toLowerCase() === 'redux') {
+		return res.json({'title': 'Title "'+title+'" is not unique!'});
 	}
 
-	return res.json({});
-
-	// Add DB code to check uniqueness like Post.findone({title: body.title})
-
+	Post.findOne({'title': new RegExp(title, "i") }, function(err, post){
+		if (err) {
+			console.log(err);
+			return res.json({error: 'Could not find post for title uniqueness'});
+		}
+		if(post) {
+			res.json({title: 'Title "'+title+'" is not unique!'});
+		} else {
+			return res.json({});
+		}
+		
+	});
 });
 
 
