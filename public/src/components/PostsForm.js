@@ -23,6 +23,7 @@ class PostsForm extends Component {
     const {asyncValidating, fields: { title, categories, content }, handleSubmit } = this.props;
 
     return (
+      <div>
       <form onSubmit={handleSubmit(this.props.createPost.bind(this))}>
         <div className={`form-group ${title.touched && title.invalid ? 'has-error' : ''}`}>
           <label className="control-label">Title*</label>
@@ -54,6 +55,33 @@ class PostsForm extends Component {
         <button type="submit" className="btn btn-primary">Submit</button>
         <Link to="/" className="btn btn-error">Cancel</Link>
       </form>
+      <br/>
+      <br/>
+      <br/>
+
+      <div className="panel panel-default">
+      <div className="panel-heading">Check out Form Validations!</div>
+      <div className="panel-body">
+        <ol>
+         <li>Client Side Validation:
+              <br/>1. Click on <b>Title</b> field and leave it empty.
+              <br/>2. Then click on another field(to trigger blur).
+              <br/> <b>Result: "Enter a Title"</b>
+         </li>
+
+         <li>Instant Server Side Validation:
+              <br/>1. Enter "redux" in the <b>Title</b> field. 
+              <br/>2. Then click on Categories field (to trigger blur). 
+              <br/> <b>Result: Title "redux" is not unique!</b>
+               <br/><i>Note: We ask server to see if a post w/ title "redux" is unique. The server is hardcoded to return "Title "redux" is not unique!" if the title is "redux" for demo purposes</i>
+        </li>
+         </ol>
+
+      </div>
+</div>
+
+      </div>
+
     );
   }
 }

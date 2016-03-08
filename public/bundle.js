@@ -26222,6 +26222,15 @@
 	    case _index.RESET_DELETED_POST:
 	      return _extends({}, state, { deletedPost: { post: null, error: null, loading: false } });
 
+	    case _index.VALIDATE_POST_FIELDS:
+	      return _extends({}, state, { postFieldsError: { title: null, categories: null, description: null, loading: true } });
+	    case _index.VALIDATE_POST_FIELDS_SUCCESS:
+	      return _extends({}, state, { postFieldsError: { title: null, categories: null, description: null, loading: false } });
+	    case _index.VALIDATE_POST_FIELDS_FAILURE:
+	      var result = action.payload;
+	      return _extends({}, state, { postFieldsError: { title: result.title, categories: result.categories, description: result.description, loading: false } });
+	    case _index.RESET_POST_FIELDS:
+	      return _extends({}, state, { postFieldsError: { title: null, categories: null, description: null, loading: false } });
 	    default:
 	      return state;
 	  }
@@ -26232,7 +26241,8 @@
 	var INITIAL_STATE = { postsList: { posts: [], error: null, loading: false },
 	  newPost: { post: null, error: null, loading: false },
 	  activePost: { post: null, error: null, loading: false },
-	  deletedPost: { post: null, error: null, loading: false }
+	  deletedPost: { post: null, error: null, loading: false },
+	  postFieldsError: { title: null, categories: null, description: null, loading: false }
 	};
 
 /***/ },
@@ -26244,10 +26254,14 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.RESET_DELETED_POST = exports.DELETE_POST_FAILURE = exports.DELETE_POST_SUCCESS = exports.DELETE_POST = exports.RESET_ACTIVE_POST = exports.FETCH_POST_FAILURE = exports.FETCH_POST_SUCCESS = exports.FETCH_POST = exports.RESET_NEW_POST = exports.CREATE_POST_FAILURE = exports.CREATE_POST_SUCCESS = exports.CREATE_POST = exports.RESET_POSTS = exports.FETCH_POSTS_FAILURE = exports.FETCH_POSTS_SUCCESS = exports.FETCH_POSTS = undefined;
+	exports.RESET_DELETED_POST = exports.DELETE_POST_FAILURE = exports.DELETE_POST_SUCCESS = exports.DELETE_POST = exports.RESET_ACTIVE_POST = exports.FETCH_POST_FAILURE = exports.FETCH_POST_SUCCESS = exports.FETCH_POST = exports.RESET_POST_FIELDS = exports.VALIDATE_POST_FIELDS_FAILURE = exports.VALIDATE_POST_FIELDS_SUCCESS = exports.VALIDATE_POST_FIELDS = exports.RESET_NEW_POST = exports.CREATE_POST_FAILURE = exports.CREATE_POST_SUCCESS = exports.CREATE_POST = exports.RESET_POSTS = exports.FETCH_POSTS_FAILURE = exports.FETCH_POSTS_SUCCESS = exports.FETCH_POSTS = undefined;
 	exports.fetchPosts = fetchPosts;
 	exports.fetchPostsSuccess = fetchPostsSuccess;
 	exports.fetchPostsFailure = fetchPostsFailure;
+	exports.validatePostFields = validatePostFields;
+	exports.validatePostFieldsSuccess = validatePostFieldsSuccess;
+	exports.validatePostFieldsFailure = validatePostFieldsFailure;
+	exports.resetPostFields = resetPostFields;
 	exports.createPost = createPost;
 	exports.createPostSuccess = createPostSuccess;
 	exports.createPostFailure = createPostFailure;
@@ -26278,6 +26292,12 @@
 	var CREATE_POST_SUCCESS = exports.CREATE_POST_SUCCESS = 'CREATE_POST_SUCCESS';
 	var CREATE_POST_FAILURE = exports.CREATE_POST_FAILURE = 'CREATE_POST_FAILURE';
 	var RESET_NEW_POST = exports.RESET_NEW_POST = 'RESET_NEW_POST';
+
+	//Validate post fields like Title, Categries on the server
+	var VALIDATE_POST_FIELDS = exports.VALIDATE_POST_FIELDS = 'VALIDATE_POST_FIELDS';
+	var VALIDATE_POST_FIELDS_SUCCESS = exports.VALIDATE_POST_FIELDS_SUCCESS = 'VALIDATE_POST_FIELDS_SUCCESS';
+	var VALIDATE_POST_FIELDS_FAILURE = exports.VALIDATE_POST_FIELDS_FAILURE = 'VALIDATE_POST_FIELDS_FAILURE';
+	var RESET_POST_FIELDS = exports.RESET_POST_FIELDS = 'RESET_POST_FIELDS';
 
 	//Fetch post
 	var FETCH_POST = exports.FETCH_POST = 'FETCH_POST';
@@ -26314,6 +26334,34 @@
 	    payload: error
 	  };
 	}
+
+	function validatePostFields(props) {
+	  var request = _axios2.default.post(ROOT_URL + '/validatePostFields', props);
+
+	  return {
+	    type: VALIDATE_POST_FIELDS,
+	    payload: request
+	  };
+	}
+
+	function validatePostFieldsSuccess() {
+	  return {
+	    type: VALIDATE_POST_FIELDS_SUCCESS
+	  };
+	}
+
+	function validatePostFieldsFailure(error) {
+	  return {
+	    type: VALIDATE_POST_FIELDS_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetPostFields() {
+	  return {
+	    type: RESET_POST_FIELDS
+	  };
+	};
 
 	function createPost(props) {
 	  var request = _axios2.default.post(ROOT_URL + '/posts', props);
@@ -26367,7 +26415,6 @@
 	}
 
 	function fetchPostFailure(error) {
-	  debugger;
 	  return {
 	    type: FETCH_POST_FAILURE,
 	    payload: error
@@ -31124,19 +31171,38 @@
 
 	function validate(values) {
 	  var errors = {};
-
-	  if (!values.title) {
-	    errors.title = 'Enter a username';
+	  if (!values.title || values.title.trim() === '') {
+	    errors.title = 'Enter a Title';
 	  }
-	  if (!values.categories) {
+	  if (!values.categories || values.categories.trim() === '') {
 	    errors.categories = 'Enter categories';
 	  }
-	  if (!values.content) {
+	  if (!values.content || values.content.trim() === '') {
 	    errors.content = 'Enter some content';
 	  }
 
 	  return errors;
 	}
+
+	var asyncValidate = function asyncValidate(values, dispatch) {
+
+	  return new Promise(function (resolve, reject) {
+
+	    dispatch((0, _index.validatePostFields)(values)).then(function (response) {
+	      var data = response.payload.data;
+	      //if any one of these exist, then there is a field error
+	      if (data.title || data.categories || data.description) {
+	        //let other components know of error by updating the redux` state
+	        dispatch((0, _index.validatePostFieldsFailure)(response.payload));
+	        reject(data); //this is for redux-form itself
+	      } else {
+	          //let other components know that everything is fine by updating the redux` state
+	          dispatch((0, _index.validatePostFieldsSuccess)(response.payload)); //ps: this is same as dispatching RESET_POST_FIELDS
+	          resolve(); //this is for redux-form itself
+	        }
+	    });
+	  });
+	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
@@ -31162,6 +31228,8 @@
 	exports.default = (0, _reduxForm.reduxForm)({
 	  form: 'PostsNewForm',
 	  fields: ['title', 'categories', 'content'],
+	  asyncValidate: asyncValidate,
+	  asyncBlurFields: ['title'],
 	  validate: validate
 	}, mapStateToProps, mapDispatchToProps)(_PostsForm2.default);
 
@@ -31224,6 +31292,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
+	      var asyncValidating = _props.asyncValidating;
 	      var _props$fields = _props.fields;
 	      var title = _props$fields.title;
 	      var categories = _props$fields.categories;
@@ -31232,62 +31301,141 @@
 
 
 	      return _react2.default.createElement(
-	        'form',
-	        { onSubmit: handleSubmit(this.props.createPost.bind(this)) },
+	        'div',
+	        null,
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'form-group ' + (title.touched && title.invalid ? 'has-danger' : '') },
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Title'
-	          ),
-	          _react2.default.createElement('input', _extends({ type: 'text', className: 'form-control' }, title)),
+	          'form',
+	          { onSubmit: handleSubmit(this.props.createPost.bind(this)) },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'text-help' },
-	            title.touched ? title.error : ''
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'form-group ' + (categories.touched && categories.invalid ? 'has-danger' : '') },
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Categories'
+	            { className: 'form-group ' + (title.touched && title.invalid ? 'has-error' : '') },
+	            _react2.default.createElement(
+	              'label',
+	              { className: 'control-label' },
+	              'Title*'
+	            ),
+	            _react2.default.createElement('input', _extends({ type: 'text', className: 'form-control' }, title)),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'help-block' },
+	              title.touched ? title.error : ''
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'help-block' },
+	              asyncValidating === 'title' ? 'validating..' : ''
+	            )
 	          ),
-	          _react2.default.createElement('input', _extends({ type: 'text', className: 'form-control' }, categories)),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'text-help' },
-	            categories.touched ? categories.error : ''
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'form-group ' + (content.touched && content.invalid ? 'has-danger' : '') },
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Content'
+	            { className: 'form-group ' + (categories.touched && categories.invalid ? 'has-error' : '') },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Categories*'
+	            ),
+	            _react2.default.createElement('input', _extends({ type: 'text', className: 'form-control' }, categories)),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'help-block' },
+	              categories.touched ? categories.error : ''
+	            )
 	          ),
-	          _react2.default.createElement('textarea', _extends({ className: 'form-control' }, content)),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'text-help' },
-	            content.touched ? content.error : ''
+	            { className: 'form-group ' + (content.touched && content.invalid ? 'has-error' : '') },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Content*'
+	            ),
+	            _react2.default.createElement('textarea', _extends({ className: 'form-control' }, content)),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'help-block' },
+	              content.touched ? content.error : ''
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit', className: 'btn btn-primary' },
+	            'Submit'
+	          ),
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/', className: 'btn btn-error' },
+	            'Cancel'
 	          )
 	        ),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit', className: 'btn btn-primary' },
-	          'Submit'
-	        ),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/', className: 'btn btn-danger' },
-	          'Cancel'
+	          'div',
+	          { className: 'panel panel-default' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-heading' },
+	            'Check out Form Validations!'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-body' },
+	            _react2.default.createElement(
+	              'ol',
+	              null,
+	              _react2.default.createElement(
+	                'li',
+	                null,
+	                'Client Side Validation:',
+	                _react2.default.createElement('br', null),
+	                '1. Click on ',
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'Title'
+	                ),
+	                ' field and leave it empty.',
+	                _react2.default.createElement('br', null),
+	                '2. Then click on another field(to trigger blur).',
+	                _react2.default.createElement('br', null),
+	                ' ',
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'Result: "Enter a Title"'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                null,
+	                'Instant Server Side Validation:',
+	                _react2.default.createElement('br', null),
+	                '1. Enter "redux" in the ',
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'Title'
+	                ),
+	                ' field.',
+	                _react2.default.createElement('br', null),
+	                '2. Then click on Categories field (to trigger blur).',
+	                _react2.default.createElement('br', null),
+	                ' ',
+	                _react2.default.createElement(
+	                  'b',
+	                  null,
+	                  'Result: Title "redux" is not unique!'
+	                ),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                  'i',
+	                  null,
+	                  'Note: We ask server to see if a post w/ title "redux" is unique. The server is hardcoded to return "Title "redux" is not unique!" if the title is "redux" for demo purposes'
+	                )
+	              )
+	            )
+	          )
 	        )
 	      );
 	    }
