@@ -62,23 +62,32 @@ class PostsForm extends Component {
       <br/>
 
       <div className="panel panel-default">
-      <div className="panel-heading">Check out Form Validations!</div>
+      <div className="panel-heading"><h3>Check out Form Validations!</h3></div>
       <div className="panel-body">
         <ol>
-         <li>Client Side Validation:
-              <br/>1. Click on <b>Title</b> field and leave it empty.
+         <li><h4>Client Side Validation:</h4>
+              1. Click on <b>Title</b> field and leave it empty.
               <br/>2. Then click on another field(to trigger blur).
               <br/> <b>Result: "Enter a Title"</b>
+              <br/>
          </li>
 
-         <li>Instant Server Side Validation:
-              <br/>Create two posts w/ the same <b>Title</b>, you'll get error on the 2nd one from the server!
-              <br/><b>OR:</b>
-              <br/>1. Enter "redux" in the <b>Title</b> field. 
-              <br/>2. Then click on Categories field (to trigger blur). 
-              <br/> <b>Result: Title "redux" is not unique!</b>
-               <br/><i>The server is hardcoded to return "Title "redux" is not unique!" if the title is "redux" for demo purposes</i>
+         <li><h4>"Instant" Server Side Validation:</h4>
+              Calls server w/ field values when a field is blurred (even before submitting the form).
+              <br/>1. Create a post
+              <br/>2. Try to create another w/ the same <b>Title</b>
+              <br/>3. Then click on Categories field (to trigger blur). 
+
+               <br/> <b>Result: You'll get error from the server saying "Title is not unique"</b>
         </li>
+
+         <li><h4>"onSubmit" Server Side Validation:</h4>
+              This is the common scenario where the server throws some error when user clicks on submit button.
+              <br/>1. Enter <b>test</b> in all the above fields . 
+              <br/>2. Press the Submit button. 
+              <br/> <b>Result: Errors below every field</b>
+               <br/><i>Note: The server is hardcoded to return this error for for demo purposes</i>
+        </li>        
         </ol>
 
         </div>

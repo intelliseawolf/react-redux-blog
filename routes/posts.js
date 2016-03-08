@@ -94,12 +94,6 @@ router.post('/validatePostFields', function(req, res, next){
 	var body = req.body;
 	var title = body.title ? body.title.trim() : '';
 
-	//Simulating field error instead of actually going to DB.
-	//Returns 'title is not unique'if the post title = 'redux'
-	if(title.toLowerCase() === 'redux') {
-		return res.json({'title': 'Title "'+title+'" is not unique!'});
-	}
-
 	Post.findOne({'title': new RegExp(title, "i") }, function(err, post){
 		if (err) {
 			console.log(err);
