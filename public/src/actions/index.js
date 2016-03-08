@@ -12,6 +12,12 @@ export const CREATE_POST_SUCCESS = 'CREATE_POST_SUCCESS';
 export const CREATE_POST_FAILURE = 'CREATE_POST_FAILURE';
 export const RESET_NEW_POST = 'RESET_NEW_POST';
 
+//Validate post fields like Title, Categries on the server
+export const VALIDATE_POST_FIELDS = 'VALIDATE_POST_FIELDS';
+export const VALIDATE_POST_FIELDS_SUCCESS = 'VALIDATE_POST_FIELDS_SUCCESS';
+export const VALIDATE_POST_FIELDS_FAILURE = 'VALIDATE_POST_FIELDS_FAILURE';
+export const RESET_POST_FIELDS = 'RESET_POST_FIELDS';
+
 //Fetch post
 export const FETCH_POST = 'FETCH_POST';
 export const FETCH_POST_SUCCESS = 'FETCH_POST_SUCCESS';
@@ -48,6 +54,35 @@ export function fetchPostsFailure(error) {
     payload: error
   };
 }
+
+export function validatePostFields(props) {
+  const request = axios.post(`${ROOT_URL}/validatePostFields`, props);
+
+  return {
+    type: VALIDATE_POST_FIELDS,
+    payload: request
+  };
+}
+
+export function validatePostFieldsSuccess() {
+  return {
+    type: VALIDATE_POST_FIELDS_SUCCESS
+  };
+}
+
+export function validatePostFieldsFailure(error) {
+  return {
+    type: VALIDATE_POST_FIELDS_FAILURE,
+    payload: error
+  };
+}
+
+export function resetPostFields() {
+  return {
+    type: RESET_POST_FIELDS
+  }
+};
+
 
 export function createPost(props) {
   const request = axios.post(`${ROOT_URL}/posts`, props);
@@ -102,7 +137,6 @@ export function fetchPostSuccess(activePost) {
 }
 
 export function fetchPostFailure(error) {
-  debugger;
   return {
     type: FETCH_POST_FAILURE,
     payload: error

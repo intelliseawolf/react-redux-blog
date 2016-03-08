@@ -83,7 +83,16 @@ router.delete('/posts/:id', function(req, res, next) {
 	});
 });
 
+router.post('/validatePostFields', function(req, res, next){
+	var body = req.body;
+	//simulating field error (instead of actually going to DB)
+	// Returns 'title is not unique'if the post title = 'redux'
+	if(body.title && body.title.toLowerCase() === 'redux')
+		return res.json({'title': 'Title "'+body.title+'" is not unique!'});
 
+	return res.json({});
+
+});
 
 
 module.exports = router;

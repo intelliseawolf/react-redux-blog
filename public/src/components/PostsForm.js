@@ -20,36 +20,39 @@ class PostsForm extends Component {
   }
 
   render() {
-    const { fields: { title, categories, content }, handleSubmit } = this.props;
+    const {asyncValidating, fields: { title, categories, content }, handleSubmit } = this.props;
 
     return (
       <form onSubmit={handleSubmit(this.props.createPost.bind(this))}>
-        <div className={`form-group ${title.touched && title.invalid ? 'has-danger' : ''}`}>
-          <label>Title</label>
+        <div className={`form-group ${title.touched && title.invalid ? 'has-error' : ''}`}>
+          <label className="control-label">Title*</label>
           <input type="text" className="form-control" {...title} />
-          <div className="text-help">
+          <div className="help-block">
             {title.touched ? title.error : ''}
+          </div>
+          <div className="help-block">
+            {asyncValidating === 'title'? 'validating..': ''}
           </div>
         </div>
 
-        <div className={`form-group ${categories.touched && categories.invalid ? 'has-danger' : ''}`}>
-          <label>Categories</label>
+        <div className={`form-group ${categories.touched && categories.invalid ? 'has-error' : ''}`}>
+          <label>Categories*</label>
           <input type="text" className="form-control" {...categories} />
-          <div className="text-help">
+          <div className="help-block">
             {categories.touched ? categories.error : ''}
           </div>
         </div>
 
-        <div className={`form-group ${content.touched && content.invalid ? 'has-danger' : ''}`}>
-          <label>Content</label>
+        <div className={`form-group ${content.touched && content.invalid ? 'has-error' : ''}`}>
+          <label>Content*</label>
           <textarea className="form-control" {...content} />
-          <div className="text-help">
+          <div className="help-block">
             {content.touched ? content.error : ''}
           </div>
         </div>
 
         <button type="submit" className="btn btn-primary">Submit</button>
-        <Link to="/" className="btn btn-danger">Cancel</Link>
+        <Link to="/" className="btn btn-error">Cancel</Link>
       </form>
     );
   }

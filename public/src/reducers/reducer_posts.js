@@ -2,13 +2,16 @@ import {
 	FETCH_POSTS, FETCH_POSTS_SUCCESS, FETCH_POSTS_FAILURE, RESET_POSTS,
 	FETCH_POST, FETCH_POST_SUCCESS,  FETCH_POST_FAILURE, RESET_ACTIVE_POST,
 	CREATE_POST, CREATE_POST_SUCCESS, CREATE_POST_FAILURE, RESET_NEW_POST,
-	DELETE_POST, DELETE_POST_SUCCESS, DELETE_POST_FAILURE, RESET_DELETED_POST
+	DELETE_POST, DELETE_POST_SUCCESS, DELETE_POST_FAILURE, RESET_DELETED_POST,
+  VALIDATE_POST_FIELDS,VALIDATE_POST_FIELDS_SUCCESS, VALIDATE_POST_FIELDS_FAILURE, RESET_POST_FIELDS
 } from '../actions/index';
+
 
 	const INITIAL_STATE = { postsList: {posts: [], error:null, loading: false},  
 							newPost:{post:null, error:null, loading: false}, 
 							activePost:{post:null, error:null, loading: false}, 
-							deletedPost: {post: null, error:null, loading: false} 
+							deletedPost: {post: null, error:null, loading: false},
+              postFieldsError:{title: null, categories: null, description: null, loading: false}
 						};
 
 export default function(state = INITIAL_STATE, action) {
@@ -51,6 +54,15 @@ export default function(state = INITIAL_STATE, action) {
   case RESET_DELETED_POST:
   	return {...state,  deletedPost:{post:null, error:null, loading: false}}
 
+  case VALIDATE_POST_FIELDS:
+    return {...state, postFieldsError:{title: null, categories: null, description: null, loading: true}}
+  case VALIDATE_POST_FIELDS_SUCCESS:
+        return {...state, postFieldsError:{title: null, categories: null, description: null, loading: false}}
+  case VALIDATE_POST_FIELDS_FAILURE:
+        let result = action.payload;
+        return {...state, postFieldsError:{title: result.title, categories: result.categories, description: result.description, loading: false}}
+  case RESET_POST_FIELDS:
+      return {...state, postFieldsError:{title: null, categories: null, description: null, loading: false}}
   default:
     return state;
   }
