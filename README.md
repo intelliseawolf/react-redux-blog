@@ -28,7 +28,9 @@ You can create your own version of the app (including MongoDB!)
 *You need two terminal windows open*, one for client and the other for server.
 
 ####Development
-1. In terminal 1, run: `npm start`. This runs the app server (Express). 
+1. In terminal 1, 
+	1. `export JWT_SECRET=somesecretstring` <-- This is used to generate JWT tokens.
+	2. run `npm start`. This runs the app server (Express). 
 2. In terminal 2, run: `npm run dev`. This runs the development server(webpack-dev-server).
 3. Open browser and go to: `localhost:8080`
 

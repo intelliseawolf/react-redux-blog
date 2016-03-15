@@ -29,15 +29,19 @@ class PostsList extends Component {
   }
 
   render() {
-    if(this.props.loading) {
-      return <div><h1>Posts</h1><h3>Loading...</h3></div>      
+    const { posts, loading, error } = this.props.postsList;
+
+    if(loading) {
+      return <div className="container"><h1>Posts</h1><h3>Loading...</h3></div>      
+    } else if(error) {
+      return <div className="alert alert-danger">Error: {error.message}</div>
     }
 
     return (
-      <div>
+      <div className="container">
         <h1>Posts</h1>
         <ul className="list-group">
-          {this.renderPosts(this.props.posts)}
+          {this.renderPosts(posts)}
         </ul>
       </div>
     );

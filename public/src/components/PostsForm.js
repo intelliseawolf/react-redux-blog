@@ -19,11 +19,24 @@ class PostsForm extends Component {
     }
   }
 
+  renderError(newPost) {
+    if(newPost && newPost.error && newPost.error.message) {
+      return (
+        <div className="alert alert-danger">
+          {newPost ? newPost.error.message : ''}
+        </div>
+      );
+    } else {
+      return <span></span>
+    }
+  }
+
   render() {
-    const {asyncValidating, fields: { title, categories, content }, handleSubmit, submitting } = this.props;
+    const {asyncValidating, fields: { title, categories, content }, handleSubmit, submitting, newPost } = this.props;
 
     return (
-      <div>
+      <div className="container">
+      {this.renderError(newPost)}
       <form onSubmit={handleSubmit(this.props.createPost.bind(this))}>
         <div className={`form-group ${title.touched && title.invalid ? 'has-error' : ''}`}>
           <label className="control-label">Title*</label>
@@ -57,6 +70,11 @@ class PostsForm extends Component {
       </form>
 
 
+        <br/>
+        <br/>
+        <div className="alert alert-warning">
+          NOTE: The app now has JWT Authentication turned on. <b>Please *Sign up* using some dummy data to create new posts</b>
+        </div> 
       <br/>
       <br/>
       <br/>
@@ -90,7 +108,6 @@ class PostsForm extends Component {
                <br/><i>Note: The server is hardcoded to return this error for demo purposes</i>
         </li>        
         </ol>
-
         </div>
       </div>
 

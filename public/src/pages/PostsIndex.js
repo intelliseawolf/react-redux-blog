@@ -5,7 +5,7 @@ import PostsList from '../containers/PostsListContainer.js';
 class PostsIndex extends Component {
   render() {
     return (
-      <div className='container'>
+      <div>
         <HeaderContainer type="posts_index"/>
         <PostsList />
       </div>

@@ -3,13 +3,17 @@
   "description": "A sample Blog app that shows how to build React Redux CRUD app",
   "repository": "https://github.com/rajaraodv/react-redux-blog",
   "logo": "http://node-js-sample.herokuapp.com/node.svg",
-  "keywords": ["node", "express", "React", "React.js", "React", "Redux", "JavaScript", "MongoDB"],
+  "keywords": ["node", "express", "React", "React.js", "React", "Redux", "JavaScript", "MongoDB", "jwt"],
   "image": "heroku/nodejs",
   "env": {
   	"NODE_ENV": {
   		"description": "Node environment",
   		"value": "production"
-  	}
+  	},
+    "JWT_SECRET": {
+      "description": "A secret string to generate JWT tokens (REQUIRED)",
+      "value":""
+    }
   },
   "addons": ["mongolab"]
 }

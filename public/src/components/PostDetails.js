@@ -18,22 +18,19 @@ class PostDetails extends Component {
     this.props.fetchPost(this.props.postId);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.activePost.error) {
-      alert('No such post');
-      this.context.router.push('/');
-    } 
-  }
 
   render() {
-    const { post } = this.props.activePost;
-
-    if (!post) {
-      return <div>Loading...</div>;
+    const { post, loading, error } = this.props.activePost;
+    if (loading) {
+      return <div className="container">Loading...</div>;
+    } else if(error) {
+      return  <div className="alert alert-danger">{error.message}</div>
+    } else if(!post) {
+      return <span />
     }
 
     return (
-      <div>
+      <div className="container">
         <h3>{post.title}</h3>
         <h6>Categories: {post.categories}</h6>
         <p>{post.content}</p>

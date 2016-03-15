@@ -1,13 +1,12 @@
 import { connect } from 'react-redux'
-import { fetchPosts, fetchPostsSuccess, fetchPostsFailure } from '../actions/index';
+import { fetchPosts, fetchPostsSuccess, fetchPostsFailure } from '../actions/posts';
 
 import PostsList from '../components/PostsList';
 
 
 const mapStateToProps = (state) => {
   return { 
-    posts: state.posts.postsList.posts,
-    loading: state.posts.postsList.loading 
+    postsList: state.posts.postsList
   };
 }
 
@@ -15,8 +14,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchPosts: () => {
       dispatch(fetchPosts()).then((response) => {
-      		let data = response.payload.data ? response.payload.data : {data: 'Network Error'};
-            !response.error ? dispatch(fetchPostsSuccess(data)) : dispatch(fetchPostsFailure(data));
+            !response.error ? dispatch(fetchPostsSuccess(response.payload)) : dispatch(fetchPostsFailure(response.payload));
           });
     }
   }

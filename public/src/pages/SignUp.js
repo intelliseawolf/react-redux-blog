@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import HeaderContainer from '../containers/HeaderContainer.js';
-import PostFormContainer from '../containers/PostFormContainer.js';
+import SignUpFormContainer from '../containers/SignUpFormContainer.js';
 
 class PostsNew extends Component {
   render() {
     return (
       <div>
         <HeaderContainer type="posts_new"/>
-        <PostFormContainer />
+        <SignUpFormContainer />
       </div>
     );
   }

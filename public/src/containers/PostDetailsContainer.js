@@ -1,5 +1,5 @@
 import PostDetails from '../components/PostDetails.js';
-import { fetchPost, fetchPostSuccess, fetchPostFailure, resetActivePost } from '../actions/index';
+import { fetchPost, fetchPostSuccess, fetchPostFailure, resetActivePost, resetDeletedPost } from '../actions/posts';
 import { connect } from 'react-redux';
 
 
@@ -18,7 +18,9 @@ const mapDispatchToProps = (dispatch) => {
           }) 
   	 },
      resetMe: () =>{
+      //clean up both activePost(currrently open) and deletedPost(open and being deleted) states
         dispatch(resetActivePost());
+        dispatch(resetDeletedPost());
      }
   }
 }

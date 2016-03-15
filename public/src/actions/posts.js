@@ -31,9 +31,14 @@ export const DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
 export const RESET_DELETED_POST = 'RESET_DELETED_POST';
 
 
+
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
 export function fetchPosts() {
-  const request = axios.get(`${ROOT_URL}/posts`);
+  const request = axios({
+    method: 'get',
+    url: `${ROOT_URL}/posts`,
+    headers: []
+  });
 
   return {
     type: FETCH_POSTS,
@@ -56,7 +61,8 @@ export function fetchPostsFailure(error) {
 }
 
 export function validatePostFields(props) {
-  const request = axios.post(`${ROOT_URL}/validatePostFields`, props);
+  //note: we cant have /posts/validateFields because it'll match /posts/:id path!
+  const request = axios.post(`${ROOT_URL}/posts/validate/fields`, props);
 
   return {
     type: VALIDATE_POST_FIELDS,
@@ -84,8 +90,14 @@ export function resetPostFields() {
 };
 
 
-export function createPost(props) {
-  const request = axios.post(`${ROOT_URL}/posts`, props);
+export function createPost(props, tokenFromStorage) {
+  //const request = axios.post(`${ROOT_URL}/posts`, props);
+  const request = axios({
+    method: 'post',
+    data: props,
+    url: `${ROOT_URL}/posts`,
+   headers: {'Authorization': `Bearer ${tokenFromStorage}`}
+  });
 
   return {
     type: CREATE_POST,
@@ -149,9 +161,12 @@ export function resetActivePost() {
   }
 };
 
-export function deletePost(id) {
-  const request = axios.delete(`${ROOT_URL}/posts/${id}`);
-
+export function deletePost(id, tokenFromStorage) {
+  const request = axios({
+    method: 'delete',
+    url: `${ROOT_URL}/posts/${id}`,
+   headers: {'Authorization': `Bearer ${tokenFromStorage}`}
+  });
   return {
     type: DELETE_POST,
     payload: request

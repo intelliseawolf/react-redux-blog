@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchPost, deletePost } from '../actions/index';
-import { Link } from 'react-router';
+import { deletePost } from '../actions/posts';
 import Header from '../containers/HeaderContainer.js';
 import PostDetailsContainer from '../containers/PostDetailsContainer.js';
 
