@@ -47,7 +47,7 @@ const asyncValidate = (values, dispatch) => {
     .then((response) => {
         let data = response.payload.data;
         //if status is not 200 or any one of the fields exist, then there is a field error
-        if(response.payload.status != 200 || data.title || data.categories || data.description) {
+        if(response.payload.status != 200 || data.username || data.email) {
           //let other components know of error by updating the redux` state
           dispatch(validateUserFieldsFailure(response.payload));
            reject(data); //this is for redux-form itself
@@ -113,6 +113,6 @@ export default reduxForm({
   form: 'SignUpForm', 
   fields: ['name', 'username', 'email', 'password', 'confirmPassword'], 
   asyncValidate,
-  asyncBlurFields: ['username'],
+  asyncBlurFields: ['username', 'email'],
   validate 
 }, mapStateToProps, mapDispatchToProps)(SignUpForm);

@@ -5,6 +5,7 @@ var timestamps = require('mongoose-timestamp');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var utils = require('../utils/index');
+var email = require('../utils/email');
 
 if (!process.env.JWT_SECRET) {
   console.error('ERROR!: Please set JWT_SECRET before running the app. \n run: export JWT_SECRET=<some secret string> to set JWTSecret. ')
@@ -18,7 +19,9 @@ var userSchema = mongoose.Schema({
   password: String,
   image: String,
   admin: Boolean,
-  isEmailVerified: Boolean
+  isEmailVerified: Boolean,
+  verifyEmailToken: String,
+  verifyEmailTokenExpires: Date
 });
 
 userSchema.plugin(timestamps);
@@ -26,13 +29,35 @@ userSchema.plugin(timestamps);
 var User = mongoose.model('User', userSchema);
 
 //utility func
-function isUsernameUnique(username, cb) {
+function isUserUnique(reqBody, cb) {
+  var username = reqBody.username ? reqBody.username.trim() : '';
+  var email = reqBody.email ? reqBody.email.trim() : '';
+
   User.findOne({
-    'username': new RegExp(username, "i")
+    $or: [{
+      'username': new RegExp(["^", username, "$"].join(""), "i")
+    }, {
+      'email': new RegExp(["^", email, "$"].join(""), "i")
+    }]
   }, function(err, user) {
     if (err) throw err;
 
-    cb(user ? false : true);
+    if (!user) {
+      cb();
+      return;
+    }
+
+    var err;
+    if (user.username === username) {
+      err = {};
+      err.username = '"' + username + '" is not unique';
+    }
+    if (user.email === email) {
+      err = err ? err : {};
+      err.email = '"' + email + '" is not unique';
+    }
+
+    cb(err);
   });
 }
 
@@ -115,16 +140,15 @@ router.post('/users/signin', function(req, res) {
 router.post('/users/signup', function(req, res, next) {
   var body = req.body;
 
+
   var errors = utils.validateSignUpForm(body);
   if (errors) {
     return res.status(403).json(errors);
   }
 
-  isUsernameUnique(body.username.trim(), function(isUnique) {
-    if (!isUnique) {
-      res.status(403).json({
-        username: 'Username "' + username + '" is not unique!'
-      });
+  isUserUnique(body, function(err) {
+    if (err) {
+      res.status(403).json(err);
     }
 
     var hash = bcrypt.hashSync(body.password.trim(), 10);
@@ -139,6 +163,8 @@ router.post('/users/signup', function(req, res, next) {
 
     user.save(function(err, user) {
       if (err) throw err;
+
+      email.sendWelcomeEmail(user, req.headers.host); //send welcome email w/ verification token
 
       var token = utils.generateToken(user);
 
@@ -159,12 +185,9 @@ router.post('/users/signup', function(req, res, next) {
 router.post('/users/validate/fields', function(req, res, next) {
   var body = req.body;
 
-  var username = body.username ? body.username.trim() : '';
-  isUsernameUnique(username, function(isUnique) {
-    if (!isUnique) {
-      res.status(403).json({
-        username: 'Username "' + username + '" is not unique!'
-      });
+  isUserUnique(body, function(err) {
+    if (err) {
+      res.status(403).json(err);
     } else {
       return res.json({});
     }
@@ -206,6 +229,43 @@ router.get('/me/from/token', function(req, res, next) {
   });
 });
 
+//get current user from token
+router.get('/validateEmail/:token', function(req, res, next) {
+
+  // check header or url parameters or post parameters for token
+  var token = req.params.token;
+  if (!token) {
+    return res.status(401).json({
+      message: 'Must pass token'
+    });
+  }
+
+  User.findOne({
+    verifyEmailToken: req.params.token,
+    verifyEmailTokenExpires: {
+      $gt: Date.now()
+    }
+  }, function(err, user) {
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'Token is not valid or has expired'
+      });
+    }
+
+    user.isEmailVerified = true;
+    user.verifyEmailToken = undefined;
+    user.verifyEmailTokenExpires = undefined;
+    user.save(function(err) {
+      user = utils.getCleanUser(user); //dont pass password and stuff
+      var token = utils.generateToken(user);
+      res.json({
+        user: user,
+        token: token
+      });
+    });
+  });
+});
 
 
 module.exports = router;

@@ -13,7 +13,11 @@
     "JWT_SECRET": {
       "description": "A secret string to generate JWT tokens (REQUIRED)",
       "value":""
+    },
+    "FROM_EMAIL": {
+      "description": "A *validated* from-email address to send emails from(REQUIRED)",
+      "value":""
     }
   },
-  "addons": ["mongolab"]
+  "addons": ["mongolab", "sendgrid:starter"]
 }

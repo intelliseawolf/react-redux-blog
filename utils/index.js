@@ -54,7 +54,7 @@ function validateSignUpForm(values, callback) {
   }
 }
 
-//strips internal fields like password and isEmailVerified
+//strips internal fields like password and verifyEmailToken etc
 function getCleanUser(user) {
   var u = user.toJSON();
   return {
@@ -65,9 +65,8 @@ function getCleanUser(user) {
     admin: u.admin,
     createdAt: u.createdAt,
     updatedAt: u.updatedAt,
-    image: u.image
-      //password: hash,
-      //isEmailVerified: false
+    image: u.image,
+    isEmailVerified: false
   }
 }
 

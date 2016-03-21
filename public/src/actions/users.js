@@ -23,11 +23,42 @@ export const VALIDATE_USER_FIELDS_SUCCESS = 'VALIDATE_USER_FIELDS_SUCCESS';
 export const VALIDATE_USER_FIELDS_FAILURE = 'VALIDATE_USER_FIELDS_FAILURE';
 export const RESET_USER_FIELDS = 'RESET_USER_FIELDS';
 
+
+//validate email, if success, then load user and login
+export const VALIDATE_EMAIL = 'VALIDATE_EMAIL';
+export const VALIDATE_EMAIL_SUCCESS = 'VALIDATE_EMAIL_SUCCESS';
+export const VALIDATE_EMAIL_FAILURE = 'VALIDATE_EMAIL_FAILURE';
+
+
 //log out user
 export const LOGOUT_USER = 'LOGOUT_USER';
 
 
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+
+export function validateEmail(validateEmailToken) {
+  //check if token from welcome email is valid, if so, update email as verified and login the user from response
+  const request = axios.get(`${ROOT_URL}/validateEmail/${validateEmailToken}`);
+
+  return {
+    type: VALIDATE_EMAIL,
+    payload: request
+  };
+}
+
+export function validateEmailSuccess(currentUser) {
+  return {
+    type: VALIDATE_EMAIL_SUCCESS,
+    payload: currentUser
+  };
+}
+
+export function validateEmailFailure(error) {
+  return {
+    type: VALIDATE_EMAIL_FAILURE,
+    payload: error
+  };
+}
 
 export function meFromToken(tokenFromStorage) {
   //check if the token is still valid, if so, get me from the server
