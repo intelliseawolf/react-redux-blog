@@ -65,6 +65,7 @@ app.use(express.static(staticPath));
 app.use('/', express.static(staticPath));
 app.use('/posts/*', express.static(staticPath));
 app.use('/new/*', express.static(staticPath));
+app.use('/validateEmail/*', express.static(staticPath));
 
 
 
