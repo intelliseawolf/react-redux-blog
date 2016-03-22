@@ -8,7 +8,7 @@ if (!process.env.FROM_EMAIL) {
 }
 
 function sendWelcomeEmail(user, host, finalCB) {
-  host = host.indexOf('localhost') >= 0 ? 'http://' + host : host;
+  host = host.indexOf('localhost') >= 0 ? 'http://' + host : 'https://' + host;
 
   async.waterfall([
       function(done) {
