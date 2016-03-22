@@ -2,14 +2,14 @@ var postmark = require("postmark")(process.env.POSTMARK_API_TOKEN);
 var async = require('async');
 var crypto = require('crypto');
 
-if(!process.env.FROM_EMAIL) {
-	console.log('Please set: FROM_EMAIL environment variable. This is a validated email address to send emails from to other users for email verification, reset pwd etc')
-	process.exit();
+if (!process.env.FROM_EMAIL) {
+  console.log('Please set: FROM_EMAIL environment variable. This is a validated email address to send emails from to other users for email verification, reset pwd etc')
+  process.exit();
 }
 
-function sendWelcomeEmail(user, host) {
-	host = host.indexOf('localhost') >= 0 ? 'http://' + host: host;
-	console.log('host = '+ host);
+function sendWelcomeEmail(user, host, finalCB) {
+  host = host.indexOf('localhost') >= 0 ? 'http://' + host : host;
+
   async.waterfall([
       function(done) {
         crypto.randomBytes(15, function(err, buf) {
@@ -46,8 +46,17 @@ function sendWelcomeEmail(user, host) {
     ],
     function(err) {
       if (err) {
-        console.log('Error: could not send welcome email ' + user.username);
+        console.log('Could not send welcome email to: ' + user.email);
         console.error(err);
+        if (finalCB) {
+          finalCB({
+            message: 'Could not send welcome email to: ' + user.email
+          });
+        }
+      } else {
+        if (finalCB) {
+          finalCB();
+        }
       }
     });
 

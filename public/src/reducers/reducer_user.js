@@ -4,8 +4,7 @@ import {
   ME_FROM_TOKEN, ME_FROM_TOKEN_SUCCESS, ME_FROM_TOKEN_FAILURE, RESET_TOKEN,
 	SIGNUP_USER, SIGNUP_USER_SUCCESS, SIGNUP_USER_FAILURE, RESET_USER,
 	SIGNIN_USER, SIGNIN_USER_SUCCESS,  SIGNIN_USER_FAILURE,
-	VALIDATE_USER_FIELDS, VALIDATE_USER_FIELDS_SUCCESS, VALIDATE_USER_FIELDS_FAILURE, RESET_USER_FIELDS,
-	LOGOUT_USER
+	LOGOUT_USER, UPDATE_USER_EMAIL
 } from '../actions/users';
 
 
@@ -28,7 +27,7 @@ export default function(state = INITIAL_STATE, action) {
     case VALIDATE_EMAIL://check email verification token
     return { ...state, user: null, status:'validate_email', error:null, loading: true};
     case VALIDATE_EMAIL_SUCCESS:
-    return { ...state, user: action.payload.data.user, status:'authenticated', error:null, loading: false}; //<-- authenticated
+    return { ...state, user: action.payload.data.user, status:'authenticated', error:null, loading: false}; //<-- authenticated & email verified
     case VALIDATE_EMAIL_FAILURE:
     error = action.payload.data || {message: action.payload.message};//2nd one is network or server down errors       
     return { ...state, user:null, status:'validate_email', error:error, loading: false}; //<-- authenticated
@@ -60,21 +59,17 @@ export default function(state = INITIAL_STATE, action) {
     error = action.payload.data || {message: action.payload.message};//2nd one is network or server down errors      
     return { ...state, user: null, status:'signin', error:error, loading: false};
 
-    case VALIDATE_USER_FIELDS://sign up or sign in form fields
-    return { ...state, user: null, status:'validate', error:null, loading: true}; 
-    case VALIDATE_USER_FIELDS_SUCCESS:
-    return { ...state, user: null, status:'validate', error:null, loading: false}; 
-    case VALIDATE_USER_FIELDS_FAILURE:
-    error = action.payload.data;
-    if(!error) {
-      error = {message: action.payload.message};
-    }  
-    return { ...state, user: null, status:'validate', error:error, loading: false}; 
+
+    case UPDATE_USER_EMAIL:
+    return{...state, user:{...state.user, email:action.payload.email}};
+    
+
     case LOGOUT_USER:
       return {...state, user:null, status:'logout', error:null, loading: false};
+
     case RESET_USER:// reset authenticated user to initial state
-    case RESET_USER_FIELDS://same as above
     return { ...state, user: null, status:null, error:null, loading: false};
+    
     default:
     return state;
   }

@@ -6,6 +6,7 @@ var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var utils = require('../utils/index');
 var email = require('../utils/email');
+var expressJwt = require('express-jwt');
 
 if (!process.env.JWT_SECRET) {
   console.error('ERROR!: Please set JWT_SECRET before running the app. \n run: export JWT_SECRET=<some secret string> to set JWTSecret. ')
@@ -229,7 +230,60 @@ router.get('/me/from/token', function(req, res, next) {
   });
 });
 
-//get current user from token
+router.get('/resendValidationEmail', expressJwt({
+  secret: process.env.JWT_SECRET
+}), function(req, res, next) {
+
+  User.findById({
+    '_id': req.user._id
+  }, function(err, user) {
+    if (err) throw err;
+
+    //send welcome email w/ verification token
+    email.sendWelcomeEmail(user, req.headers.host, function(err) {
+      if (err) {
+        res.status(404).json(err);
+      } else {
+        res.send({
+          message: 'Email was resent'
+        })
+      }
+    });
+  });
+});
+
+
+router.post(
+  '/updateEmail',
+  expressJwt({
+    secret: process.env.JWT_SECRET
+  }),
+  function(req, res, next) {
+
+    var newEmail = req.body.email && req.body.email.trim();
+
+    User.findOneAndUpdate({
+      '_id': req.user._id
+    }, {
+      email: newEmail
+    }, {
+      new: true
+    }, function(err, user) {
+      if (err) throw err;
+
+      console.dir(user.toJSON());
+      //send welcome email w/ verification token
+      email.sendWelcomeEmail(user, req.headers.host);
+
+      res.json({message: 'Email was updated'});
+
+    });
+  });
+
+
+
+
+//get current user from email-token(from w/in welcome email)
 router.get('/validateEmail/:token', function(req, res, next) {
 
   // check header or url parameters or post parameters for token
@@ -249,7 +303,7 @@ router.get('/validateEmail/:token', function(req, res, next) {
 
     if (!user) {
       return res.status(404).json({
-        message: 'Token is not valid or has expired'
+        message: 'Email token is not valid or has expired'
       });
     }
 

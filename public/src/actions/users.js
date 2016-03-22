@@ -17,17 +17,14 @@ export const SIGNIN_USER = 'SIGNIN_USER';
 export const SIGNIN_USER_SUCCESS = 'SIGNIN_USER_SUCCESS';
 export const SIGNIN_USER_FAILURE = 'SIGNIN_USER_FAILURE';
 
-//Validate user fields like name and password
-export const VALIDATE_USER_FIELDS = 'VALIDATE_USER_FIELDS';
-export const VALIDATE_USER_FIELDS_SUCCESS = 'VALIDATE_USER_FIELDS_SUCCESS';
-export const VALIDATE_USER_FIELDS_FAILURE = 'VALIDATE_USER_FIELDS_FAILURE';
-export const RESET_USER_FIELDS = 'RESET_USER_FIELDS';
-
 
 //validate email, if success, then load user and login
 export const VALIDATE_EMAIL = 'VALIDATE_EMAIL';
 export const VALIDATE_EMAIL_SUCCESS = 'VALIDATE_EMAIL_SUCCESS';
 export const VALIDATE_EMAIL_FAILURE = 'VALIDATE_EMAIL_FAILURE';
+
+//called when email is updated in profile to update main user's email state
+export const UPDATE_USER_EMAIL = 'UPDATE_USER_EMAIL';
 
 
 //log out user
@@ -145,41 +142,15 @@ export function signInUserFailure(error) {
   };
 }
 
-
-export function validateUserFields(values) {
-  //note: we cant have /users/validateFields because it'll match /users/:id path!
-  const request = axios.post(`${ROOT_URL}/users/validate/fields`, values);
-
-  return {
-    type: VALIDATE_USER_FIELDS,
-    payload: request
-  };
-}
-
-export function validateUserFieldsSuccess() {
-  return {
-    type: VALIDATE_USER_FIELDS_SUCCESS
-  };
-}
-
-export function validateUserFieldsFailure(error) {
-  return {
-    type: VALIDATE_USER_FIELDS_FAILURE,
-    payload: error
-  };
-}
-
-export function resetUserFields() {
-  return {
-    type: RESET_USER_FIELDS
-  }
-};
-
-
 export function logoutUser() {
-
   return {
     type: LOGOUT_USER
+  };
+}
+export function updateUserEmail(email) {
+  return {
+    type: UPDATE_USER_EMAIL,
+    payload:email
   };
 }
 

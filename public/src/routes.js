@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ForgotPwd from './pages/ForgotPwd';
 import ValidateEmail from './pages/ValidateEmail';
+import Profile from './pages/Profile';
 
 export default (
   <Route path="/" component={App}>
@@ -19,5 +20,6 @@ export default (
     <Route path="/signup" component={SignUp} />
     <Route path="/forgotPwd" component={ForgotPwd} />
     <Route path="/validateEmail/:token" component={ValidateEmail} />
+    <Route path="/profile" component={Profile} />
   </Route>
 );

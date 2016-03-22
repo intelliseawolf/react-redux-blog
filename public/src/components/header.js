@@ -7,7 +7,7 @@ class Header extends Component {
     router: PropTypes.object
   };
 
-  componentWillMount() {
+  componentWillUnmount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
      this.props.resetMe();
@@ -28,7 +28,7 @@ class Header extends Component {
       return (
         <ul className="nav  nav-pills navbar-right">
             <li style={{paddingRight: '10px'}} role="presentation">      
-              <Link  role="presentation" style={{color:'#996633',  fontSize: '17px'}} to="/profile">
+              <Link role="presentation" style={{color:'#996633',  fontSize: '17px'}} to="/profile">
               {authenticatedUser.name}
               </Link>
             </li>

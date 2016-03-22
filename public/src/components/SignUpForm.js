@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import Header from '../containers/HeaderContainer.js';
 
 class SignUpForm extends Component {
   static contextTypes = {

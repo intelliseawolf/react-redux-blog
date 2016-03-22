@@ -66,7 +66,7 @@ function getCleanUser(user) {
     createdAt: u.createdAt,
     updatedAt: u.updatedAt,
     image: u.image,
-    isEmailVerified: false
+    isEmailVerified: u.isEmailVerified
   }
 }
 

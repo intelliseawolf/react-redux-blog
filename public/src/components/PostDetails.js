@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-//import { connect } from 'react-redux';
-//import { fetchPost, deletePost } from '../actions/index';
 import { Link } from 'react-router';
 
 class PostDetails extends Component {
@@ -8,7 +6,7 @@ class PostDetails extends Component {
     router: PropTypes.object
   };
 
-  componentWillMount() {
+  componentWillUnmount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
      this.props.resetMe();

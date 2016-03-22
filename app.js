@@ -68,21 +68,6 @@ app.use('/new/*', express.static(staticPath));
 
 
 
-// error handlers
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  console.dir(err);
-  res.status(err.status || 500);
-  if(err.status === 500) {
-    res.json({error: 'Internal Server Error: '+ err.message});
-  }
-  else if(err.status === 404) {
-    res.render('error');    //render error page
-  } else {
-    res.json({error: err.message})
-  }
-});
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -92,11 +77,29 @@ app.use(function(req, res, next) {
 });
 
 
+// app.use(function(err, req, res, next) {
+//   console.error(err.stack);
+//   console.log(1)
+//   res.status(500).send('Uh oh! Something broke!');
+// });
+
+
+// error handlers
+// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  console.log(1)
-  res.status(500).send('Uh oh! Something broke!');
+  console.dir(err);
+  res.status(err.status || 500);
+  if(err.status === 500) {
+    console.error(err.stack);
+    res.json({error: 'Internal Server Error'});
+  }
+  else if(err.status === 404) {
+    res.render('error');    //render error page
+  } else {
+    res.json({error: err.message})
+  }
 });
+
 
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/posts');
 var db = mongoose.connection;

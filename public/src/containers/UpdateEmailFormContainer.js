@@ -1,6 +1,7 @@
-import SignUpForm from '../components/SignUpForm.js';
-import {signUpUser, signUpUserSuccess, signUpUserFailure, resetUser } from '../actions/users';
+import UpdateEmailForm from '../components/UpdateEmailForm.js';
+import {updateEmail, updateEmailSuccess, updateEmailFailure, resetUpdateEmailState } from '../actions/updateEmail';
 import { validateUserFields, validateUserFieldsSuccess, validateUserFieldsFailure, resetValidateUserFields } from '../actions/validateUserFields';
+import { updateUserEmail } from '../actions/users';
 
 import { reduxForm } from 'redux-form';
 
@@ -9,31 +10,8 @@ import { reduxForm } from 'redux-form';
 function validate(values) {
   var errors = {};
   var hasErrors = false;
-
-  if (!values.name || values.name.trim() === '') {
-    errors.name = 'Enter a name';
-    hasErrors = true;
-  }
-  if (!values.username || values.username.trim() === '') {
-    errors.username = 'Enter username';
-    hasErrors = true;
-  }
-  if(!values.email || values.email.trim() === '') {
-    errors.email = 'Enter email';
-    hasErrors = true;
-  }
-  if(!values.password || values.password.trim() === '') {
-    errors.password = 'Enter password';
-    hasErrors = true;
-  }
-  if(!values.confirmPassword || values.confirmPassword.trim() === '') {
-    errors.confirmPassword = 'Enter Confirm Password';
-    hasErrors = true;
-  }
-
-  if(values.confirmPassword  && values.confirmPassword.trim() !== '' && values.password  && values.password.trim() !== '' && values.password !== values.confirmPassword) {
-    errors.password = 'Password And Confirm Password don\'t match';
-    errors.password = 'Password And Confirm Password don\'t match';
+  if (!values.email || values.email.trim() === '') {
+    errors.username = 'Enter email';
     hasErrors = true;
   }
    return hasErrors && errors;
@@ -55,33 +33,38 @@ const asyncValidate = (values, dispatch) => {
            reject(data); //this is for redux-form itself
          } else {
             //let other components know that everything is fine by updating the redux` state
-          dispatch(validateUserFieldsSuccess(response.payload)); //ps: this is same as dispatching RESET_USER_FIELDS
+          dispatch(validateUserFieldsSuccess(response.payload)); //ps: this is same as dispatching RESET_POST_FIELDS
           resolve();//this is for redux-form itself
         }
       });
   });
 };
 
+
 //For any field errors upon submission (i.e. not instant check)
-const validateAndSignUpUser = (values, dispatch) => {
+const validateAndUpdateEmail = (values, dispatch) => {
 
   return new Promise((resolve, reject) => {
 
-   dispatch(signUpUser(values))
+  let jwtToken = sessionStorage.getItem('jwtToken');
+  if(!jwtToken || jwtToken === '') {
+    alert('Please Sign In');
+    reject();
+    return;
+  }
+
+   dispatch(updateEmail(values, jwtToken))
     .then((response) => {
         let data = response.payload.data;
         //if any one of these exist, then there is a field error 
         if(response.payload.status != 200) {
           //let other components know of error by updating the redux` state
-          dispatch(signUpUserFailure(response.payload));
+          dispatch(updateEmailFailure(response.payload));
            reject(data); //this is for redux-form itself
          } else {
-          //store JWT Token to browser session storage 
-          //If you use localStorage instead of sessionStorage, then this w/ persisted across tabs and new windows.
-          //sessionStorage = persisted only in current tab
-          sessionStorage.setItem('jwtToken', response.payload.data.token);
           //let other components know that we got user and things are fine by updating the redux` state 
-          dispatch(signUpUserSuccess(response.payload)); 
+          dispatch(updateEmailSuccess(response.payload)); 
+          dispatch(updateUserEmail(values));//update current user's email (in user's state)
           resolve();//this is for redux-form itself
         }
       });
@@ -92,8 +75,9 @@ const validateAndSignUpUser = (values, dispatch) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-   signUpUser: validateAndSignUpUser,
+   validateAndUpdateEmail: validateAndUpdateEmail,
    resetMe: () =>{
+     dispatch(resetUpdateEmailState());
      dispatch(resetValidateUserFields());
     }
   }
@@ -102,8 +86,8 @@ const mapDispatchToProps = (dispatch) => {
 
 function mapStateToProps(state, ownProps) {
   return { 
-    user: state.user,
-    validateFields: state.validateFields
+    updateEmail: state.updateEmail,
+    initialValues: {email: state.user.user && state.user.user.email}
   };
 }
 
@@ -111,9 +95,9 @@ function mapStateToProps(state, ownProps) {
 // connect: first argument is mapStateToProps, 2nd is mapDispatchToProps
 // reduxForm: 1st is form config, 2nd is mapStateToProps, 3rd is mapDispatchToProps
 export default reduxForm({
-  form: 'SignUpForm', 
-  fields: ['name', 'username', 'email', 'password', 'confirmPassword'], 
+  form: 'UpdateEmailForm', 
+  fields: ['email'], 
   asyncValidate,
-  asyncBlurFields: ['username', 'email'],
+  asyncBlurFields: ['email'],
   validate 
-}, mapStateToProps, mapDispatchToProps)(SignUpForm);
+}, mapStateToProps, mapDispatchToProps)(UpdateEmailForm);
