@@ -63,34 +63,23 @@
 
 	var _reactRedux = __webpack_require__(160);
 
-	var _redux = __webpack_require__(166);
-
 	var _reactRouter = __webpack_require__(181);
 
-	var _reducers = __webpack_require__(237);
-
-	var _reducers2 = _interopRequireDefault(_reducers);
-
-	var _routes = __webpack_require__(309);
+	var _routes = __webpack_require__(237);
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _reduxPromise = __webpack_require__(341);
+	var _configureStore = __webpack_require__(335);
 
-	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
-
-	var _reduxLogger = __webpack_require__(348);
-
-	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
+	var _configureStore2 = _interopRequireDefault(_configureStore);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var logger = (0, _reduxLogger2.default)();
-	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default, logger)(_redux.createStore);
+	var store = (0, _configureStore2.default)();
 
 	_reactDom2.default.render(_react2.default.createElement(
 	  _reactRedux.Provider,
-	  { store: createStoreWithMiddleware(_reducers2.default) },
+	  { store: store },
 	  _react2.default.createElement(_reactRouter.Router, { history: _reactRouter.browserHistory, routes: _routes2.default })
 	), document.getElementById('body'));
 
@@ -26152,42 +26141,62 @@
 	  value: true
 	});
 
-	var _redux = __webpack_require__(166);
+	var _react = __webpack_require__(2);
 
-	var _reducer_posts = __webpack_require__(238);
+	var _react2 = _interopRequireDefault(_react);
 
-	var _reducer_posts2 = _interopRequireDefault(_reducer_posts);
+	var _reactRouter = __webpack_require__(181);
 
-	var _reducer_user = __webpack_require__(257);
+	var _App = __webpack_require__(238);
 
-	var _reducer_user2 = _interopRequireDefault(_reducer_user);
+	var _App2 = _interopRequireDefault(_App);
 
-	var _reducer_validateUserFields = __webpack_require__(259);
+	var _PostsIndex = __webpack_require__(259);
 
-	var _reducer_validateUserFields2 = _interopRequireDefault(_reducer_validateUserFields);
+	var _PostsIndex2 = _interopRequireDefault(_PostsIndex);
 
-	var _reducer_resendEmail = __webpack_require__(261);
+	var _PostsNew = __webpack_require__(312);
 
-	var _reducer_resendEmail2 = _interopRequireDefault(_reducer_resendEmail);
+	var _PostsNew2 = _interopRequireDefault(_PostsNew);
 
-	var _reducer_updateEmail = __webpack_require__(263);
+	var _PostsShow = __webpack_require__(315);
 
-	var _reducer_updateEmail2 = _interopRequireDefault(_reducer_updateEmail);
+	var _PostsShow2 = _interopRequireDefault(_PostsShow);
 
-	var _reduxForm = __webpack_require__(265);
+	var _SignIn = __webpack_require__(318);
+
+	var _SignIn2 = _interopRequireDefault(_SignIn);
+
+	var _SignUp = __webpack_require__(321);
+
+	var _SignUp2 = _interopRequireDefault(_SignUp);
+
+	var _ForgotPwd = __webpack_require__(325);
+
+	var _ForgotPwd2 = _interopRequireDefault(_ForgotPwd);
+
+	var _ValidateEmail = __webpack_require__(328);
+
+	var _ValidateEmail2 = _interopRequireDefault(_ValidateEmail);
+
+	var _Profile = __webpack_require__(329);
+
+	var _Profile2 = _interopRequireDefault(_Profile);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var rootReducer = (0, _redux.combineReducers)({
-	  user: _reducer_user2.default,
-	  validateFields: _reducer_validateUserFields2.default,
-	  posts: _reducer_posts2.default, //<-- Posts
-	  form: _reduxForm.reducer, // <-- redux-form
-	  resendEmail: _reducer_resendEmail2.default,
-	  updateEmail: _reducer_updateEmail2.default
-	});
-
-	exports.default = rootReducer;
+	exports.default = _react2.default.createElement(
+	  _reactRouter.Route,
+	  { path: '/', component: _App2.default },
+	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _PostsIndex2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'posts/new', component: _PostsNew2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: 'posts/:id', component: _PostsShow2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/signin', component: _SignIn2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _SignUp2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/forgotPwd', component: _ForgotPwd2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/validateEmail/:token', component: _ValidateEmail2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/profile', component: _Profile2.default })
+	);
 
 /***/ },
 /* 238 */
@@ -26199,85 +26208,48 @@
 	  value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
-	  var action = arguments[1];
+	var _react = __webpack_require__(2);
 
-	  var error = void 0;
-	  switch (action.type) {
+	var _react2 = _interopRequireDefault(_react);
 
-	    case _posts.FETCH_POSTS:
-	      // start fetching posts and set loading = true
-	      return _extends({}, state, { postsList: { posts: [], error: null, loading: true } });
-	    case _posts.FETCH_POSTS_SUCCESS:
-	      // return list of posts and make loading = false
-	      return _extends({}, state, { postsList: { posts: action.payload.data, error: null, loading: false } });
-	    case _posts.FETCH_POSTS_FAILURE:
-	      // return error and make loading = false
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
-	      return _extends({}, state, { postsList: { posts: [], error: error, loading: false } });
-	    case _posts.RESET_POSTS:
-	      // reset postList to initial state
-	      return _extends({}, state, { postsList: { posts: [], error: null, loading: false } });
+	var _AppContainer = __webpack_require__(239);
 
-	    case _posts.FETCH_POST:
-	      return _extends({}, state, { activePost: _extends({}, state.activePost, { loading: true }) });
-	    case _posts.FETCH_POST_SUCCESS:
-	      return _extends({}, state, { activePost: { post: action.payload.data, error: null, loading: false } });
-	    case _posts.FETCH_POST_FAILURE:
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
-	      return _extends({}, state, { activePost: { post: null, error: error, loading: false } });
-	    case _posts.RESET_ACTIVE_POST:
-	      return _extends({}, state, { activePost: { post: null, error: null, loading: false } });
+	var _AppContainer2 = _interopRequireDefault(_AppContainer);
 
-	    case _posts.CREATE_POST:
-	      return _extends({}, state, { newPost: _extends({}, state.newPost, { loading: true }) });
-	    case _posts.CREATE_POST_SUCCESS:
-	      return _extends({}, state, { newPost: { post: action.payload.data, error: null, loading: false } });
-	    case _posts.CREATE_POST_FAILURE:
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
-	      return _extends({}, state, { newPost: { post: null, error: error, loading: false } });
-	    case _posts.RESET_NEW_POST:
-	      return _extends({}, state, { newPost: { post: null, error: null, loading: false } });
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	    case _posts.DELETE_POST:
-	      return _extends({}, state, { deletedPost: _extends({}, state.deletedPost, { loading: true }) });
-	    case _posts.DELETE_POST_SUCCESS:
-	      return _extends({}, state, { deletedPost: { post: action.payload.data, error: null, loading: false } });
-	    case _posts.DELETE_POST_FAILURE:
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
-	      return _extends({}, state, { deletedPost: { post: null, error: error, loading: false } });
-	    case _posts.RESET_DELETED_POST:
-	      return _extends({}, state, { deletedPost: { post: null, error: null, loading: false } });
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	    case _posts.VALIDATE_POST_FIELDS:
-	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: true }) });
-	    case _posts.VALIDATE_POST_FIELDS_SUCCESS:
-	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: false }) });
-	    case _posts.VALIDATE_POST_FIELDS_FAILURE:
-	      var result = action.payload.data;
-	      if (!result) {
-	        error = { message: action.payload.message };
-	      } else {
-	        error = { title: result.title, categories: result.categories, description: result.description };
-	      }
-	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: error, loading: false }) });
-	    case _posts.RESET_POST_FIELDS:
-	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: null }) });
-	    default:
-	      return state;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var App = function (_Component) {
+	  _inherits(App, _Component);
+
+	  function App() {
+	    _classCallCheck(this, App);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
 	  }
-	};
 
-	var _posts = __webpack_require__(239);
+	  _createClass(App, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _AppContainer2.default,
+	        null,
+	        this.props.children
+	      );
+	    }
+	  }]);
 
-	var INITIAL_STATE = { postsList: { posts: [], error: null, loading: false },
-	  newPost: { post: null, error: null, loading: false },
-	  activePost: { post: null, error: null, loading: false },
-	  deletedPost: { post: null, error: null, loading: false }
-	};
+	  return App;
+	}(_react.Component);
+
+	exports.default = App;
 
 /***/ },
 /* 239 */
@@ -26288,236 +26260,253 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.RESET_DELETED_POST = exports.DELETE_POST_FAILURE = exports.DELETE_POST_SUCCESS = exports.DELETE_POST = exports.RESET_ACTIVE_POST = exports.FETCH_POST_FAILURE = exports.FETCH_POST_SUCCESS = exports.FETCH_POST = exports.RESET_POST_FIELDS = exports.VALIDATE_POST_FIELDS_FAILURE = exports.VALIDATE_POST_FIELDS_SUCCESS = exports.VALIDATE_POST_FIELDS = exports.RESET_NEW_POST = exports.CREATE_POST_FAILURE = exports.CREATE_POST_SUCCESS = exports.CREATE_POST = exports.RESET_POSTS = exports.FETCH_POSTS_FAILURE = exports.FETCH_POSTS_SUCCESS = exports.FETCH_POSTS = undefined;
-	exports.fetchPosts = fetchPosts;
-	exports.fetchPostsSuccess = fetchPostsSuccess;
-	exports.fetchPostsFailure = fetchPostsFailure;
-	exports.validatePostFields = validatePostFields;
-	exports.validatePostFieldsSuccess = validatePostFieldsSuccess;
-	exports.validatePostFieldsFailure = validatePostFieldsFailure;
-	exports.resetPostFields = resetPostFields;
-	exports.createPost = createPost;
-	exports.createPostSuccess = createPostSuccess;
-	exports.createPostFailure = createPostFailure;
-	exports.resetNewPost = resetNewPost;
-	exports.resetDeletedPost = resetDeletedPost;
-	exports.fetchPost = fetchPost;
-	exports.fetchPostSuccess = fetchPostSuccess;
-	exports.fetchPostFailure = fetchPostFailure;
-	exports.resetActivePost = resetActivePost;
-	exports.deletePost = deletePost;
-	exports.deletePostSuccess = deletePostSuccess;
-	exports.deletePostFailure = deletePostFailure;
 
-	var _axios = __webpack_require__(240);
+	var _react = __webpack_require__(2);
 
-	var _axios2 = _interopRequireDefault(_axios);
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _users = __webpack_require__(240);
+
+	var _App = __webpack_require__(258);
+
+	var _App2 = _interopRequireDefault(_App);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//Post list
-	var FETCH_POSTS = exports.FETCH_POSTS = 'FETCH_POSTS';
-	var FETCH_POSTS_SUCCESS = exports.FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
-	var FETCH_POSTS_FAILURE = exports.FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
-	var RESET_POSTS = exports.RESET_POSTS = 'RESET_POSTS';
-
-	//Create new post
-	var CREATE_POST = exports.CREATE_POST = 'CREATE_POST';
-	var CREATE_POST_SUCCESS = exports.CREATE_POST_SUCCESS = 'CREATE_POST_SUCCESS';
-	var CREATE_POST_FAILURE = exports.CREATE_POST_FAILURE = 'CREATE_POST_FAILURE';
-	var RESET_NEW_POST = exports.RESET_NEW_POST = 'RESET_NEW_POST';
-
-	//Validate post fields like Title, Categries on the server
-	var VALIDATE_POST_FIELDS = exports.VALIDATE_POST_FIELDS = 'VALIDATE_POST_FIELDS';
-	var VALIDATE_POST_FIELDS_SUCCESS = exports.VALIDATE_POST_FIELDS_SUCCESS = 'VALIDATE_POST_FIELDS_SUCCESS';
-	var VALIDATE_POST_FIELDS_FAILURE = exports.VALIDATE_POST_FIELDS_FAILURE = 'VALIDATE_POST_FIELDS_FAILURE';
-	var RESET_POST_FIELDS = exports.RESET_POST_FIELDS = 'RESET_POST_FIELDS';
-
-	//Fetch post
-	var FETCH_POST = exports.FETCH_POST = 'FETCH_POST';
-	var FETCH_POST_SUCCESS = exports.FETCH_POST_SUCCESS = 'FETCH_POST_SUCCESS';
-	var FETCH_POST_FAILURE = exports.FETCH_POST_FAILURE = 'FETCH_POST_FAILURE';
-	var RESET_ACTIVE_POST = exports.RESET_ACTIVE_POST = 'RESET_ACTIVE_POST';
-
-	//Delete post
-	var DELETE_POST = exports.DELETE_POST = 'DELETE_POST';
-	var DELETE_POST_SUCCESS = exports.DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS';
-	var DELETE_POST_FAILURE = exports.DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
-	var RESET_DELETED_POST = exports.RESET_DELETED_POST = 'RESET_DELETED_POST';
-
-	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
-	function fetchPosts() {
-	  var request = (0, _axios2.default)({
-	    method: 'get',
-	    url: ROOT_URL + '/posts',
-	    headers: []
-	  });
-
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    type: FETCH_POSTS,
-	    payload: request
-	  };
-	}
+	    loadUserFromToken: function loadUserFromToken() {
+	      var token = sessionStorage.getItem('jwtToken');
+	      if (!token || token === '') {
+	        //if there is no token, dont bother
+	        return;
+	      }
 
-	function fetchPostsSuccess(posts) {
-	  return {
-	    type: FETCH_POSTS_SUCCESS,
-	    payload: posts
-	  };
-	}
-
-	function fetchPostsFailure(error) {
-	  return {
-	    type: FETCH_POSTS_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function validatePostFields(props) {
-	  //note: we cant have /posts/validateFields because it'll match /posts/:id path!
-	  var request = _axios2.default.post(ROOT_URL + '/posts/validate/fields', props);
-
-	  return {
-	    type: VALIDATE_POST_FIELDS,
-	    payload: request
-	  };
-	}
-
-	function validatePostFieldsSuccess() {
-	  return {
-	    type: VALIDATE_POST_FIELDS_SUCCESS
-	  };
-	}
-
-	function validatePostFieldsFailure(error) {
-	  return {
-	    type: VALIDATE_POST_FIELDS_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function resetPostFields() {
-	  return {
-	    type: RESET_POST_FIELDS
+	      //fetch user from token (if server deems it's valid token)
+	      dispatch((0, _users.meFromToken)(token)).then(function (response) {
+	        if (!response.error) {
+	          //reset token (possibly new token that was regenerated by the server)
+	          sessionStorage.setItem('jwtToken', response.payload.data.token);
+	          dispatch((0, _users.meFromTokenSuccess)(response.payload));
+	        } else {
+	          sessionStorage.removeItem('jwtToken'); //remove token from storage
+	          dispatch((0, _users.meFromTokenFailure)(response.payload));
+	        }
+	      });
+	    },
+	    resetMe: function resetMe() {
+	      sessionStorage.removeItem('jwtToken'); //remove token from storage
+	      dispatch((0, _users.resetToken)());
+	    }
 	  };
 	};
 
-	function createPost(props, tokenFromStorage) {
-	  //const request = axios.post(`${ROOT_URL}/posts`, props);
-	  var request = (0, _axios2.default)({
-	    method: 'post',
-	    data: props,
-	    url: ROOT_URL + '/posts',
-	    headers: { 'Authorization': 'Bearer ' + tokenFromStorage }
-	  });
-
-	  return {
-	    type: CREATE_POST,
-	    payload: request
-	  };
-	}
-
-	function createPostSuccess(newPost) {
-	  return {
-	    type: CREATE_POST_SUCCESS,
-	    payload: newPost
-	  };
-	}
-
-	function createPostFailure(error) {
-	  return {
-	    type: CREATE_POST_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function resetNewPost() {
-	  return {
-	    type: RESET_NEW_POST
-	  };
-	};
-
-	function resetDeletedPost() {
-	  return {
-	    type: RESET_DELETED_POST
-	  };
-	};
-
-	function fetchPost(id) {
-	  var request = _axios2.default.get(ROOT_URL + '/posts/' + id);
-
-	  return {
-	    type: FETCH_POST,
-	    payload: request
-	  };
-	}
-
-	function fetchPostSuccess(activePost) {
-	  return {
-	    type: FETCH_POST_SUCCESS,
-	    payload: activePost
-	  };
-	}
-
-	function fetchPostFailure(error) {
-	  return {
-	    type: FETCH_POST_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function resetActivePost() {
-	  return {
-	    type: RESET_ACTIVE_POST
-	  };
-	};
-
-	function deletePost(id, tokenFromStorage) {
-	  var request = (0, _axios2.default)({
-	    method: 'delete',
-	    url: ROOT_URL + '/posts/' + id,
-	    headers: { 'Authorization': 'Bearer ' + tokenFromStorage }
-	  });
-	  return {
-	    type: DELETE_POST,
-	    payload: request
-	  };
-	}
-
-	function deletePostSuccess(deletedPost) {
-	  return {
-	    type: DELETE_POST_SUCCESS,
-	    payload: deletedPost
-	  };
-	}
-
-	function deletePostFailure(response) {
-	  return {
-	    type: DELETE_POST_FAILURE,
-	    payload: response
-	  };
-	}
+	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_App2.default);
 
 /***/ },
 /* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(241);
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.LOGOUT_USER = exports.UPDATE_USER_EMAIL = exports.VALIDATE_EMAIL_FAILURE = exports.VALIDATE_EMAIL_SUCCESS = exports.VALIDATE_EMAIL = exports.SIGNIN_USER_FAILURE = exports.SIGNIN_USER_SUCCESS = exports.SIGNIN_USER = exports.RESET_USER = exports.SIGNUP_USER_FAILURE = exports.SIGNUP_USER_SUCCESS = exports.SIGNUP_USER = exports.RESET_TOKEN = exports.ME_FROM_TOKEN_FAILURE = exports.ME_FROM_TOKEN_SUCCESS = exports.ME_FROM_TOKEN = undefined;
+	exports.validateEmail = validateEmail;
+	exports.validateEmailSuccess = validateEmailSuccess;
+	exports.validateEmailFailure = validateEmailFailure;
+	exports.meFromToken = meFromToken;
+	exports.meFromTokenSuccess = meFromTokenSuccess;
+	exports.meFromTokenFailure = meFromTokenFailure;
+	exports.resetToken = resetToken;
+	exports.signUpUser = signUpUser;
+	exports.signUpUserSuccess = signUpUserSuccess;
+	exports.signUpUserFailure = signUpUserFailure;
+	exports.resetUser = resetUser;
+	exports.signInUser = signInUser;
+	exports.signInUserSuccess = signInUserSuccess;
+	exports.signInUserFailure = signInUserFailure;
+	exports.logoutUser = logoutUser;
+	exports.updateUserEmail = updateUserEmail;
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	//Get current user(me) from token in localStorage
+	var ME_FROM_TOKEN = exports.ME_FROM_TOKEN = 'ME_FROM_TOKEN';
+	var ME_FROM_TOKEN_SUCCESS = exports.ME_FROM_TOKEN_SUCCESS = 'ME_FROM_TOKEN_SUCCESS';
+	var ME_FROM_TOKEN_FAILURE = exports.ME_FROM_TOKEN_FAILURE = 'ME_FROM_TOKEN_FAILURE';
+	var RESET_TOKEN = exports.RESET_TOKEN = 'RESET_TOKEN';
+
+	//Sign Up User
+	var SIGNUP_USER = exports.SIGNUP_USER = 'SIGNUP_USER';
+	var SIGNUP_USER_SUCCESS = exports.SIGNUP_USER_SUCCESS = 'SIGNUP_USER_SUCCESS';
+	var SIGNUP_USER_FAILURE = exports.SIGNUP_USER_FAILURE = 'SIGNUP_USER_FAILURE';
+	var RESET_USER = exports.RESET_USER = 'RESET_USER';
+
+	//Sign In User
+	var SIGNIN_USER = exports.SIGNIN_USER = 'SIGNIN_USER';
+	var SIGNIN_USER_SUCCESS = exports.SIGNIN_USER_SUCCESS = 'SIGNIN_USER_SUCCESS';
+	var SIGNIN_USER_FAILURE = exports.SIGNIN_USER_FAILURE = 'SIGNIN_USER_FAILURE';
+
+	//validate email, if success, then load user and login
+	var VALIDATE_EMAIL = exports.VALIDATE_EMAIL = 'VALIDATE_EMAIL';
+	var VALIDATE_EMAIL_SUCCESS = exports.VALIDATE_EMAIL_SUCCESS = 'VALIDATE_EMAIL_SUCCESS';
+	var VALIDATE_EMAIL_FAILURE = exports.VALIDATE_EMAIL_FAILURE = 'VALIDATE_EMAIL_FAILURE';
+
+	//called when email is updated in profile to update main user's email state
+	var UPDATE_USER_EMAIL = exports.UPDATE_USER_EMAIL = 'UPDATE_USER_EMAIL';
+
+	//log out user
+	var LOGOUT_USER = exports.LOGOUT_USER = 'LOGOUT_USER';
+
+	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+
+	function validateEmail(validateEmailToken) {
+	  //check if token from welcome email is valid, if so, update email as verified and login the user from response
+	  var request = _axios2.default.get(ROOT_URL + '/validateEmail/' + validateEmailToken);
+
+	  return {
+	    type: VALIDATE_EMAIL,
+	    payload: request
+	  };
+	}
+
+	function validateEmailSuccess(currentUser) {
+	  return {
+	    type: VALIDATE_EMAIL_SUCCESS,
+	    payload: currentUser
+	  };
+	}
+
+	function validateEmailFailure(error) {
+	  return {
+	    type: VALIDATE_EMAIL_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function meFromToken(tokenFromStorage) {
+	  //check if the token is still valid, if so, get me from the server
+	  var request = _axios2.default.get(ROOT_URL + '/me/from/token?token=' + tokenFromStorage);
+
+	  return {
+	    type: ME_FROM_TOKEN,
+	    payload: request
+	  };
+	}
+
+	function meFromTokenSuccess(currentUser) {
+	  return {
+	    type: ME_FROM_TOKEN_SUCCESS,
+	    payload: currentUser
+	  };
+	}
+
+	function meFromTokenFailure(error) {
+	  return {
+	    type: ME_FROM_TOKEN_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetToken() {
+	  //used for logout
+	  return {
+	    type: RESET_TOKEN
+	  };
+	}
+
+	function signUpUser(formValues) {
+	  var request = _axios2.default.post(ROOT_URL + '/users/signup', formValues);
+
+	  return {
+	    type: SIGNUP_USER,
+	    payload: request
+	  };
+	}
+
+	function signUpUserSuccess(user) {
+	  return {
+	    type: SIGNUP_USER_SUCCESS,
+	    payload: user
+	  };
+	}
+
+	function signUpUserFailure(error) {
+	  return {
+	    type: SIGNUP_USER_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetUser() {
+	  return {
+	    type: RESET_USER
+	  };
+	}
+
+	function signInUser(formValues) {
+	  var request = _axios2.default.post(ROOT_URL + '/users/signin', formValues);
+
+	  return {
+	    type: SIGNIN_USER,
+	    payload: request
+	  };
+	}
+
+	function signInUserSuccess(user) {
+	  return {
+	    type: SIGNIN_USER_SUCCESS,
+	    payload: user
+	  };
+	}
+
+	function signInUserFailure(error) {
+	  return {
+	    type: SIGNIN_USER_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function logoutUser() {
+	  return {
+	    type: LOGOUT_USER
+	  };
+	}
+	function updateUserEmail(email) {
+	  return {
+	    type: UPDATE_USER_EMAIL,
+	    payload: email
+	  };
+	}
 
 /***/ },
 /* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(242);
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	var defaults = __webpack_require__(242);
-	var utils = __webpack_require__(243);
-	var dispatchRequest = __webpack_require__(244);
-	var InterceptorManager = __webpack_require__(252);
-	var isAbsoluteURL = __webpack_require__(253);
-	var combineURLs = __webpack_require__(254);
-	var bind = __webpack_require__(255);
-	var transformData = __webpack_require__(248);
+	var defaults = __webpack_require__(243);
+	var utils = __webpack_require__(244);
+	var dispatchRequest = __webpack_require__(245);
+	var InterceptorManager = __webpack_require__(253);
+	var isAbsoluteURL = __webpack_require__(254);
+	var combineURLs = __webpack_require__(255);
+	var bind = __webpack_require__(256);
+	var transformData = __webpack_require__(249);
 
 	function Axios(defaultConfig) {
 	  this.defaults = utils.merge({}, defaultConfig);
@@ -26600,7 +26589,7 @@
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(256);
+	axios.spread = __webpack_require__(257);
 
 	// Expose interceptors
 	axios.interceptors = defaultInstance.interceptors;
@@ -26631,12 +26620,12 @@
 
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
+	var utils = __webpack_require__(244);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -26700,7 +26689,7 @@
 
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26950,7 +26939,7 @@
 
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -26972,10 +26961,10 @@
 	        adapter = config.adapter;
 	      } else if (typeof XMLHttpRequest !== 'undefined') {
 	        // For browsers use XHR adapter
-	        adapter = __webpack_require__(245);
+	        adapter = __webpack_require__(246);
 	      } else if (typeof process !== 'undefined') {
 	        // For node use HTTP adapter
-	        adapter = __webpack_require__(245);
+	        adapter = __webpack_require__(246);
 	      }
 
 	      if (typeof adapter === 'function') {
@@ -26991,17 +26980,17 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
-	var buildURL = __webpack_require__(246);
-	var parseHeaders = __webpack_require__(247);
-	var transformData = __webpack_require__(248);
-	var isURLSameOrigin = __webpack_require__(249);
-	var btoa = window.btoa || __webpack_require__(250);
+	var utils = __webpack_require__(244);
+	var buildURL = __webpack_require__(247);
+	var parseHeaders = __webpack_require__(248);
+	var transformData = __webpack_require__(249);
+	var isURLSameOrigin = __webpack_require__(250);
+	var btoa = window.btoa || __webpack_require__(251);
 
 	module.exports = function xhrAdapter(resolve, reject, config) {
 	  var requestData = config.data;
@@ -27076,7 +27065,7 @@
 	  // This is only done if running in a standard browser environment.
 	  // Specifically not if we're in a web worker, or react-native.
 	  if (utils.isStandardBrowserEnv()) {
-	    var cookies = __webpack_require__(251);
+	    var cookies = __webpack_require__(252);
 
 	    // Add xsrf header
 	    var xsrfValue = config.withCredentials || isURLSameOrigin(config.url) ?
@@ -27127,12 +27116,12 @@
 
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
+	var utils = __webpack_require__(244);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -27200,12 +27189,12 @@
 
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
+	var utils = __webpack_require__(244);
 
 	/**
 	 * Parse headers into an object
@@ -27243,12 +27232,12 @@
 
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
+	var utils = __webpack_require__(244);
 
 	/**
 	 * Transform the data for a request or a response
@@ -27269,12 +27258,12 @@
 
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
+	var utils = __webpack_require__(244);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -27343,7 +27332,7 @@
 
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27385,12 +27374,12 @@
 
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
+	var utils = __webpack_require__(244);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -27444,12 +27433,12 @@
 
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(243);
+	var utils = __webpack_require__(244);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -27502,7 +27491,7 @@
 
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27522,7 +27511,7 @@
 
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27540,7 +27529,7 @@
 
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27557,7 +27546,7 @@
 
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27590,99 +27579,6 @@
 
 
 /***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
-	  var action = arguments[1];
-
-	  var error = void 0;
-	  switch (action.type) {
-
-	    case _users.VALIDATE_EMAIL:
-	      //check email verification token
-	      return _extends({}, state, { user: null, status: 'validate_email', error: null, loading: true });
-	    case _users.VALIDATE_EMAIL_SUCCESS:
-	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated & email verified
-	    case _users.VALIDATE_EMAIL_FAILURE:
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors      
-	      return _extends({}, state, { user: null, status: 'validate_email', error: error, loading: false }); //<-- authenticated
-
-	    case _users.ME_FROM_TOKEN:
-	      // loading currentUser("me") from jwttoken in local/session storage storage,
-	      return _extends({}, state, { user: null, status: 'storage', error: null, loading: true });
-	    case _users.ME_FROM_TOKEN_SUCCESS:
-	      //return user, status = authenticated and make loading = false
-	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated
-	    case _users.ME_FROM_TOKEN_FAILURE:
-	      // return error and make loading = false
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors  
-	      return _extends({}, state, { user: null, status: 'storage', error: error, loading: false });
-	    case _users.RESET_TOKEN:
-	      // remove token from storage make loading = false
-	      return _extends({}, state, { user: null, status: 'storage', error: null, loading: false });
-
-	    case _users.SIGNUP_USER:
-	      // sign up user, set loading = true and status = signup
-	      return _extends({}, state, { user: null, status: 'signup', error: null, loading: true });
-	    case _users.SIGNUP_USER_SUCCESS:
-	      //return user, status = authenticated and make loading = false
-	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated
-	    case _users.SIGNUP_USER_FAILURE:
-	      // return error and make loading = false
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors     
-	      return _extends({}, state, { user: null, status: 'signup', error: error, loading: false });
-
-	    case _users.SIGNIN_USER:
-	      // sign in user,  set loading = true and status = signin
-	      return _extends({}, state, { user: null, status: 'signin', error: null, loading: true });
-	    case _users.SIGNIN_USER_SUCCESS:
-	      //return authenticated user,  make loading = false and status = authenticated
-	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated
-	    case _users.SIGNIN_USER_FAILURE:
-	      // return error and make loading = false
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors     
-	      return _extends({}, state, { user: null, status: 'signin', error: error, loading: false });
-
-	    case _users.UPDATE_USER_EMAIL:
-	      return _extends({}, state, { user: _extends({}, state.user, { email: action.payload.email }) });
-
-	    case _users.LOGOUT_USER:
-	      return _extends({}, state, { user: null, status: 'logout', error: null, loading: false });
-
-	    case _users.RESET_USER:
-	      // reset authenticated user to initial state
-	      return _extends({}, state, { user: null, status: null, error: null, loading: false });
-
-	    default:
-	      return state;
-	  }
-	};
-
-	var _users = __webpack_require__(258);
-
-	//user = userobj,
-	// status can be:
-	// 1. 'storage' ie. localstorage / sessionstorage)
-	// 2. 'signup' (signing up)
-	// 3. 'signin' (signing in)
-	// 4. 'validate'(validate fields)
-	// 5. 'validate_email' (validating email token)
-	// 5. 'authenticated'(after signin)
-	// 6. 'logout' (after logout)
-
-	var INITIAL_STATE = { user: null, status: null, error: null, loading: false };
-
-/***/ },
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -27691,178 +27587,50 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.LOGOUT_USER = exports.UPDATE_USER_EMAIL = exports.VALIDATE_EMAIL_FAILURE = exports.VALIDATE_EMAIL_SUCCESS = exports.VALIDATE_EMAIL = exports.SIGNIN_USER_FAILURE = exports.SIGNIN_USER_SUCCESS = exports.SIGNIN_USER = exports.RESET_USER = exports.SIGNUP_USER_FAILURE = exports.SIGNUP_USER_SUCCESS = exports.SIGNUP_USER = exports.RESET_TOKEN = exports.ME_FROM_TOKEN_FAILURE = exports.ME_FROM_TOKEN_SUCCESS = exports.ME_FROM_TOKEN = undefined;
-	exports.validateEmail = validateEmail;
-	exports.validateEmailSuccess = validateEmailSuccess;
-	exports.validateEmailFailure = validateEmailFailure;
-	exports.meFromToken = meFromToken;
-	exports.meFromTokenSuccess = meFromTokenSuccess;
-	exports.meFromTokenFailure = meFromTokenFailure;
-	exports.resetToken = resetToken;
-	exports.signUpUser = signUpUser;
-	exports.signUpUserSuccess = signUpUserSuccess;
-	exports.signUpUserFailure = signUpUserFailure;
-	exports.resetUser = resetUser;
-	exports.signInUser = signInUser;
-	exports.signInUserSuccess = signInUserSuccess;
-	exports.signInUserFailure = signInUserFailure;
-	exports.logoutUser = logoutUser;
-	exports.updateUserEmail = updateUserEmail;
 
-	var _axios = __webpack_require__(240);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _axios2 = _interopRequireDefault(_axios);
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//Get current user(me) from token in localStorage
-	var ME_FROM_TOKEN = exports.ME_FROM_TOKEN = 'ME_FROM_TOKEN';
-	var ME_FROM_TOKEN_SUCCESS = exports.ME_FROM_TOKEN_SUCCESS = 'ME_FROM_TOKEN_SUCCESS';
-	var ME_FROM_TOKEN_FAILURE = exports.ME_FROM_TOKEN_FAILURE = 'ME_FROM_TOKEN_FAILURE';
-	var RESET_TOKEN = exports.RESET_TOKEN = 'RESET_TOKEN';
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	//Sign Up User
-	var SIGNUP_USER = exports.SIGNUP_USER = 'SIGNUP_USER';
-	var SIGNUP_USER_SUCCESS = exports.SIGNUP_USER_SUCCESS = 'SIGNUP_USER_SUCCESS';
-	var SIGNUP_USER_FAILURE = exports.SIGNUP_USER_FAILURE = 'SIGNUP_USER_FAILURE';
-	var RESET_USER = exports.RESET_USER = 'RESET_USER';
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	//Sign In User
-	var SIGNIN_USER = exports.SIGNIN_USER = 'SIGNIN_USER';
-	var SIGNIN_USER_SUCCESS = exports.SIGNIN_USER_SUCCESS = 'SIGNIN_USER_SUCCESS';
-	var SIGNIN_USER_FAILURE = exports.SIGNIN_USER_FAILURE = 'SIGNIN_USER_FAILURE';
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	//validate email, if success, then load user and login
-	var VALIDATE_EMAIL = exports.VALIDATE_EMAIL = 'VALIDATE_EMAIL';
-	var VALIDATE_EMAIL_SUCCESS = exports.VALIDATE_EMAIL_SUCCESS = 'VALIDATE_EMAIL_SUCCESS';
-	var VALIDATE_EMAIL_FAILURE = exports.VALIDATE_EMAIL_FAILURE = 'VALIDATE_EMAIL_FAILURE';
+	var App = function (_Component) {
+	  _inherits(App, _Component);
 
-	//called when email is updated in profile to update main user's email state
-	var UPDATE_USER_EMAIL = exports.UPDATE_USER_EMAIL = 'UPDATE_USER_EMAIL';
+	  function App() {
+	    _classCallCheck(this, App);
 
-	//log out user
-	var LOGOUT_USER = exports.LOGOUT_USER = 'LOGOUT_USER';
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+	  }
 
-	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+	  _createClass(App, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.props.loadUserFromToken();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        this.props.children
+	      );
+	    }
+	  }]);
 
-	function validateEmail(validateEmailToken) {
-	  //check if token from welcome email is valid, if so, update email as verified and login the user from response
-	  var request = _axios2.default.get(ROOT_URL + '/validateEmail/' + validateEmailToken);
+	  return App;
+	}(_react.Component);
 
-	  return {
-	    type: VALIDATE_EMAIL,
-	    payload: request
-	  };
-	}
-
-	function validateEmailSuccess(currentUser) {
-	  return {
-	    type: VALIDATE_EMAIL_SUCCESS,
-	    payload: currentUser
-	  };
-	}
-
-	function validateEmailFailure(error) {
-	  return {
-	    type: VALIDATE_EMAIL_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function meFromToken(tokenFromStorage) {
-	  //check if the token is still valid, if so, get me from the server
-	  var request = _axios2.default.get(ROOT_URL + '/me/from/token?token=' + tokenFromStorage);
-
-	  return {
-	    type: ME_FROM_TOKEN,
-	    payload: request
-	  };
-	}
-
-	function meFromTokenSuccess(currentUser) {
-	  return {
-	    type: ME_FROM_TOKEN_SUCCESS,
-	    payload: currentUser
-	  };
-	}
-
-	function meFromTokenFailure(error) {
-	  return {
-	    type: ME_FROM_TOKEN_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function resetToken() {
-	  //used for logout
-	  return {
-	    type: RESET_TOKEN
-	  };
-	}
-
-	function signUpUser(formValues) {
-	  var request = _axios2.default.post(ROOT_URL + '/users/signup', formValues);
-
-	  return {
-	    type: SIGNUP_USER,
-	    payload: request
-	  };
-	}
-
-	function signUpUserSuccess(user) {
-	  return {
-	    type: SIGNUP_USER_SUCCESS,
-	    payload: user
-	  };
-	}
-
-	function signUpUserFailure(error) {
-	  return {
-	    type: SIGNUP_USER_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function resetUser() {
-	  return {
-	    type: RESET_USER
-	  };
-	}
-
-	function signInUser(formValues) {
-	  var request = _axios2.default.post(ROOT_URL + '/users/signin', formValues);
-
-	  return {
-	    type: SIGNIN_USER,
-	    payload: request
-	  };
-	}
-
-	function signInUserSuccess(user) {
-	  return {
-	    type: SIGNIN_USER_SUCCESS,
-	    payload: user
-	  };
-	}
-
-	function signInUserFailure(error) {
-	  return {
-	    type: SIGNIN_USER_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function logoutUser() {
-	  return {
-	    type: LOGOUT_USER
-	  };
-	}
-	function updateUserEmail(email) {
-	  return {
-	    type: UPDATE_USER_EMAIL,
-	    payload: email
-	  };
-	}
+	exports.default = App;
 
 /***/ },
 /* 259 */
@@ -27874,43 +27642,58 @@
 	  value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
-	  var action = arguments[1];
+	var _react = __webpack_require__(2);
 
-	  var error = void 0;
-	  switch (action.type) {
-	    case _validateUserFields.VALIDATE_USER_FIELDS:
-	      //sign up or sign in form fields
-	      return _extends({}, state, { error: null, loading: true });
-	    case _validateUserFields.VALIDATE_USER_FIELDS_SUCCESS:
-	      // same as RESET_USER_FIELDS
-	      return _extends({}, state, { error: null, loading: false });
-	    case _validateUserFields.VALIDATE_USER_FIELDS_FAILURE:
-	      error = action.payload.data ? action.payload.data : { message: action.payload.message };
-	      return _extends({}, state, { error: error, loading: false });
-	    case _validateUserFields.RESET_VALIDATE_USER_FIELDS:
-	      return _extends({}, state, { error: null, loading: false });
-	    default:
-	      return state;
+	var _react2 = _interopRequireDefault(_react);
+
+	var _HeaderContainer = __webpack_require__(260);
+
+	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
+
+	var _ValidateEmailAlertContainer = __webpack_require__(263);
+
+	var _ValidateEmailAlertContainer2 = _interopRequireDefault(_ValidateEmailAlertContainer);
+
+	var _PostsListContainer = __webpack_require__(310);
+
+	var _PostsListContainer2 = _interopRequireDefault(_PostsListContainer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PostsIndex = function (_Component) {
+	  _inherits(PostsIndex, _Component);
+
+	  function PostsIndex() {
+	    _classCallCheck(this, PostsIndex);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(PostsIndex).apply(this, arguments));
 	  }
-	};
 
-	var _validateUserFields = __webpack_require__(260);
+	  _createClass(PostsIndex, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_HeaderContainer2.default, { type: 'posts_index' }),
+	        _react2.default.createElement(_ValidateEmailAlertContainer2.default, null),
+	        _react2.default.createElement(_PostsListContainer2.default, null)
+	      );
+	    }
+	  }]);
 
-	//user = userobj,
-	// status can be:
-	// 1. 'storage' ie. localstorage / sessionstorage)
-	// 2. 'signup' (signing up)
-	// 3. 'signin' (signing in)
-	// 4. 'validate'(validate fields)
-	// 5. 'validate_email' (validating email token)
-	// 5. 'authenticated'(after signin)
-	// 6. 'logout' (after logout)
+	  return PostsIndex;
+	}(_react.Component);
 
-	var INITIAL_STATE = { error: null, loading: false };
+	exports.default = PostsIndex;
 
 /***/ },
 /* 260 */
@@ -27921,54 +27704,59 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.RESET_VALIDATE_USER_FIELDS = exports.VALIDATE_USER_FIELDS_FAILURE = exports.VALIDATE_USER_FIELDS_SUCCESS = exports.VALIDATE_USER_FIELDS = undefined;
-	exports.validateUserFields = validateUserFields;
-	exports.validateUserFieldsSuccess = validateUserFieldsSuccess;
-	exports.validateUserFieldsFailure = validateUserFieldsFailure;
-	exports.resetValidateUserFields = resetValidateUserFields;
 
-	var _axios = __webpack_require__(240);
+	var _react = __webpack_require__(2);
 
-	var _axios2 = _interopRequireDefault(_axios);
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _posts = __webpack_require__(261);
+
+	var _users = __webpack_require__(240);
+
+	var _header = __webpack_require__(262);
+
+	var _header2 = _interopRequireDefault(_header);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//Validate user fields like name and password
-	var VALIDATE_USER_FIELDS = exports.VALIDATE_USER_FIELDS = 'VALIDATE_USER_FIELDS';
-	var VALIDATE_USER_FIELDS_SUCCESS = exports.VALIDATE_USER_FIELDS_SUCCESS = 'VALIDATE_USER_FIELDS_SUCCESS';
-	var VALIDATE_USER_FIELDS_FAILURE = exports.VALIDATE_USER_FIELDS_FAILURE = 'VALIDATE_USER_FIELDS_FAILURE';
-	var RESET_VALIDATE_USER_FIELDS = exports.RESET_VALIDATE_USER_FIELDS = 'RESET_VALIDATE_USER_FIELDS';
-
-	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
-
-	function validateUserFields(values) {
-	  //note: we cant have /users/validateFields because it'll match /users/:id path!
-	  var request = _axios2.default.post(ROOT_URL + '/users/validate/fields', values);
-
+	function mapStateToProps(state) {
+	  console.log(' state.user.status ' + state.user.status);
 	  return {
-	    type: VALIDATE_USER_FIELDS,
-	    payload: request
+	    deletedPost: state.posts.deletedPost,
+	    authenticatedUser: state.user.status === 'authenticated' ? state.user.user : null,
+	    user: state.user
 	  };
 	}
 
-	function validateUserFieldsSuccess() {
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
 	  return {
-	    type: VALIDATE_USER_FIELDS_SUCCESS
-	  };
-	}
+	    onDeleteClick: function onDeleteClick() {
+	      var token = sessionStorage.getItem('jwtToken');
+	      if (!token || token === '') {
+	        //if there is no token, dont bother,
+	        var data = { data: { message: 'Please Sign In' } }; //axios like error
+	        dispatch((0, _posts.deletePostFailure)(data)); // but let other comps know
+	        return;
+	      }
 
-	function validateUserFieldsFailure(error) {
-	  return {
-	    type: VALIDATE_USER_FIELDS_FAILURE,
-	    payload: error
-	  };
-	}
+	      dispatch((0, _posts.deletePost)(ownProps.postId, token)).then(function (response) {
+	        !response.error ? dispatch((0, _posts.deletePostSuccess)(response.payload)) : dispatch((0, _posts.deletePostFailure)(response.payload));
+	      });
+	    },
+	    resetMe: function resetMe() {
+	      dispatch((0, _posts.resetDeletedPost)());
+	    },
 
-	function resetValidateUserFields() {
-	  return {
-	    type: RESET_VALIDATE_USER_FIELDS
+	    logout: function logout() {
+	      sessionStorage.removeItem('jwtToken');
+	      dispatch((0, _users.logoutUser)());
+	    }
 	  };
 	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_header2.default);
 
 /***/ },
 /* 261 */
@@ -27979,36 +27767,612 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.RESET_DELETED_POST = exports.DELETE_POST_FAILURE = exports.DELETE_POST_SUCCESS = exports.DELETE_POST = exports.RESET_ACTIVE_POST = exports.FETCH_POST_FAILURE = exports.FETCH_POST_SUCCESS = exports.FETCH_POST = exports.RESET_POST_FIELDS = exports.VALIDATE_POST_FIELDS_FAILURE = exports.VALIDATE_POST_FIELDS_SUCCESS = exports.VALIDATE_POST_FIELDS = exports.RESET_NEW_POST = exports.CREATE_POST_FAILURE = exports.CREATE_POST_SUCCESS = exports.CREATE_POST = exports.RESET_POSTS = exports.FETCH_POSTS_FAILURE = exports.FETCH_POSTS_SUCCESS = exports.FETCH_POSTS = undefined;
+	exports.fetchPosts = fetchPosts;
+	exports.fetchPostsSuccess = fetchPostsSuccess;
+	exports.fetchPostsFailure = fetchPostsFailure;
+	exports.validatePostFields = validatePostFields;
+	exports.validatePostFieldsSuccess = validatePostFieldsSuccess;
+	exports.validatePostFieldsFailure = validatePostFieldsFailure;
+	exports.resetPostFields = resetPostFields;
+	exports.createPost = createPost;
+	exports.createPostSuccess = createPostSuccess;
+	exports.createPostFailure = createPostFailure;
+	exports.resetNewPost = resetNewPost;
+	exports.resetDeletedPost = resetDeletedPost;
+	exports.fetchPost = fetchPost;
+	exports.fetchPostSuccess = fetchPostSuccess;
+	exports.fetchPostFailure = fetchPostFailure;
+	exports.resetActivePost = resetActivePost;
+	exports.deletePost = deletePost;
+	exports.deletePostSuccess = deletePostSuccess;
+	exports.deletePostFailure = deletePostFailure;
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	var _axios = __webpack_require__(241);
 
-	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
-	  var action = arguments[1];
+	var _axios2 = _interopRequireDefault(_axios);
 
-	  var error = void 0;
-	  switch (action.type) {
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	    case _resendEmail.RESEND_VALIDATION_EMAIL:
-	      return _extends({}, state, { sentAgain: false, error: null, loading: true });
-	    case _resendEmail.RESEND_VALIDATION_EMAIL_SUCCESS:
-	      return _extends({}, state, { sentAgain: true, error: null, loading: false });
-	    case _resendEmail.RESEND_VALIDATION_EMAIL_FAILURE:
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors      
-	      return _extends({}, state, { sentAgain: false, error: error, loading: false });
-	    case _resendEmail.RESET_RESEND_EMAIL_STATE:
-	      return _extends({}, state, { sentAgain: false, error: null, loading: false });
-	    default:
-	      return state;
-	  }
+	//Post list
+	var FETCH_POSTS = exports.FETCH_POSTS = 'FETCH_POSTS';
+	var FETCH_POSTS_SUCCESS = exports.FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
+	var FETCH_POSTS_FAILURE = exports.FETCH_POSTS_FAILURE = 'FETCH_POSTS_FAILURE';
+	var RESET_POSTS = exports.RESET_POSTS = 'RESET_POSTS';
+
+	//Create new post
+	var CREATE_POST = exports.CREATE_POST = 'CREATE_POST';
+	var CREATE_POST_SUCCESS = exports.CREATE_POST_SUCCESS = 'CREATE_POST_SUCCESS';
+	var CREATE_POST_FAILURE = exports.CREATE_POST_FAILURE = 'CREATE_POST_FAILURE';
+	var RESET_NEW_POST = exports.RESET_NEW_POST = 'RESET_NEW_POST';
+
+	//Validate post fields like Title, Categries on the server
+	var VALIDATE_POST_FIELDS = exports.VALIDATE_POST_FIELDS = 'VALIDATE_POST_FIELDS';
+	var VALIDATE_POST_FIELDS_SUCCESS = exports.VALIDATE_POST_FIELDS_SUCCESS = 'VALIDATE_POST_FIELDS_SUCCESS';
+	var VALIDATE_POST_FIELDS_FAILURE = exports.VALIDATE_POST_FIELDS_FAILURE = 'VALIDATE_POST_FIELDS_FAILURE';
+	var RESET_POST_FIELDS = exports.RESET_POST_FIELDS = 'RESET_POST_FIELDS';
+
+	//Fetch post
+	var FETCH_POST = exports.FETCH_POST = 'FETCH_POST';
+	var FETCH_POST_SUCCESS = exports.FETCH_POST_SUCCESS = 'FETCH_POST_SUCCESS';
+	var FETCH_POST_FAILURE = exports.FETCH_POST_FAILURE = 'FETCH_POST_FAILURE';
+	var RESET_ACTIVE_POST = exports.RESET_ACTIVE_POST = 'RESET_ACTIVE_POST';
+
+	//Delete post
+	var DELETE_POST = exports.DELETE_POST = 'DELETE_POST';
+	var DELETE_POST_SUCCESS = exports.DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS';
+	var DELETE_POST_FAILURE = exports.DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
+	var RESET_DELETED_POST = exports.RESET_DELETED_POST = 'RESET_DELETED_POST';
+
+	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+	function fetchPosts() {
+	  var request = (0, _axios2.default)({
+	    method: 'get',
+	    url: ROOT_URL + '/posts',
+	    headers: []
+	  });
+
+	  return {
+	    type: FETCH_POSTS,
+	    payload: request
+	  };
+	}
+
+	function fetchPostsSuccess(posts) {
+	  return {
+	    type: FETCH_POSTS_SUCCESS,
+	    payload: posts
+	  };
+	}
+
+	function fetchPostsFailure(error) {
+	  return {
+	    type: FETCH_POSTS_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function validatePostFields(props) {
+	  //note: we cant have /posts/validateFields because it'll match /posts/:id path!
+	  var request = _axios2.default.post(ROOT_URL + '/posts/validate/fields', props);
+
+	  return {
+	    type: VALIDATE_POST_FIELDS,
+	    payload: request
+	  };
+	}
+
+	function validatePostFieldsSuccess() {
+	  return {
+	    type: VALIDATE_POST_FIELDS_SUCCESS
+	  };
+	}
+
+	function validatePostFieldsFailure(error) {
+	  return {
+	    type: VALIDATE_POST_FIELDS_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetPostFields() {
+	  return {
+	    type: RESET_POST_FIELDS
+	  };
 	};
 
-	var _resendEmail = __webpack_require__(262);
+	function createPost(props, tokenFromStorage) {
+	  //const request = axios.post(`${ROOT_URL}/posts`, props);
+	  var request = (0, _axios2.default)({
+	    method: 'post',
+	    data: props,
+	    url: ROOT_URL + '/posts',
+	    headers: { 'Authorization': 'Bearer ' + tokenFromStorage }
+	  });
 
-	var INITIAL_STATE = { sentAgain: false, error: null, loading: false };
+	  return {
+	    type: CREATE_POST,
+	    payload: request
+	  };
+	}
+
+	function createPostSuccess(newPost) {
+	  return {
+	    type: CREATE_POST_SUCCESS,
+	    payload: newPost
+	  };
+	}
+
+	function createPostFailure(error) {
+	  return {
+	    type: CREATE_POST_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetNewPost() {
+	  return {
+	    type: RESET_NEW_POST
+	  };
+	};
+
+	function resetDeletedPost() {
+	  return {
+	    type: RESET_DELETED_POST
+	  };
+	};
+
+	function fetchPost(id) {
+	  var request = _axios2.default.get(ROOT_URL + '/posts/' + id);
+
+	  return {
+	    type: FETCH_POST,
+	    payload: request
+	  };
+	}
+
+	function fetchPostSuccess(activePost) {
+	  return {
+	    type: FETCH_POST_SUCCESS,
+	    payload: activePost
+	  };
+	}
+
+	function fetchPostFailure(error) {
+	  return {
+	    type: FETCH_POST_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetActivePost() {
+	  return {
+	    type: RESET_ACTIVE_POST
+	  };
+	};
+
+	function deletePost(id, tokenFromStorage) {
+	  var request = (0, _axios2.default)({
+	    method: 'delete',
+	    url: ROOT_URL + '/posts/' + id,
+	    headers: { 'Authorization': 'Bearer ' + tokenFromStorage }
+	  });
+	  return {
+	    type: DELETE_POST,
+	    payload: request
+	  };
+	}
+
+	function deletePostSuccess(deletedPost) {
+	  return {
+	    type: DELETE_POST_SUCCESS,
+	    payload: deletedPost
+	  };
+	}
+
+	function deletePostFailure(response) {
+	  return {
+	    type: DELETE_POST_FAILURE,
+	    payload: response
+	  };
+	}
 
 /***/ },
 /* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(181);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Header = function (_Component) {
+	  _inherits(Header, _Component);
+
+	  function Header() {
+	    _classCallCheck(this, Header);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Header).apply(this, arguments));
+	  }
+
+	  _createClass(Header, [{
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
+	      //always reset that global state back to null when you REMOUNT
+	      this.props.resetMe();
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.deletedPost.error && nextProps.deletedPost.error.message) {
+	        //delete failure
+	        alert(nextProps.deletedPost.error.message || 'Could not delete. Please try again.');
+	      } else if (nextProps.deletedPost.post && !nextProps.deletedPost.error) {
+	        //delete success
+	        this.context.router.push('/');
+	      } else if (this.props.user.user && !nextProps.user.user) {
+	        //logout (had user(this.props.user.user) but no loger the case (!nextProps.user.user))
+	        this.context.router.push('/');
+	      }
+	    }
+	  }, {
+	    key: 'renderSignInLinks',
+	    value: function renderSignInLinks(authenticatedUser) {
+	      if (authenticatedUser) {
+	        return _react2.default.createElement(
+	          'ul',
+	          { className: 'nav  nav-pills navbar-right' },
+	          _react2.default.createElement(
+	            'li',
+	            { style: { paddingRight: '10px' }, role: 'presentation' },
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { role: 'presentation', style: { color: '#996633', fontSize: '17px' }, to: '/profile' },
+	              authenticatedUser.name
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            { style: { paddingRight: '10px' }, role: 'presentation' },
+	            _react2.default.createElement(
+	              'a',
+	              { style: { color: '#996633', fontSize: '17px' }, onClick: this.props.logout, href: 'javascript:void(0)' },
+	              'Log out'
+	            )
+	          )
+	        );
+	      }
+
+	      return _react2.default.createElement(
+	        'ul',
+	        { className: 'nav  nav-pills navbar-right' },
+	        _react2.default.createElement(
+	          'li',
+	          { style: { paddingRight: '10px' }, role: 'presentation' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { role: 'presentation', style: { color: '#996633', fontSize: '17px' }, to: '/signup' },
+	            'Sign up'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          { style: { paddingRight: '10px' }, role: 'presentation' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { style: { color: '#996633', fontSize: '17px' }, to: '/signin' },
+	            'Sign in'
+	          )
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'renderLinks',
+	    value: function renderLinks() {
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var type = _props.type;
+	      var authenticatedUser = _props.authenticatedUser;
+
+	      console.log('authenticatedUser.status' + (authenticatedUser ? authenticatedUser.status : authenticatedUser));
+	      if (type === 'posts_index') {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'ul',
+	            { className: 'nav  nav-pills navbar-right' },
+	            _react2.default.createElement(
+	              'li',
+	              { style: { paddingRight: '10px' }, role: 'presentation' },
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { style: { color: '#337ab7', fontSize: '17px' }, to: '/posts/new' },
+	                'New Post'
+	              )
+	            )
+	          ),
+	          this.renderSignInLinks(authenticatedUser)
+	        );
+	      } else if (type === 'posts_new') {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          this.renderSignInLinks(authenticatedUser),
+	          _react2.default.createElement(
+	            'ul',
+	            { className: 'nav  nav-pills navbar-left' },
+	            _react2.default.createElement(
+	              'li',
+	              { style: { paddingRight: '10px' }, role: 'presentation' },
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { className: 'text-xs-right', style: { color: '#337ab7', fontSize: '17px' }, to: '/' },
+	                'Back To Index'
+	              )
+	            )
+	          )
+	        );
+	      } else if (type === 'posts_show') {
+	        var _React$createElement;
+
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'ul',
+	            { className: 'nav  nav-pills navbar-left' },
+	            _react2.default.createElement(
+	              'li',
+	              (_React$createElement = { style: { paddingRight: '10px' } }, _defineProperty(_React$createElement, 'style', { color: '#337ab7', fontSize: '17px' }), _defineProperty(_React$createElement, 'role', 'presentation'), _React$createElement),
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: '/' },
+	                'Back To Index'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'navbar-form navbar-right', style: { paddingRight: '50px' } },
+	            _react2.default.createElement(
+	              'button',
+	              { className: 'btn btn-warning pull-xs-right', onClick: function onClick() {
+	                  _this2.props.onDeleteClick();
+	                } },
+	              'Delete Post'
+	            )
+	          ),
+	          this.renderSignInLinks(authenticatedUser)
+	        );
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'nav',
+	        { className: 'navbar navbar-default navbar-static-top' },
+	        _react2.default.createElement(
+	          'div',
+	          { id: 'navbar', className: 'navbar-collapse collapse' },
+	          this.renderLinks()
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Header;
+	}(_react.Component);
+
+	Header.contextTypes = {
+	  router: _react.PropTypes.object
+	};
+	exports.default = Header;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _ValidateEmailAlert = __webpack_require__(264);
+
+	var _ValidateEmailAlert2 = _interopRequireDefault(_ValidateEmailAlert);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _users = __webpack_require__(240);
+
+	var _resendEmail = __webpack_require__(265);
+
+	var _reduxForm = __webpack_require__(266);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  return {
+	    user: state.user,
+	    resendEmail: state.resendEmail,
+	    autoValidateToken: ownProps.autoValidateToken //auto-check server to validate token this mounts(used in validateEmail page)
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+	  return {
+	    validateEmail: function validateEmail() {
+	      dispatch((0, _users.validateEmail)(ownProps.token)).then(function (response) {
+	        if (!response.error) {
+	          //reset token (possibly new token that was regenerated by the server)
+	          sessionStorage.setItem('jwtToken', response.payload.data.token);
+	          dispatch((0, _users.validateEmailSuccess)(response.payload));
+	        } else {
+	          sessionStorage.removeItem('jwtToken');
+	          dispatch((0, _users.validateEmailFailure)(response.payload));
+	        }
+	      });
+	    },
+	    resend: function resend() {
+	      var jwtToken = sessionStorage.getItem('jwtToken');
+	      if (!jwtToken || jwtToken === '') {
+	        //if there is no jwtToken, alert
+	        alert('Please Log In');
+	        return;
+	      }
+
+	      dispatch((0, _resendEmail.resendValidationEmail)(jwtToken)).then(function (response) {
+	        !response.error ? dispatch((0, _resendEmail.resendValidationEmailSuccess)(response.payload)) : dispatch((0, _resendEmail.resendValidationEmailFailure)(response.payload));
+	      });
+	    },
+	    resetMe: function resetMe() {
+	      dispatch((0, _resendEmail.resetResendEmailState)());
+	    }
+	  };
+	};
+
+	var ValidateEmailContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_ValidateEmailAlert2.default);
+
+	exports.default = ValidateEmailContainer;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(181);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ValidateEmailAlert = function (_Component) {
+	  _inherits(ValidateEmailAlert, _Component);
+
+	  function ValidateEmailAlert() {
+	    _classCallCheck(this, ValidateEmailAlert);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ValidateEmailAlert).apply(this, arguments));
+	  }
+
+	  _createClass(ValidateEmailAlert, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      //automatically verify for token if autoValidateToken is set to true (e.g. in ValidateEmail *page*)
+	      if (this.props.autoValidateToken) {
+	        this.props.validateEmail(this.props.token);
+	      }
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      //if user is authenticated, then reroute the user to PostsList as authenticated user
+	      if (nextProps.user && nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
+	        this.context.router.push('/');
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.props.resetMe();
+	    }
+	  }, {
+	    key: 'getAlertMessage',
+	    value: function getAlertMessage() {
+	      var resendEmailError = this.props.resendEmail.error;
+	      var validationError = this.props.user.error;
+
+	      if (resendEmailError || validationError) {
+	        return resendEmailError.message || validationError.message;
+	      } else if (this.props.user.user && !this.props.user.user.isEmailVerified) {
+	        if (this.props.resendEmail.sentAgain) {
+	          //if the user has pressed the 'resend' button
+	          return 'Resent Email. Please verify';
+	        } else {
+	          return 'Please verify email';
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var alertMessage = this.getAlertMessage();
+
+	      if (alertMessage) {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'alert alert-danger' },
+	            this.getAlertMessage(),
+	            _react2.default.createElement(
+	              'a',
+	              { style: { paddingLeft: '20px' }, onClick: this.props.resend, href: 'javascript:void(0)' },
+	              'Resend'
+	            ),
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { style: { paddingLeft: '20px' }, to: '/profile' },
+	              'Update Email'
+	            )
+	          )
+	        );
+	      } else {
+	        return _react2.default.createElement('span', null);
+	      }
+	    }
+	  }]);
+
+	  return ValidateEmailAlert;
+	}(_react.Component);
+
+	ValidateEmailAlert.contextTypes = {
+	  router: _react.PropTypes.object
+	};
+	exports.default = ValidateEmailAlert;
+
+/***/ },
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28022,7 +28386,7 @@
 	exports.resendValidationEmailFailure = resendValidationEmailFailure;
 	exports.resetResendEmailState = resetResendEmailState;
 
-	var _axios = __webpack_require__(240);
+	var _axios = __webpack_require__(241);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -28070,106 +28434,7 @@
 	}
 
 /***/ },
-/* 263 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
-	  var action = arguments[1];
-
-	  var error = void 0;
-	  switch (action.type) {
-
-	    case _updateEmail.UPDATE_EMAIL:
-	      return _extends({}, state, { emailUpdated: false, error: null, loading: true });
-	    case _updateEmail.UPDATE_EMAIL_SUCCESS:
-	      return _extends({}, state, { emailUpdated: true, error: null, loading: false });
-	    case _updateEmail.UPDATE_EMAIL_FAILURE:
-	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors      
-	      return _extends({}, state, { emailUpdated: false, error: error, loading: false });
-	    case _updateEmail.RESET_UPDATE_EMAIL_STATE:
-	      return _extends({}, state, { emailUpdated: false, error: null, loading: false });
-	    default:
-	      return state;
-	  }
-	};
-
-	var _updateEmail = __webpack_require__(264);
-
-	var INITIAL_STATE = { emailUpdated: false, error: null, loading: false };
-
-/***/ },
-/* 264 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.RESET_UPDATE_EMAIL_STATE = exports.UPDATE_EMAIL_FAILURE = exports.UPDATE_EMAIL_SUCCESS = exports.UPDATE_EMAIL = undefined;
-	exports.updateEmail = updateEmail;
-	exports.updateEmailSuccess = updateEmailSuccess;
-	exports.updateEmailFailure = updateEmailFailure;
-	exports.resetUpdateEmailState = resetUpdateEmailState;
-
-	var _axios = __webpack_require__(240);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	//update  email
-	var UPDATE_EMAIL = exports.UPDATE_EMAIL = 'UPDATE_EMAIL';
-	var UPDATE_EMAIL_SUCCESS = exports.UPDATE_EMAIL_SUCCESS = 'UPDATE_EMAIL_SUCCESS';
-	var UPDATE_EMAIL_FAILURE = exports.UPDATE_EMAIL_FAILURE = 'UPDATE_EMAIL_FAILURE';
-	var RESET_UPDATE_EMAIL_STATE = exports.RESET_UPDATE_EMAIL_STATE = 'RESET_UPDATE_EMAIL_STATE';
-
-	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
-
-	function updateEmail(email, tokenFromStorage) {
-	  var request = (0, _axios2.default)({
-	    method: 'post',
-	    data: email,
-	    url: ROOT_URL + '/updateEmail',
-	    headers: { 'Authorization': 'Bearer ' + tokenFromStorage }
-	  });
-
-	  return {
-	    type: UPDATE_EMAIL,
-	    payload: request
-	  };
-	}
-
-	function updateEmailSuccess() {
-	  return {
-	    type: UPDATE_EMAIL_SUCCESS
-	  };
-	}
-
-	function updateEmailFailure(error) {
-	  return {
-	    type: UPDATE_EMAIL_FAILURE,
-	    payload: error
-	  };
-	}
-
-	function resetUpdateEmailState() {
-	  return {
-	    type: RESET_UPDATE_EMAIL_STATE
-	  };
-	}
-
-/***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28184,7 +28449,7 @@
 
 	var _reactRedux = __webpack_require__(160);
 
-	var _createAll2 = __webpack_require__(266);
+	var _createAll2 = __webpack_require__(267);
 
 	var _createAll3 = _interopRequireDefault(_createAll2);
 
@@ -28242,7 +28507,7 @@
 	exports.untouchWithKey = untouchWithKey;
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28257,35 +28522,35 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _reducer = __webpack_require__(267);
+	var _reducer = __webpack_require__(268);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _createReduxForm = __webpack_require__(278);
+	var _createReduxForm = __webpack_require__(279);
 
 	var _createReduxForm2 = _interopRequireDefault(_createReduxForm);
 
-	var _mapValues = __webpack_require__(269);
+	var _mapValues = __webpack_require__(270);
 
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 
-	var _bindActionData = __webpack_require__(285);
+	var _bindActionData = __webpack_require__(286);
 
 	var _bindActionData2 = _interopRequireDefault(_bindActionData);
 
-	var _actions = __webpack_require__(284);
+	var _actions = __webpack_require__(285);
 
 	var actions = _interopRequireWildcard(_actions);
 
-	var _actionTypes = __webpack_require__(268);
+	var _actionTypes = __webpack_require__(269);
 
 	var actionTypes = _interopRequireWildcard(_actionTypes);
 
-	var _createPropTypes = __webpack_require__(308);
+	var _createPropTypes = __webpack_require__(309);
 
 	var _createPropTypes2 = _interopRequireDefault(_createPropTypes);
 
-	var _getValuesFromState = __webpack_require__(272);
+	var _getValuesFromState = __webpack_require__(273);
 
 	var _getValuesFromState2 = _interopRequireDefault(_getValuesFromState);
 
@@ -28389,7 +28654,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28404,39 +28669,39 @@
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var _actionTypes = __webpack_require__(268);
+	var _actionTypes = __webpack_require__(269);
 
-	var _mapValues = __webpack_require__(269);
+	var _mapValues = __webpack_require__(270);
 
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 
-	var _read = __webpack_require__(270);
+	var _read = __webpack_require__(271);
 
 	var _read2 = _interopRequireDefault(_read);
 
-	var _write = __webpack_require__(271);
+	var _write = __webpack_require__(272);
 
 	var _write2 = _interopRequireDefault(_write);
 
-	var _getValuesFromState = __webpack_require__(272);
+	var _getValuesFromState = __webpack_require__(273);
 
 	var _getValuesFromState2 = _interopRequireDefault(_getValuesFromState);
 
-	var _initializeState = __webpack_require__(274);
+	var _initializeState = __webpack_require__(275);
 
 	var _initializeState2 = _interopRequireDefault(_initializeState);
 
-	var _resetState = __webpack_require__(275);
+	var _resetState = __webpack_require__(276);
 
 	var _resetState2 = _interopRequireDefault(_resetState);
 
-	var _setErrors = __webpack_require__(276);
+	var _setErrors = __webpack_require__(277);
 
 	var _setErrors2 = _interopRequireDefault(_setErrors);
 
-	var _fieldValue = __webpack_require__(273);
+	var _fieldValue = __webpack_require__(274);
 
-	var _normalizeFields = __webpack_require__(277);
+	var _normalizeFields = __webpack_require__(278);
 
 	var _normalizeFields2 = _interopRequireDefault(_normalizeFields);
 
@@ -28712,7 +28977,7 @@
 	exports['default'] = decorate(formReducer);
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28752,7 +29017,7 @@
 	exports.UNTOUCH = UNTOUCH;
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports) {
 
 	/**
@@ -28777,7 +29042,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 270 */
+/* 271 */
 /***/ function(module, exports) {
 
 	/**
@@ -28848,7 +29113,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports) {
 
 	/**
@@ -28970,14 +29235,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _fieldValue = __webpack_require__(273);
+	var _fieldValue = __webpack_require__(274);
 
 	/**
 	 * A different version of getValues() that does not need the fields array
@@ -29017,7 +29282,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29042,7 +29307,7 @@
 	}
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29051,7 +29316,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _fieldValue = __webpack_require__(273);
+	var _fieldValue = __webpack_require__(274);
 
 	var makeEntry = function makeEntry(value) {
 	  return _fieldValue.makeFieldValue(value === undefined ? {} : { initial: value, value: value });
@@ -29134,14 +29399,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _fieldValue = __webpack_require__(273);
+	var _fieldValue = __webpack_require__(274);
 
 	var reset = function reset(value) {
 	  return _fieldValue.makeFieldValue(value === undefined || value && value.initial === undefined ? {} : { initial: value.initial, value: value.initial });
@@ -29174,7 +29439,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29183,7 +29448,7 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _fieldValue = __webpack_require__(273);
+	var _fieldValue = __webpack_require__(274);
 
 	var isMetaKey = function isMetaKey(key) {
 	  return key[0] === '_';
@@ -29281,7 +29546,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29292,7 +29557,7 @@
 
 	exports['default'] = normalizeFields;
 
-	var _fieldValue = __webpack_require__(273);
+	var _fieldValue = __webpack_require__(274);
 
 	function extractKey(field) {
 	  var dotIndex = field.indexOf('.');
@@ -29380,7 +29645,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29395,7 +29660,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _createReduxFormConnector = __webpack_require__(279);
+	var _createReduxFormConnector = __webpack_require__(280);
 
 	var _createReduxFormConnector2 = _interopRequireDefault(_createReduxFormConnector);
 
@@ -29449,7 +29714,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29464,15 +29729,15 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _reactLazyCacheNoGetters = __webpack_require__(280);
+	var _reactLazyCacheNoGetters = __webpack_require__(281);
 
 	var _reactLazyCacheNoGetters2 = _interopRequireDefault(_reactLazyCacheNoGetters);
 
-	var _getDisplayName = __webpack_require__(282);
+	var _getDisplayName = __webpack_require__(283);
 
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 
-	var _createHigherOrderComponent = __webpack_require__(283);
+	var _createHigherOrderComponent = __webpack_require__(284);
 
 	var _createHigherOrderComponent2 = _interopRequireDefault(_createHigherOrderComponent);
 
@@ -29551,14 +29816,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(281);
+	module.exports = __webpack_require__(282);
 
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29653,7 +29918,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29668,7 +29933,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29687,57 +29952,57 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var _actions = __webpack_require__(284);
+	var _actions = __webpack_require__(285);
 
 	var importedActions = _interopRequireWildcard(_actions);
 
-	var _getDisplayName = __webpack_require__(282);
+	var _getDisplayName = __webpack_require__(283);
 
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 
-	var _reducer = __webpack_require__(267);
+	var _reducer = __webpack_require__(268);
 
 	var _deepEqual = __webpack_require__(192);
 
 	var _deepEqual2 = _interopRequireDefault(_deepEqual);
 
-	var _bindActionData = __webpack_require__(285);
+	var _bindActionData = __webpack_require__(286);
 
 	var _bindActionData2 = _interopRequireDefault(_bindActionData);
 
-	var _getValues = __webpack_require__(286);
+	var _getValues = __webpack_require__(287);
 
 	var _getValues2 = _interopRequireDefault(_getValues);
 
-	var _isValid = __webpack_require__(287);
+	var _isValid = __webpack_require__(288);
 
 	var _isValid2 = _interopRequireDefault(_isValid);
 
-	var _readFields = __webpack_require__(288);
+	var _readFields = __webpack_require__(289);
 
 	var _readFields2 = _interopRequireDefault(_readFields);
 
-	var _handleSubmit2 = __webpack_require__(302);
+	var _handleSubmit2 = __webpack_require__(303);
 
 	var _handleSubmit3 = _interopRequireDefault(_handleSubmit2);
 
-	var _asyncValidation = __webpack_require__(303);
+	var _asyncValidation = __webpack_require__(304);
 
 	var _asyncValidation2 = _interopRequireDefault(_asyncValidation);
 
-	var _eventsSilenceEvents = __webpack_require__(304);
+	var _eventsSilenceEvents = __webpack_require__(305);
 
 	var _eventsSilenceEvents2 = _interopRequireDefault(_eventsSilenceEvents);
 
-	var _eventsSilenceEvent = __webpack_require__(305);
+	var _eventsSilenceEvent = __webpack_require__(306);
 
 	var _eventsSilenceEvent2 = _interopRequireDefault(_eventsSilenceEvent);
 
-	var _wrapMapDispatchToProps = __webpack_require__(306);
+	var _wrapMapDispatchToProps = __webpack_require__(307);
 
 	var _wrapMapDispatchToProps2 = _interopRequireDefault(_wrapMapDispatchToProps);
 
-	var _wrapMapStateToProps = __webpack_require__(307);
+	var _wrapMapStateToProps = __webpack_require__(308);
 
 	var _wrapMapStateToProps2 = _interopRequireDefault(_wrapMapStateToProps);
 
@@ -30029,14 +30294,14 @@
 	// contains dispatch
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _actionTypes = __webpack_require__(268);
+	var _actionTypes = __webpack_require__(269);
 
 	var addArrayValue = function addArrayValue(path, value, index, fields) {
 	  return { type: _actionTypes.ADD_ARRAY_VALUE, path: path, value: value, index: index, fields: fields };
@@ -30130,7 +30395,7 @@
 	exports.untouch = untouch;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30143,7 +30408,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _mapValues = __webpack_require__(269);
+	var _mapValues = __webpack_require__(270);
 
 	var _mapValues2 = _interopRequireDefault(_mapValues);
 
@@ -30168,7 +30433,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30230,7 +30495,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30255,7 +30520,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30266,19 +30531,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _readField = __webpack_require__(289);
+	var _readField = __webpack_require__(290);
 
 	var _readField2 = _interopRequireDefault(_readField);
 
-	var _write = __webpack_require__(271);
+	var _write = __webpack_require__(272);
 
 	var _write2 = _interopRequireDefault(_write);
 
-	var _getValues = __webpack_require__(286);
+	var _getValues = __webpack_require__(287);
 
 	var _getValues2 = _interopRequireDefault(_getValues);
 
-	var _removeField = __webpack_require__(301);
+	var _removeField = __webpack_require__(302);
 
 	var _removeField2 = _interopRequireDefault(_removeField);
 
@@ -30327,7 +30592,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30338,35 +30603,35 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _eventsCreateOnBlur = __webpack_require__(290);
+	var _eventsCreateOnBlur = __webpack_require__(291);
 
 	var _eventsCreateOnBlur2 = _interopRequireDefault(_eventsCreateOnBlur);
 
-	var _eventsCreateOnChange = __webpack_require__(293);
+	var _eventsCreateOnChange = __webpack_require__(294);
 
 	var _eventsCreateOnChange2 = _interopRequireDefault(_eventsCreateOnChange);
 
-	var _eventsCreateOnDragStart = __webpack_require__(294);
+	var _eventsCreateOnDragStart = __webpack_require__(295);
 
 	var _eventsCreateOnDragStart2 = _interopRequireDefault(_eventsCreateOnDragStart);
 
-	var _eventsCreateOnDrop = __webpack_require__(295);
+	var _eventsCreateOnDrop = __webpack_require__(296);
 
 	var _eventsCreateOnDrop2 = _interopRequireDefault(_eventsCreateOnDrop);
 
-	var _eventsCreateOnFocus = __webpack_require__(296);
+	var _eventsCreateOnFocus = __webpack_require__(297);
 
 	var _eventsCreateOnFocus2 = _interopRequireDefault(_eventsCreateOnFocus);
 
-	var _silencePromise = __webpack_require__(297);
+	var _silencePromise = __webpack_require__(298);
 
 	var _silencePromise2 = _interopRequireDefault(_silencePromise);
 
-	var _read = __webpack_require__(270);
+	var _read = __webpack_require__(271);
 
 	var _read2 = _interopRequireDefault(_read);
 
-	var _updateField = __webpack_require__(299);
+	var _updateField = __webpack_require__(300);
 
 	var _updateField2 = _interopRequireDefault(_updateField);
 
@@ -30535,7 +30800,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30544,7 +30809,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _getValue = __webpack_require__(291);
+	var _getValue = __webpack_require__(292);
 
 	var _getValue2 = _interopRequireDefault(_getValue);
 
@@ -30561,7 +30826,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30570,7 +30835,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _isEvent = __webpack_require__(292);
+	var _isEvent = __webpack_require__(293);
 
 	var _isEvent2 = _interopRequireDefault(_isEvent);
 
@@ -30622,7 +30887,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30636,7 +30901,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30645,7 +30910,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _getValue = __webpack_require__(291);
+	var _getValue = __webpack_require__(292);
 
 	var _getValue2 = _interopRequireDefault(_getValue);
 
@@ -30658,7 +30923,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30675,14 +30940,14 @@
 	exports['default'] = createOnDragStart;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createOnDragStart = __webpack_require__(294);
+	var _createOnDragStart = __webpack_require__(295);
 
 	var createOnDrop = function createOnDrop(name, change) {
 	  return function (event) {
@@ -30693,7 +30958,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30708,7 +30973,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30717,7 +30982,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _isPromise = __webpack_require__(298);
+	var _isPromise = __webpack_require__(299);
 
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 
@@ -30733,7 +30998,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports) {
 
 	module.exports = isPromise;
@@ -30744,7 +31009,7 @@
 
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30755,11 +31020,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _isPristine = __webpack_require__(300);
+	var _isPristine = __webpack_require__(301);
 
 	var _isPristine2 = _interopRequireDefault(_isPristine);
 
-	var _isValid = __webpack_require__(287);
+	var _isValid = __webpack_require__(288);
 
 	var _isValid2 = _interopRequireDefault(_isValid);
 
@@ -30817,7 +31082,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30858,7 +31123,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30939,7 +31204,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30948,11 +31213,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _isPromise = __webpack_require__(298);
+	var _isPromise = __webpack_require__(299);
 
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 
-	var _isValid = __webpack_require__(287);
+	var _isValid = __webpack_require__(288);
 
 	var _isValid2 = _interopRequireDefault(_isValid);
 
@@ -31004,7 +31269,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31013,11 +31278,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _isPromise = __webpack_require__(298);
+	var _isPromise = __webpack_require__(299);
 
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 
-	var _isValid = __webpack_require__(287);
+	var _isValid = __webpack_require__(288);
 
 	var _isValid2 = _interopRequireDefault(_isValid);
 
@@ -31047,7 +31312,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31056,7 +31321,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _silenceEvent = __webpack_require__(305);
+	var _silenceEvent = __webpack_require__(306);
 
 	var _silenceEvent2 = _interopRequireDefault(_silenceEvent);
 
@@ -31074,7 +31339,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31083,7 +31348,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _isEvent = __webpack_require__(292);
+	var _isEvent = __webpack_require__(293);
 
 	var _isEvent2 = _interopRequireDefault(_isEvent);
 
@@ -31099,7 +31364,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31143,7 +31408,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31181,7 +31446,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -31227,73 +31492,6 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 309 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(181);
-
-	var _App = __webpack_require__(310);
-
-	var _App2 = _interopRequireDefault(_App);
-
-	var _PostsIndex = __webpack_require__(313);
-
-	var _PostsIndex2 = _interopRequireDefault(_PostsIndex);
-
-	var _PostsNew = __webpack_require__(320);
-
-	var _PostsNew2 = _interopRequireDefault(_PostsNew);
-
-	var _PostsShow = __webpack_require__(323);
-
-	var _PostsShow2 = _interopRequireDefault(_PostsShow);
-
-	var _SignIn = __webpack_require__(326);
-
-	var _SignIn2 = _interopRequireDefault(_SignIn);
-
-	var _SignUp = __webpack_require__(329);
-
-	var _SignUp2 = _interopRequireDefault(_SignUp);
-
-	var _ForgotPwd = __webpack_require__(332);
-
-	var _ForgotPwd2 = _interopRequireDefault(_ForgotPwd);
-
-	var _ValidateEmail = __webpack_require__(335);
-
-	var _ValidateEmail2 = _interopRequireDefault(_ValidateEmail);
-
-	var _Profile = __webpack_require__(336);
-
-	var _Profile2 = _interopRequireDefault(_Profile);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _react2.default.createElement(
-	  _reactRouter.Route,
-	  { path: '/', component: _App2.default },
-	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _PostsIndex2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'posts/new', component: _PostsNew2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: 'posts/:id', component: _PostsShow2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/signin', component: _SignIn2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _SignUp2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/forgotPwd', component: _ForgotPwd2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/validateEmail/:token', component: _ValidateEmail2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/profile', component: _Profile2.default })
-	);
-
-/***/ },
 /* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31303,692 +31501,11 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _AppContainer = __webpack_require__(311);
-
-	var _AppContainer2 = _interopRequireDefault(_AppContainer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var App = function (_Component) {
-	  _inherits(App, _Component);
-
-	  function App() {
-	    _classCallCheck(this, App);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
-	  }
-
-	  _createClass(App, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _AppContainer2.default,
-	        null,
-	        this.props.children
-	      );
-	    }
-	  }]);
-
-	  return App;
-	}(_react.Component);
-
-	exports.default = App;
-
-/***/ },
-/* 311 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
 	var _reactRedux = __webpack_require__(160);
 
-	var _users = __webpack_require__(258);
+	var _posts = __webpack_require__(261);
 
-	var _App = __webpack_require__(312);
-
-	var _App2 = _interopRequireDefault(_App);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    loadUserFromToken: function loadUserFromToken() {
-	      var token = sessionStorage.getItem('jwtToken');
-	      if (!token || token === '') {
-	        //if there is no token, dont bother
-	        return;
-	      }
-
-	      //fetch user from token (if server deems it's valid token)
-	      dispatch((0, _users.meFromToken)(token)).then(function (response) {
-	        if (!response.error) {
-	          //reset token (possibly new token that was regenerated by the server)
-	          sessionStorage.setItem('jwtToken', response.payload.data.token);
-	          dispatch((0, _users.meFromTokenSuccess)(response.payload));
-	        } else {
-	          sessionStorage.removeItem('jwtToken'); //remove token from storage
-	          dispatch((0, _users.meFromTokenFailure)(response.payload));
-	        }
-	      });
-	    },
-	    resetMe: function resetMe() {
-	      sessionStorage.removeItem('jwtToken'); //remove token from storage
-	      dispatch((0, _users.resetToken)());
-	    }
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(_App2.default);
-
-/***/ },
-/* 312 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var App = function (_Component) {
-	  _inherits(App, _Component);
-
-	  function App() {
-	    _classCallCheck(this, App);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
-	  }
-
-	  _createClass(App, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.props.loadUserFromToken();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        this.props.children
-	      );
-	    }
-	  }]);
-
-	  return App;
-	}(_react.Component);
-
-	exports.default = App;
-
-/***/ },
-/* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _HeaderContainer = __webpack_require__(314);
-
-	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
-
-	var _ValidateEmailAlertContainer = __webpack_require__(316);
-
-	var _ValidateEmailAlertContainer2 = _interopRequireDefault(_ValidateEmailAlertContainer);
-
-	var _PostsListContainer = __webpack_require__(318);
-
-	var _PostsListContainer2 = _interopRequireDefault(_PostsListContainer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var PostsIndex = function (_Component) {
-	  _inherits(PostsIndex, _Component);
-
-	  function PostsIndex() {
-	    _classCallCheck(this, PostsIndex);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(PostsIndex).apply(this, arguments));
-	  }
-
-	  _createClass(PostsIndex, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(_HeaderContainer2.default, { type: 'posts_index' }),
-	        _react2.default.createElement(_ValidateEmailAlertContainer2.default, null),
-	        _react2.default.createElement(_PostsListContainer2.default, null)
-	      );
-	    }
-	  }]);
-
-	  return PostsIndex;
-	}(_react.Component);
-
-	exports.default = PostsIndex;
-
-/***/ },
-/* 314 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(160);
-
-	var _posts = __webpack_require__(239);
-
-	var _users = __webpack_require__(258);
-
-	var _header = __webpack_require__(315);
-
-	var _header2 = _interopRequireDefault(_header);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  console.log(' state.user.status ' + state.user.status);
-	  return {
-	    deletedPost: state.posts.deletedPost,
-	    authenticatedUser: state.user.status === 'authenticated' ? state.user.user : null,
-	    user: state.user
-	  };
-	}
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
-	  return {
-	    onDeleteClick: function onDeleteClick() {
-	      var token = sessionStorage.getItem('jwtToken');
-	      if (!token || token === '') {
-	        //if there is no token, dont bother,
-	        var data = { data: { message: 'Please Sign In' } }; //axios like error
-	        dispatch((0, _posts.deletePostFailure)(data)); // but let other comps know
-	        return;
-	      }
-
-	      dispatch((0, _posts.deletePost)(ownProps.postId, token)).then(function (response) {
-	        !response.error ? dispatch((0, _posts.deletePostSuccess)(response.payload)) : dispatch((0, _posts.deletePostFailure)(response.payload));
-	      });
-	    },
-	    resetMe: function resetMe() {
-	      dispatch((0, _posts.resetDeletedPost)());
-	    },
-
-	    logout: function logout() {
-	      sessionStorage.removeItem('jwtToken');
-	      dispatch((0, _users.logoutUser)());
-	    }
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_header2.default);
-
-/***/ },
-/* 315 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(181);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Header = function (_Component) {
-	  _inherits(Header, _Component);
-
-	  function Header() {
-	    _classCallCheck(this, Header);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Header).apply(this, arguments));
-	  }
-
-	  _createClass(Header, [{
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
-	      //always reset that global state back to null when you REMOUNT
-	      this.props.resetMe();
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.deletedPost.error && nextProps.deletedPost.error.message) {
-	        //delete failure
-	        alert(nextProps.deletedPost.error.message || 'Could not delete. Please try again.');
-	      } else if (nextProps.deletedPost.post && !nextProps.deletedPost.error) {
-	        //delete success
-	        this.context.router.push('/');
-	      } else if (this.props.user.user && !nextProps.user.user) {
-	        //logout (had user(this.props.user.user) but no loger the case (!nextProps.user.user))
-	        this.context.router.push('/');
-	      }
-	    }
-	  }, {
-	    key: 'renderSignInLinks',
-	    value: function renderSignInLinks(authenticatedUser) {
-	      if (authenticatedUser) {
-	        return _react2.default.createElement(
-	          'ul',
-	          { className: 'nav  nav-pills navbar-right' },
-	          _react2.default.createElement(
-	            'li',
-	            { style: { paddingRight: '10px' }, role: 'presentation' },
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { role: 'presentation', style: { color: '#996633', fontSize: '17px' }, to: '/profile' },
-	              authenticatedUser.name
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'li',
-	            { style: { paddingRight: '10px' }, role: 'presentation' },
-	            _react2.default.createElement(
-	              'a',
-	              { style: { color: '#996633', fontSize: '17px' }, onClick: this.props.logout, href: 'javascript:void(0)' },
-	              'Log out'
-	            )
-	          )
-	        );
-	      }
-
-	      return _react2.default.createElement(
-	        'ul',
-	        { className: 'nav  nav-pills navbar-right' },
-	        _react2.default.createElement(
-	          'li',
-	          { style: { paddingRight: '10px' }, role: 'presentation' },
-	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { role: 'presentation', style: { color: '#996633', fontSize: '17px' }, to: '/signup' },
-	            'Sign up'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'li',
-	          { style: { paddingRight: '10px' }, role: 'presentation' },
-	          _react2.default.createElement(
-	            _reactRouter.Link,
-	            { style: { color: '#996633', fontSize: '17px' }, to: '/signin' },
-	            'Sign in'
-	          )
-	        )
-	      );
-	    }
-	  }, {
-	    key: 'renderLinks',
-	    value: function renderLinks() {
-	      var _this2 = this;
-
-	      var _props = this.props;
-	      var type = _props.type;
-	      var authenticatedUser = _props.authenticatedUser;
-
-	      console.log('authenticatedUser.status' + (authenticatedUser ? authenticatedUser.status : authenticatedUser));
-	      if (type === 'posts_index') {
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'container' },
-	          _react2.default.createElement(
-	            'ul',
-	            { className: 'nav  nav-pills navbar-right' },
-	            _react2.default.createElement(
-	              'li',
-	              { style: { paddingRight: '10px' }, role: 'presentation' },
-	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { style: { color: '#337ab7', fontSize: '17px' }, to: '/posts/new' },
-	                'New Post'
-	              )
-	            )
-	          ),
-	          this.renderSignInLinks(authenticatedUser)
-	        );
-	      } else if (type === 'posts_new') {
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'container' },
-	          this.renderSignInLinks(authenticatedUser),
-	          _react2.default.createElement(
-	            'ul',
-	            { className: 'nav  nav-pills navbar-left' },
-	            _react2.default.createElement(
-	              'li',
-	              { style: { paddingRight: '10px' }, role: 'presentation' },
-	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { className: 'text-xs-right', style: { color: '#337ab7', fontSize: '17px' }, to: '/' },
-	                'Back To Index'
-	              )
-	            )
-	          )
-	        );
-	      } else if (type === 'posts_show') {
-	        var _React$createElement;
-
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'container' },
-	          _react2.default.createElement(
-	            'ul',
-	            { className: 'nav  nav-pills navbar-left' },
-	            _react2.default.createElement(
-	              'li',
-	              (_React$createElement = { style: { paddingRight: '10px' } }, _defineProperty(_React$createElement, 'style', { color: '#337ab7', fontSize: '17px' }), _defineProperty(_React$createElement, 'role', 'presentation'), _React$createElement),
-	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: '/' },
-	                'Back To Index'
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'navbar-form navbar-right', style: { paddingRight: '50px' } },
-	            _react2.default.createElement(
-	              'button',
-	              { className: 'btn btn-warning pull-xs-right', onClick: function onClick() {
-	                  _this2.props.onDeleteClick();
-	                } },
-	              'Delete Post'
-	            )
-	          ),
-	          this.renderSignInLinks(authenticatedUser)
-	        );
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'nav',
-	        { className: 'navbar navbar-default navbar-static-top' },
-	        _react2.default.createElement(
-	          'div',
-	          { id: 'navbar', className: 'navbar-collapse collapse' },
-	          this.renderLinks()
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Header;
-	}(_react.Component);
-
-	Header.contextTypes = {
-	  router: _react.PropTypes.object
-	};
-	exports.default = Header;
-
-/***/ },
-/* 316 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _ValidateEmailAlert = __webpack_require__(317);
-
-	var _ValidateEmailAlert2 = _interopRequireDefault(_ValidateEmailAlert);
-
-	var _reactRedux = __webpack_require__(160);
-
-	var _users = __webpack_require__(258);
-
-	var _resendEmail = __webpack_require__(262);
-
-	var _reduxForm = __webpack_require__(265);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state, ownProps) {
-	  return {
-	    user: state.user,
-	    resendEmail: state.resendEmail,
-	    autoValidateToken: ownProps.autoValidateToken //auto-check server to validate token this mounts(used in validateEmail page)
-	  };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
-	  return {
-	    validateEmail: function validateEmail() {
-	      dispatch((0, _users.validateEmail)(ownProps.token)).then(function (response) {
-	        if (!response.error) {
-	          //reset token (possibly new token that was regenerated by the server)
-	          sessionStorage.setItem('jwtToken', response.payload.data.token);
-	          dispatch((0, _users.validateEmailSuccess)(response.payload));
-	        } else {
-	          sessionStorage.removeItem('jwtToken');
-	          dispatch((0, _users.validateEmailFailure)(response.payload));
-	        }
-	      });
-	    },
-	    resend: function resend() {
-	      var jwtToken = sessionStorage.getItem('jwtToken');
-	      if (!jwtToken || jwtToken === '') {
-	        //if there is no jwtToken, alert
-	        alert('Please Log In');
-	        return;
-	      }
-
-	      dispatch((0, _resendEmail.resendValidationEmail)(jwtToken)).then(function (response) {
-	        !response.error ? dispatch((0, _resendEmail.resendValidationEmailSuccess)(response.payload)) : dispatch((0, _resendEmail.resendValidationEmailFailure)(response.payload));
-	      });
-	    },
-	    resetMe: function resetMe() {
-	      dispatch((0, _resendEmail.resetResendEmailState)());
-	    }
-	  };
-	};
-
-	var ValidateEmailContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_ValidateEmailAlert2.default);
-
-	exports.default = ValidateEmailContainer;
-
-/***/ },
-/* 317 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(181);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ValidateEmailAlert = function (_Component) {
-	  _inherits(ValidateEmailAlert, _Component);
-
-	  function ValidateEmailAlert() {
-	    _classCallCheck(this, ValidateEmailAlert);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ValidateEmailAlert).apply(this, arguments));
-	  }
-
-	  _createClass(ValidateEmailAlert, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      //automatically verify for token if autoValidateToken is set to true (e.g. in ValidateEmail *page*)
-	      if (this.props.autoValidateToken) {
-	        this.props.validateEmail(this.props.token);
-	      }
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      //if user is authenticated, then reroute the user to PostsList as authenticated user
-	      if (nextProps.user && nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-	        this.context.router.push('/');
-	      }
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.props.resetMe();
-	    }
-	  }, {
-	    key: 'getAlertMessage',
-	    value: function getAlertMessage() {
-	      var resendEmailError = this.props.resendEmail.error;
-	      var validationError = this.props.user.error;
-
-	      if (resendEmailError || validationError) {
-	        return resendEmailError.message || validationError.message;
-	      } else if (this.props.user.user && !this.props.user.user.isEmailVerified) {
-	        if (this.props.resendEmail.sentAgain) {
-	          //if the user has pressed the 'resend' button
-	          return 'Resent Email. Please verify';
-	        } else {
-	          return 'Please verify email';
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var alertMessage = this.getAlertMessage();
-
-	      if (alertMessage) {
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'container' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'alert alert-danger' },
-	            this.getAlertMessage(),
-	            _react2.default.createElement(
-	              'a',
-	              { style: { paddingLeft: '20px' }, onClick: this.props.resend, href: 'javascript:void(0)' },
-	              'Resend'
-	            ),
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { style: { paddingLeft: '20px' }, to: '/profile' },
-	              'Update Email'
-	            )
-	          )
-	        );
-	      } else {
-	        return _react2.default.createElement('span', null);
-	      }
-	    }
-	  }]);
-
-	  return ValidateEmailAlert;
-	}(_react.Component);
-
-	ValidateEmailAlert.contextTypes = {
-	  router: _react.PropTypes.object
-	};
-	exports.default = ValidateEmailAlert;
-
-/***/ },
-/* 318 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _reactRedux = __webpack_require__(160);
-
-	var _posts = __webpack_require__(239);
-
-	var _PostsList = __webpack_require__(319);
+	var _PostsList = __webpack_require__(311);
 
 	var _PostsList2 = _interopRequireDefault(_PostsList);
 
@@ -32015,7 +31532,7 @@
 	exports.default = PostsListContainer;
 
 /***/ },
-/* 319 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32144,7 +31661,7 @@
 	exports.default = PostsList;
 
 /***/ },
-/* 320 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32159,11 +31676,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _HeaderContainer = __webpack_require__(314);
+	var _HeaderContainer = __webpack_require__(260);
 
 	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
 
-	var _PostFormContainer = __webpack_require__(321);
+	var _PostFormContainer = __webpack_require__(313);
 
 	var _PostFormContainer2 = _interopRequireDefault(_PostFormContainer);
 
@@ -32202,7 +31719,7 @@
 	exports.default = PostsNew;
 
 /***/ },
-/* 321 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32211,13 +31728,13 @@
 	  value: true
 	});
 
-	var _PostsForm = __webpack_require__(322);
+	var _PostsForm = __webpack_require__(314);
 
 	var _PostsForm2 = _interopRequireDefault(_PostsForm);
 
-	var _posts = __webpack_require__(239);
+	var _posts = __webpack_require__(261);
 
-	var _reduxForm = __webpack_require__(265);
+	var _reduxForm = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32314,7 +31831,7 @@
 	}, mapStateToProps, mapDispatchToProps)(_PostsForm2.default);
 
 /***/ },
-/* 322 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32605,7 +32122,7 @@
 	exports.default = PostsForm;
 
 /***/ },
-/* 323 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32622,13 +32139,13 @@
 
 	var _reactRedux = __webpack_require__(160);
 
-	var _posts = __webpack_require__(239);
+	var _posts = __webpack_require__(261);
 
-	var _HeaderContainer = __webpack_require__(314);
+	var _HeaderContainer = __webpack_require__(260);
 
 	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
 
-	var _PostDetailsContainer = __webpack_require__(324);
+	var _PostDetailsContainer = __webpack_require__(316);
 
 	var _PostDetailsContainer2 = _interopRequireDefault(_PostDetailsContainer);
 
@@ -32679,7 +32196,7 @@
 	exports.default = PostsShow;
 
 /***/ },
-/* 324 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32688,11 +32205,11 @@
 	  value: true
 	});
 
-	var _PostDetails = __webpack_require__(325);
+	var _PostDetails = __webpack_require__(317);
 
 	var _PostDetails2 = _interopRequireDefault(_PostDetails);
 
-	var _posts = __webpack_require__(239);
+	var _posts = __webpack_require__(261);
 
 	var _reactRedux = __webpack_require__(160);
 
@@ -32720,7 +32237,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_PostDetails2.default);
 
 /***/ },
-/* 325 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32822,7 +32339,7 @@
 	exports.default = PostDetails;
 
 /***/ },
-/* 326 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32837,11 +32354,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _HeaderContainer = __webpack_require__(314);
+	var _HeaderContainer = __webpack_require__(260);
 
 	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
 
-	var _SignInFormContainer = __webpack_require__(327);
+	var _SignInFormContainer = __webpack_require__(319);
 
 	var _SignInFormContainer2 = _interopRequireDefault(_SignInFormContainer);
 
@@ -32880,7 +32397,7 @@
 	exports.default = PostsNew;
 
 /***/ },
-/* 327 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32891,13 +32408,13 @@
 
 	var _reduxForm;
 
-	var _SignInForm = __webpack_require__(328);
+	var _SignInForm = __webpack_require__(320);
 
 	var _SignInForm2 = _interopRequireDefault(_SignInForm);
 
-	var _users = __webpack_require__(258);
+	var _users = __webpack_require__(240);
 
-	var _reduxForm2 = __webpack_require__(265);
+	var _reduxForm2 = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32969,7 +32486,7 @@
 	}, _defineProperty(_reduxForm, 'null', null), _defineProperty(_reduxForm, 'validate', validate), _reduxForm), mapStateToProps, mapDispatchToProps)(_SignInForm2.default);
 
 /***/ },
-/* 328 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33146,7 +32663,7 @@
 	exports.default = SignInForm;
 
 /***/ },
-/* 329 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33161,11 +32678,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _HeaderContainer = __webpack_require__(314);
+	var _HeaderContainer = __webpack_require__(260);
 
 	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
 
-	var _SignUpFormContainer = __webpack_require__(330);
+	var _SignUpFormContainer = __webpack_require__(322);
 
 	var _SignUpFormContainer2 = _interopRequireDefault(_SignUpFormContainer);
 
@@ -33204,7 +32721,7 @@
 	exports.default = PostsNew;
 
 /***/ },
-/* 330 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33213,15 +32730,15 @@
 	  value: true
 	});
 
-	var _SignUpForm = __webpack_require__(331);
+	var _SignUpForm = __webpack_require__(323);
 
 	var _SignUpForm2 = _interopRequireDefault(_SignUpForm);
 
-	var _users = __webpack_require__(258);
+	var _users = __webpack_require__(240);
 
-	var _validateUserFields = __webpack_require__(260);
+	var _validateUserFields = __webpack_require__(324);
 
-	var _reduxForm = __webpack_require__(265);
+	var _reduxForm = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33332,7 +32849,7 @@
 	}, mapStateToProps, mapDispatchToProps)(_SignUpForm2.default);
 
 /***/ },
-/* 331 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33542,7 +33059,65 @@
 	exports.default = SignUpForm;
 
 /***/ },
-/* 332 */
+/* 324 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.RESET_VALIDATE_USER_FIELDS = exports.VALIDATE_USER_FIELDS_FAILURE = exports.VALIDATE_USER_FIELDS_SUCCESS = exports.VALIDATE_USER_FIELDS = undefined;
+	exports.validateUserFields = validateUserFields;
+	exports.validateUserFieldsSuccess = validateUserFieldsSuccess;
+	exports.validateUserFieldsFailure = validateUserFieldsFailure;
+	exports.resetValidateUserFields = resetValidateUserFields;
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	//Validate user fields like name and password
+	var VALIDATE_USER_FIELDS = exports.VALIDATE_USER_FIELDS = 'VALIDATE_USER_FIELDS';
+	var VALIDATE_USER_FIELDS_SUCCESS = exports.VALIDATE_USER_FIELDS_SUCCESS = 'VALIDATE_USER_FIELDS_SUCCESS';
+	var VALIDATE_USER_FIELDS_FAILURE = exports.VALIDATE_USER_FIELDS_FAILURE = 'VALIDATE_USER_FIELDS_FAILURE';
+	var RESET_VALIDATE_USER_FIELDS = exports.RESET_VALIDATE_USER_FIELDS = 'RESET_VALIDATE_USER_FIELDS';
+
+	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+
+	function validateUserFields(values) {
+	  //note: we cant have /users/validateFields because it'll match /users/:id path!
+	  var request = _axios2.default.post(ROOT_URL + '/users/validate/fields', values);
+
+	  return {
+	    type: VALIDATE_USER_FIELDS,
+	    payload: request
+	  };
+	}
+
+	function validateUserFieldsSuccess() {
+	  return {
+	    type: VALIDATE_USER_FIELDS_SUCCESS
+	  };
+	}
+
+	function validateUserFieldsFailure(error) {
+	  return {
+	    type: VALIDATE_USER_FIELDS_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetValidateUserFields() {
+	  return {
+	    type: RESET_VALIDATE_USER_FIELDS
+	  };
+	};
+
+/***/ },
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33557,11 +33132,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _HeaderContainer = __webpack_require__(314);
+	var _HeaderContainer = __webpack_require__(260);
 
 	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
 
-	var _ForgotPwdFormContainer = __webpack_require__(333);
+	var _ForgotPwdFormContainer = __webpack_require__(326);
 
 	var _ForgotPwdFormContainer2 = _interopRequireDefault(_ForgotPwdFormContainer);
 
@@ -33600,7 +33175,7 @@
 	exports.default = ForgotPwd;
 
 /***/ },
-/* 333 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33611,13 +33186,13 @@
 
 	var _reduxForm;
 
-	var _ForgotPwdForm = __webpack_require__(334);
+	var _ForgotPwdForm = __webpack_require__(327);
 
 	var _ForgotPwdForm2 = _interopRequireDefault(_ForgotPwdForm);
 
-	var _users = __webpack_require__(258);
+	var _users = __webpack_require__(240);
 
-	var _reduxForm2 = __webpack_require__(265);
+	var _reduxForm2 = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33681,7 +33256,7 @@
 	}, _defineProperty(_reduxForm, 'null', null), _defineProperty(_reduxForm, 'validate', validate), _reduxForm), mapStateToProps, mapDispatchToProps)(_ForgotPwdForm2.default);
 
 /***/ },
-/* 334 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33795,7 +33370,7 @@
 	exports.default = ForgotPwdForm;
 
 /***/ },
-/* 335 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33810,11 +33385,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _HeaderContainer = __webpack_require__(314);
+	var _HeaderContainer = __webpack_require__(260);
 
 	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
 
-	var _ValidateEmailAlertContainer = __webpack_require__(316);
+	var _ValidateEmailAlertContainer = __webpack_require__(263);
 
 	var _ValidateEmailAlertContainer2 = _interopRequireDefault(_ValidateEmailAlertContainer);
 
@@ -33853,7 +33428,7 @@
 	exports.default = ValidateEmail;
 
 /***/ },
-/* 336 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33868,15 +33443,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _HeaderContainer = __webpack_require__(314);
+	var _HeaderContainer = __webpack_require__(260);
 
 	var _HeaderContainer2 = _interopRequireDefault(_HeaderContainer);
 
-	var _UpdateEmailFormContainer = __webpack_require__(337);
+	var _UpdateEmailFormContainer = __webpack_require__(330);
 
 	var _UpdateEmailFormContainer2 = _interopRequireDefault(_UpdateEmailFormContainer);
 
-	var _ProfileCardContainer = __webpack_require__(339);
+	var _ProfileCardContainer = __webpack_require__(333);
 
 	var _ProfileCardContainer2 = _interopRequireDefault(_ProfileCardContainer);
 
@@ -33933,7 +33508,7 @@
 	exports.default = Profile;
 
 /***/ },
-/* 337 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33942,17 +33517,17 @@
 	  value: true
 	});
 
-	var _UpdateEmailForm = __webpack_require__(338);
+	var _UpdateEmailForm = __webpack_require__(331);
 
 	var _UpdateEmailForm2 = _interopRequireDefault(_UpdateEmailForm);
 
-	var _updateEmail = __webpack_require__(264);
+	var _updateEmail = __webpack_require__(332);
 
-	var _validateUserFields = __webpack_require__(260);
+	var _validateUserFields = __webpack_require__(324);
 
-	var _users = __webpack_require__(258);
+	var _users = __webpack_require__(240);
 
-	var _reduxForm = __webpack_require__(265);
+	var _reduxForm = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34045,7 +33620,7 @@
 	}, mapStateToProps, mapDispatchToProps)(_UpdateEmailForm2.default);
 
 /***/ },
-/* 338 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34177,7 +33752,69 @@
 	exports.default = UpdateEmailForm;
 
 /***/ },
-/* 339 */
+/* 332 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.RESET_UPDATE_EMAIL_STATE = exports.UPDATE_EMAIL_FAILURE = exports.UPDATE_EMAIL_SUCCESS = exports.UPDATE_EMAIL = undefined;
+	exports.updateEmail = updateEmail;
+	exports.updateEmailSuccess = updateEmailSuccess;
+	exports.updateEmailFailure = updateEmailFailure;
+	exports.resetUpdateEmailState = resetUpdateEmailState;
+
+	var _axios = __webpack_require__(241);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	//update  email
+	var UPDATE_EMAIL = exports.UPDATE_EMAIL = 'UPDATE_EMAIL';
+	var UPDATE_EMAIL_SUCCESS = exports.UPDATE_EMAIL_SUCCESS = 'UPDATE_EMAIL_SUCCESS';
+	var UPDATE_EMAIL_FAILURE = exports.UPDATE_EMAIL_FAILURE = 'UPDATE_EMAIL_FAILURE';
+	var RESET_UPDATE_EMAIL_STATE = exports.RESET_UPDATE_EMAIL_STATE = 'RESET_UPDATE_EMAIL_STATE';
+
+	var ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+
+	function updateEmail(email, tokenFromStorage) {
+	  var request = (0, _axios2.default)({
+	    method: 'post',
+	    data: email,
+	    url: ROOT_URL + '/updateEmail',
+	    headers: { 'Authorization': 'Bearer ' + tokenFromStorage }
+	  });
+
+	  return {
+	    type: UPDATE_EMAIL,
+	    payload: request
+	  };
+	}
+
+	function updateEmailSuccess() {
+	  return {
+	    type: UPDATE_EMAIL_SUCCESS
+	  };
+	}
+
+	function updateEmailFailure(error) {
+	  return {
+	    type: UPDATE_EMAIL_FAILURE,
+	    payload: error
+	  };
+	}
+
+	function resetUpdateEmailState() {
+	  return {
+	    type: RESET_UPDATE_EMAIL_STATE
+	  };
+	}
+
+/***/ },
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34192,7 +33829,7 @@
 
 	var _reactRedux = __webpack_require__(160);
 
-	var _ProfileCard = __webpack_require__(340);
+	var _ProfileCard = __webpack_require__(334);
 
 	var _ProfileCard2 = _interopRequireDefault(_ProfileCard);
 
@@ -34207,7 +33844,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_ProfileCard2.default);
 
 /***/ },
-/* 340 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34291,7 +33928,404 @@
 	exports.default = ProfileCard;
 
 /***/ },
+/* 335 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	if (process.env.NODE_ENV === 'production') {
+	  module.exports = __webpack_require__(336);
+	} else {
+	  module.exports = __webpack_require__(350);
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+/***/ },
+/* 336 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = configureStore;
+
+	var _redux = __webpack_require__(166);
+
+	var _reducers = __webpack_require__(337);
+
+	var _reducers2 = _interopRequireDefault(_reducers);
+
+	var _reduxPromise = __webpack_require__(343);
+
+	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Middleware you want to use in production:
+	var enhancer = (0, _redux.applyMiddleware)(_reduxPromise2.default);
+
+	function configureStore(initialState) {
+	  // Note: only Redux >= 3.1.0 supports passing enhancer as third argument.
+	  // See https://github.com/rackt/redux/releases/tag/v3.1.0
+	  return (0, _redux.createStore)(_reducers2.default, initialState, enhancer);
+	};
+
+/***/ },
+/* 337 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(166);
+
+	var _reducer_posts = __webpack_require__(338);
+
+	var _reducer_posts2 = _interopRequireDefault(_reducer_posts);
+
+	var _reducer_user = __webpack_require__(339);
+
+	var _reducer_user2 = _interopRequireDefault(_reducer_user);
+
+	var _reducer_validateUserFields = __webpack_require__(340);
+
+	var _reducer_validateUserFields2 = _interopRequireDefault(_reducer_validateUserFields);
+
+	var _reducer_resendEmail = __webpack_require__(341);
+
+	var _reducer_resendEmail2 = _interopRequireDefault(_reducer_resendEmail);
+
+	var _reducer_updateEmail = __webpack_require__(342);
+
+	var _reducer_updateEmail2 = _interopRequireDefault(_reducer_updateEmail);
+
+	var _reduxForm = __webpack_require__(266);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var rootReducer = (0, _redux.combineReducers)({
+	  user: _reducer_user2.default,
+	  validateFields: _reducer_validateUserFields2.default,
+	  posts: _reducer_posts2.default, //<-- Posts
+	  form: _reduxForm.reducer, // <-- redux-form
+	  resendEmail: _reducer_resendEmail2.default,
+	  updateEmail: _reducer_updateEmail2.default
+	});
+
+	exports.default = rootReducer;
+
+/***/ },
+/* 338 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var action = arguments[1];
+
+	  var error = void 0;
+	  switch (action.type) {
+
+	    case _posts.FETCH_POSTS:
+	      // start fetching posts and set loading = true
+	      return _extends({}, state, { postsList: { posts: [], error: null, loading: true } });
+	    case _posts.FETCH_POSTS_SUCCESS:
+	      // return list of posts and make loading = false
+	      return _extends({}, state, { postsList: { posts: action.payload.data, error: null, loading: false } });
+	    case _posts.FETCH_POSTS_FAILURE:
+	      // return error and make loading = false
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
+	      return _extends({}, state, { postsList: { posts: [], error: error, loading: false } });
+	    case _posts.RESET_POSTS:
+	      // reset postList to initial state
+	      return _extends({}, state, { postsList: { posts: [], error: null, loading: false } });
+
+	    case _posts.FETCH_POST:
+	      return _extends({}, state, { activePost: _extends({}, state.activePost, { loading: true }) });
+	    case _posts.FETCH_POST_SUCCESS:
+	      return _extends({}, state, { activePost: { post: action.payload.data, error: null, loading: false } });
+	    case _posts.FETCH_POST_FAILURE:
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
+	      return _extends({}, state, { activePost: { post: null, error: error, loading: false } });
+	    case _posts.RESET_ACTIVE_POST:
+	      return _extends({}, state, { activePost: { post: null, error: null, loading: false } });
+
+	    case _posts.CREATE_POST:
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { loading: true }) });
+	    case _posts.CREATE_POST_SUCCESS:
+	      return _extends({}, state, { newPost: { post: action.payload.data, error: null, loading: false } });
+	    case _posts.CREATE_POST_FAILURE:
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
+	      return _extends({}, state, { newPost: { post: null, error: error, loading: false } });
+	    case _posts.RESET_NEW_POST:
+	      return _extends({}, state, { newPost: { post: null, error: null, loading: false } });
+
+	    case _posts.DELETE_POST:
+	      return _extends({}, state, { deletedPost: _extends({}, state.deletedPost, { loading: true }) });
+	    case _posts.DELETE_POST_SUCCESS:
+	      return _extends({}, state, { deletedPost: { post: action.payload.data, error: null, loading: false } });
+	    case _posts.DELETE_POST_FAILURE:
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors
+	      return _extends({}, state, { deletedPost: { post: null, error: error, loading: false } });
+	    case _posts.RESET_DELETED_POST:
+	      return _extends({}, state, { deletedPost: { post: null, error: null, loading: false } });
+
+	    case _posts.VALIDATE_POST_FIELDS:
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: true }) });
+	    case _posts.VALIDATE_POST_FIELDS_SUCCESS:
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: false }) });
+	    case _posts.VALIDATE_POST_FIELDS_FAILURE:
+	      var result = action.payload.data;
+	      if (!result) {
+	        error = { message: action.payload.message };
+	      } else {
+	        error = { title: result.title, categories: result.categories, description: result.description };
+	      }
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: error, loading: false }) });
+	    case _posts.RESET_POST_FIELDS:
+	      return _extends({}, state, { newPost: _extends({}, state.newPost, { error: null, loading: null }) });
+	    default:
+	      return state;
+	  }
+	};
+
+	var _posts = __webpack_require__(261);
+
+	var INITIAL_STATE = { postsList: { posts: [], error: null, loading: false },
+	  newPost: { post: null, error: null, loading: false },
+	  activePost: { post: null, error: null, loading: false },
+	  deletedPost: { post: null, error: null, loading: false }
+	};
+
+/***/ },
+/* 339 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var action = arguments[1];
+
+	  var error = void 0;
+	  switch (action.type) {
+
+	    case _users.VALIDATE_EMAIL:
+	      //check email verification token
+	      return _extends({}, state, { user: null, status: 'validate_email', error: null, loading: true });
+	    case _users.VALIDATE_EMAIL_SUCCESS:
+	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated & email verified
+	    case _users.VALIDATE_EMAIL_FAILURE:
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors      
+	      return _extends({}, state, { user: null, status: 'validate_email', error: error, loading: false }); //<-- authenticated
+
+	    case _users.ME_FROM_TOKEN:
+	      // loading currentUser("me") from jwttoken in local/session storage storage,
+	      return _extends({}, state, { user: null, status: 'storage', error: null, loading: true });
+	    case _users.ME_FROM_TOKEN_SUCCESS:
+	      //return user, status = authenticated and make loading = false
+	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated
+	    case _users.ME_FROM_TOKEN_FAILURE:
+	      // return error and make loading = false
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors  
+	      return _extends({}, state, { user: null, status: 'storage', error: error, loading: false });
+	    case _users.RESET_TOKEN:
+	      // remove token from storage make loading = false
+	      return _extends({}, state, { user: null, status: 'storage', error: null, loading: false });
+
+	    case _users.SIGNUP_USER:
+	      // sign up user, set loading = true and status = signup
+	      return _extends({}, state, { user: null, status: 'signup', error: null, loading: true });
+	    case _users.SIGNUP_USER_SUCCESS:
+	      //return user, status = authenticated and make loading = false
+	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated
+	    case _users.SIGNUP_USER_FAILURE:
+	      // return error and make loading = false
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors     
+	      return _extends({}, state, { user: null, status: 'signup', error: error, loading: false });
+
+	    case _users.SIGNIN_USER:
+	      // sign in user,  set loading = true and status = signin
+	      return _extends({}, state, { user: null, status: 'signin', error: null, loading: true });
+	    case _users.SIGNIN_USER_SUCCESS:
+	      //return authenticated user,  make loading = false and status = authenticated
+	      return _extends({}, state, { user: action.payload.data.user, status: 'authenticated', error: null, loading: false }); //<-- authenticated
+	    case _users.SIGNIN_USER_FAILURE:
+	      // return error and make loading = false
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors     
+	      return _extends({}, state, { user: null, status: 'signin', error: error, loading: false });
+
+	    case _users.UPDATE_USER_EMAIL:
+	      return _extends({}, state, { user: _extends({}, state.user, { email: action.payload.email }) });
+
+	    case _users.LOGOUT_USER:
+	      return _extends({}, state, { user: null, status: 'logout', error: null, loading: false });
+
+	    case _users.RESET_USER:
+	      // reset authenticated user to initial state
+	      return _extends({}, state, { user: null, status: null, error: null, loading: false });
+
+	    default:
+	      return state;
+	  }
+	};
+
+	var _users = __webpack_require__(240);
+
+	//user = userobj,
+	// status can be:
+	// 1. 'storage' ie. localstorage / sessionstorage)
+	// 2. 'signup' (signing up)
+	// 3. 'signin' (signing in)
+	// 4. 'validate'(validate fields)
+	// 5. 'validate_email' (validating email token)
+	// 5. 'authenticated'(after signin)
+	// 6. 'logout' (after logout)
+
+	var INITIAL_STATE = { user: null, status: null, error: null, loading: false };
+
+/***/ },
+/* 340 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var action = arguments[1];
+
+	  var error = void 0;
+	  switch (action.type) {
+	    case _validateUserFields.VALIDATE_USER_FIELDS:
+	      //sign up or sign in form fields
+	      return _extends({}, state, { error: null, loading: true });
+	    case _validateUserFields.VALIDATE_USER_FIELDS_SUCCESS:
+	      // same as RESET_USER_FIELDS
+	      return _extends({}, state, { error: null, loading: false });
+	    case _validateUserFields.VALIDATE_USER_FIELDS_FAILURE:
+	      error = action.payload.data ? action.payload.data : { message: action.payload.message };
+	      return _extends({}, state, { error: error, loading: false });
+	    case _validateUserFields.RESET_VALIDATE_USER_FIELDS:
+	      return _extends({}, state, { error: null, loading: false });
+	    default:
+	      return state;
+	  }
+	};
+
+	var _validateUserFields = __webpack_require__(324);
+
+	//user = userobj,
+	// status can be:
+	// 1. 'storage' ie. localstorage / sessionstorage)
+	// 2. 'signup' (signing up)
+	// 3. 'signin' (signing in)
+	// 4. 'validate'(validate fields)
+	// 5. 'validate_email' (validating email token)
+	// 5. 'authenticated'(after signin)
+	// 6. 'logout' (after logout)
+
+	var INITIAL_STATE = { error: null, loading: false };
+
+/***/ },
 /* 341 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var action = arguments[1];
+
+	  var error = void 0;
+	  switch (action.type) {
+
+	    case _resendEmail.RESEND_VALIDATION_EMAIL:
+	      return _extends({}, state, { sentAgain: false, error: null, loading: true });
+	    case _resendEmail.RESEND_VALIDATION_EMAIL_SUCCESS:
+	      return _extends({}, state, { sentAgain: true, error: null, loading: false });
+	    case _resendEmail.RESEND_VALIDATION_EMAIL_FAILURE:
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors      
+	      return _extends({}, state, { sentAgain: false, error: error, loading: false });
+	    case _resendEmail.RESET_RESEND_EMAIL_STATE:
+	      return _extends({}, state, { sentAgain: false, error: null, loading: false });
+	    default:
+	      return state;
+	  }
+	};
+
+	var _resendEmail = __webpack_require__(265);
+
+	var INITIAL_STATE = { sentAgain: false, error: null, loading: false };
+
+/***/ },
+/* 342 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var action = arguments[1];
+
+	  var error = void 0;
+	  switch (action.type) {
+
+	    case _updateEmail.UPDATE_EMAIL:
+	      return _extends({}, state, { emailUpdated: false, error: null, loading: true });
+	    case _updateEmail.UPDATE_EMAIL_SUCCESS:
+	      return _extends({}, state, { emailUpdated: true, error: null, loading: false });
+	    case _updateEmail.UPDATE_EMAIL_FAILURE:
+	      error = action.payload.data || { message: action.payload.message }; //2nd one is network or server down errors      
+	      return _extends({}, state, { emailUpdated: false, error: error, loading: false });
+	    case _updateEmail.RESET_UPDATE_EMAIL_STATE:
+	      return _extends({}, state, { emailUpdated: false, error: null, loading: false });
+	    default:
+	      return state;
+	  }
+	};
+
+	var _updateEmail = __webpack_require__(332);
+
+	var INITIAL_STATE = { emailUpdated: false, error: null, loading: false };
+
+/***/ },
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34302,7 +34336,7 @@
 
 	exports['default'] = promiseMiddleware;
 
-	var _fluxStandardAction = __webpack_require__(342);
+	var _fluxStandardAction = __webpack_require__(344);
 
 	function isPromise(val) {
 	  return val && typeof val.then === 'function';
@@ -34329,7 +34363,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 342 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34340,7 +34374,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashIsplainobject = __webpack_require__(343);
+	var _lodashIsplainobject = __webpack_require__(345);
 
 	var _lodashIsplainobject2 = _interopRequireDefault(_lodashIsplainobject);
 
@@ -34359,7 +34393,7 @@
 	}
 
 /***/ },
-/* 343 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34370,9 +34404,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(344),
-	    isArguments = __webpack_require__(345),
-	    keysIn = __webpack_require__(346);
+	var baseFor = __webpack_require__(346),
+	    isArguments = __webpack_require__(347),
+	    keysIn = __webpack_require__(348);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -34468,7 +34502,7 @@
 
 
 /***/ },
-/* 344 */
+/* 346 */
 /***/ function(module, exports) {
 
 	/**
@@ -34522,7 +34556,7 @@
 
 
 /***/ },
-/* 345 */
+/* 347 */
 /***/ function(module, exports) {
 
 	/**
@@ -34771,7 +34805,7 @@
 
 
 /***/ },
-/* 346 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34782,8 +34816,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(345),
-	    isArray = __webpack_require__(347);
+	var isArguments = __webpack_require__(347),
+	    isArray = __webpack_require__(349);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -34909,7 +34943,7 @@
 
 
 /***/ },
-/* 347 */
+/* 349 */
 /***/ function(module, exports) {
 
 	/**
@@ -35095,237 +35129,45 @@
 
 
 /***/ },
-/* 348 */
-/***/ function(module, exports) {
+/* 350 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = configureStore;
 
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+	var _redux = __webpack_require__(166);
 
-	var repeat = function repeat(str, times) {
-	  return new Array(times + 1).join(str);
-	};
-	var pad = function pad(num, maxLength) {
-	  return repeat("0", maxLength - num.toString().length) + num;
-	};
-	var formatTime = function formatTime(time) {
-	  return "@ " + pad(time.getHours(), 2) + ":" + pad(time.getMinutes(), 2) + ":" + pad(time.getSeconds(), 2) + "." + pad(time.getMilliseconds(), 3);
-	};
+	var _reduxPromise = __webpack_require__(343);
 
-	// Use the new performance api to get better precision if available
-	var timer = typeof performance !== "undefined" && typeof performance.now === "function" ? performance : Date;
+	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
 
-	/**
-	 * parse the level option of createLogger
-	 *
-	 * @property {string | function | object} level - console[level]
-	 * @property {object} action
-	 * @property {array} payload
-	 * @property {string} type
-	 */
+	var _reducers = __webpack_require__(337);
 
-	function getLogLevel(level, action, payload, type) {
-	  switch (typeof level === "undefined" ? "undefined" : _typeof(level)) {
-	    case "object":
-	      return typeof level[type] === "function" ? level[type].apply(level, _toConsumableArray(payload)) : level[type];
-	    case "function":
-	      return level(action);
-	    default:
-	      return level;
-	  }
-	}
+	var _reducers2 = _interopRequireDefault(_reducers);
 
-	/**
-	 * Creates logger with followed options
-	 *
-	 * @namespace
-	 * @property {object} options - options for logger
-	 * @property {string | function | object} options.level - console[level]
-	 * @property {boolean} options.duration - print duration of each action?
-	 * @property {boolean} options.timestamp - print timestamp with each action?
-	 * @property {object} options.colors - custom colors
-	 * @property {object} options.logger - implementation of the `console` API
-	 * @property {boolean} options.logErrors - should errors in action execution be caught, logged, and re-thrown?
-	 * @property {boolean} options.collapsed - is group collapsed?
-	 * @property {boolean} options.predicate - condition which resolves logger behavior
-	 * @property {function} options.stateTransformer - transform state before print
-	 * @property {function} options.actionTransformer - transform action before print
-	 * @property {function} options.errorTransformer - transform error before print
-	 */
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function createLogger() {
-	  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var _options$level = options.level;
-	  var level = _options$level === undefined ? "log" : _options$level;
-	  var _options$logger = options.logger;
-	  var logger = _options$logger === undefined ? console : _options$logger;
-	  var _options$logErrors = options.logErrors;
-	  var logErrors = _options$logErrors === undefined ? true : _options$logErrors;
-	  var collapsed = options.collapsed;
-	  var predicate = options.predicate;
-	  var _options$duration = options.duration;
-	  var duration = _options$duration === undefined ? false : _options$duration;
-	  var _options$timestamp = options.timestamp;
-	  var timestamp = _options$timestamp === undefined ? true : _options$timestamp;
-	  var transformer = options.transformer;
-	  var _options$stateTransfo = options.stateTransformer;
-	  var // deprecated
-	  stateTransformer = _options$stateTransfo === undefined ? function (state) {
-	    return state;
-	  } : _options$stateTransfo;
-	  var _options$actionTransf = options.actionTransformer;
-	  var actionTransformer = _options$actionTransf === undefined ? function (actn) {
-	    return actn;
-	  } : _options$actionTransf;
-	  var _options$errorTransfo = options.errorTransformer;
-	  var errorTransformer = _options$errorTransfo === undefined ? function (error) {
-	    return error;
-	  } : _options$errorTransfo;
-	  var _options$colors = options.colors;
-	  var colors = _options$colors === undefined ? {
-	    title: function title() {
-	      return "#000000";
-	    },
-	    prevState: function prevState() {
-	      return "#9E9E9E";
-	    },
-	    action: function action() {
-	      return "#03A9F4";
-	    },
-	    nextState: function nextState() {
-	      return "#4CAF50";
-	    },
-	    error: function error() {
-	      return "#F20404";
-	    }
-	  } : _options$colors;
+	function configureStore(initialState) {
+	  var finalCreateStore = (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxPromise2.default), window.devToolsExtension ? window.devToolsExtension() : function (f) {
+	    return f;
+	  })(_redux.createStore);
 
-	  // exit if console undefined
+	  var store = finalCreateStore(_reducers2.default, initialState);
 
-	  if (typeof logger === "undefined") {
-	    return function () {
-	      return function (next) {
-	        return function (action) {
-	          return next(action);
-	        };
-	      };
-	    };
-	  }
-
-	  if (transformer) {
-	    console.error("Option 'transformer' is deprecated, use stateTransformer instead");
-	  }
-
-	  var logBuffer = [];
-	  function printBuffer() {
-	    logBuffer.forEach(function (logEntry, key) {
-	      var started = logEntry.started;
-	      var startedTime = logEntry.startedTime;
-	      var action = logEntry.action;
-	      var prevState = logEntry.prevState;
-	      var error = logEntry.error;
-	      var took = logEntry.took;
-	      var nextState = logEntry.nextState;
-
-	      var nextEntry = logBuffer[key + 1];
-	      if (nextEntry) {
-	        nextState = nextEntry.prevState;
-	        took = nextEntry.started - started;
-	      }
-	      // message
-	      var formattedAction = actionTransformer(action);
-	      var isCollapsed = typeof collapsed === "function" ? collapsed(function () {
-	        return nextState;
-	      }, action) : collapsed;
-
-	      var formattedTime = formatTime(startedTime);
-	      var titleCSS = colors.title ? "color: " + colors.title(formattedAction) + ";" : null;
-	      var title = "action " + (timestamp ? formattedTime : "") + " " + formattedAction.type + " " + (duration ? "(in " + took.toFixed(2) + " ms)" : "");
-
-	      // render
-	      try {
-	        if (isCollapsed) {
-	          if (colors.title) logger.groupCollapsed("%c " + title, titleCSS);else logger.groupCollapsed(title);
-	        } else {
-	          if (colors.title) logger.group("%c " + title, titleCSS);else logger.group(title);
-	        }
-	      } catch (e) {
-	        logger.log(title);
-	      }
-
-	      var prevStateLevel = getLogLevel(level, formattedAction, [prevState], "prevState");
-	      var actionLevel = getLogLevel(level, formattedAction, [formattedAction], "action");
-	      var errorLevel = getLogLevel(level, formattedAction, [error, prevState], "error");
-	      var nextStateLevel = getLogLevel(level, formattedAction, [nextState], "nextState");
-
-	      if (prevStateLevel) {
-	        if (colors.prevState) logger[prevStateLevel]("%c prev state", "color: " + colors.prevState(prevState) + "; font-weight: bold", prevState);else logger[prevStateLevel]("prev state", prevState);
-	      }
-
-	      if (actionLevel) {
-	        if (colors.action) logger[actionLevel]("%c action", "color: " + colors.action(formattedAction) + "; font-weight: bold", formattedAction);else logger[actionLevel]("action", formattedAction);
-	      }
-
-	      if (error && errorLevel) {
-	        if (colors.error) logger[errorLevel]("%c error", "color: " + colors.error(error, prevState) + "; font-weight: bold", error);else logger[errorLevel]("error", error);
-	      }
-
-	      if (nextStateLevel) {
-	        if (colors.nextState) logger[nextStateLevel]("%c next state", "color: " + colors.nextState(nextState) + "; font-weight: bold", nextState);else logger[nextStateLevel]("next state", nextState);
-	      }
-
-	      try {
-	        logger.groupEnd();
-	      } catch (e) {
-	        logger.log("—— log end ——");
-	      }
+	  if (false) {
+	    // Enable Webpack hot module replacement for reducers
+	    module.hot.accept('../reducers', function () {
+	      var nextReducer = require('../reducers');
+	      store.replaceReducer(nextReducer);
 	    });
-	    logBuffer.length = 0;
 	  }
 
-	  return function (_ref) {
-	    var getState = _ref.getState;
-	    return function (next) {
-	      return function (action) {
-	        // exit early if predicate function returns false
-	        if (typeof predicate === "function" && !predicate(getState, action)) {
-	          return next(action);
-	        }
-
-	        var logEntry = {};
-	        logBuffer.push(logEntry);
-
-	        logEntry.started = timer.now();
-	        logEntry.startedTime = new Date();
-	        logEntry.prevState = stateTransformer(getState());
-	        logEntry.action = action;
-
-	        var returnedValue = undefined;
-	        if (logErrors) {
-	          try {
-	            returnedValue = next(action);
-	          } catch (e) {
-	            logEntry.error = errorTransformer(e);
-	          }
-	        } else {
-	          returnedValue = next(action);
-	        }
-
-	        logEntry.took = timer.now() - logEntry.started;
-	        logEntry.nextState = stateTransformer(getState());
-
-	        printBuffer();
-
-	        if (logEntry.error) throw logEntry.error;
-	        return returnedValue;
-	      };
-	    };
-	  };
+	  return store;
 	}
-
-	module.exports = createLogger;
 
 /***/ }
 /******/ ]);
