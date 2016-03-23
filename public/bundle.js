@@ -31922,10 +31922,10 @@
 	    key: 'getAlertMessage',
 	    value: function getAlertMessage() {
 	      var resendEmailError = this.props.resendEmail.error;
-	      var userError = this.props.user.error;
+	      var validationError = this.props.user.error;
 
 	      if (resendEmailError || userError) {
-	        return resendEmailError.message || userError.message;
+	        return resendEmailError.message || validationError.message;
 	      } else if (this.props.user.user && !this.props.user.user.isEmailVerified) {
 	        if (this.props.resendEmail.sentAgain) {
 	          //if the user has pressed the 'resend' button
