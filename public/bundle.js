@@ -33933,7 +33933,7 @@
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	if (process.env.NODE_ENV === 'production') {
+	if (process.env.NODE_ENV === 'production' || location && location.hostname !== 'localhost') {
 	  module.exports = __webpack_require__(336);
 	} else {
 	  module.exports = __webpack_require__(350);
