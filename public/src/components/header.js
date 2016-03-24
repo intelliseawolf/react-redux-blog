@@ -59,7 +59,6 @@ class Header extends Component {
   
 	renderLinks() {
 		const { type, authenticatedUser } = this.props;
-    console.log('authenticatedUser.status' + (authenticatedUser ? authenticatedUser.status : authenticatedUser));
 		if(type === 'posts_index') {
        return (
         <div className="container">
