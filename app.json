@@ -19,5 +19,5 @@
       "value":""
     }
   },
-  "addons": ["mongolab", "sendgrid:starter"]
+  "addons": ["mongolab", "postmark:10k"]
 }

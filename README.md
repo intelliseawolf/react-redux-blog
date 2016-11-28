@@ -45,7 +45,7 @@ NOTE: In order to send email via PostMark or Sendgrid, you need to verify sender
 1. In terminal 1, 
 	1. `export JWT_SECRET=somesecretstring` <-- This is used to generate JWT tokens.
 	2. `export POSTMARK_API_TOKEN=<getApiTokenFromWInPostmark>` <-- Email
-	3. `export FROM_EMAIL=<yourFromEmailThatIsRegisteredInPostMark> <-- "From"-Email Address
+	3. `export FROM_EMAIL=<yourFromEmailThatIsRegisteredInPostMark> <-- "From"-Email Address that you verified w/ PostMark
 	4. run `npm start`. This runs the app server (Express). 
 2. In terminal 2, run: `npm run dev`. This runs the development server(webpack-dev-server).
 3. Open browser and go to: `localhost:8080`
