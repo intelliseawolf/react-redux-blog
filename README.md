@@ -54,7 +54,15 @@ NOTE: In order to send email via PostMark or Sendgrid, you need to verify sender
 2. In terminal 2, run: `npm run dev`. This runs the development server(webpack-dev-server).
 3. Open browser and go to: `localhost:8080`
 
-#####Note: If you open `localhost:3000` in browser, you'll see a "stale" production app, so while in development, **always go to `localhost:8080`**
+```
+export JWT_SECRET=somesecret
+export POSTMARK_API_TOKEN=bla-bla-bla-9619-a6d1185548cd
+export FROM_EMAIL=yourcompanyemail@company.com
+export NODE_ENV=development
+```
+
+
+####Note: If you open `localhost:3000` in browser, you'll see a "stale" production app, so while in development, **always go to `localhost:8080`**
 
 ####Production
 In production, we need to compile the **latest** client js and place it to `public` folder. This allows the main app server(Express) to also show the final app.

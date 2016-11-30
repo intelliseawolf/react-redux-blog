@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 
 module.exports = {
   entry: [
@@ -8,13 +10,25 @@ module.exports = {
     publicPath: '/',
     filename: 'bundle.js'
   },
-  devtool: "eval",
   module: {
     loaders: [{
       exclude: /node_modules/,
       loader: 'babel'
     }]
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: true
+      }
+    })
+  ],
+
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
