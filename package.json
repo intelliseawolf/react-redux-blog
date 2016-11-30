@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "build": "node node_modules/.bin/webpack --config webpack.config.prod.js”",
+    "build": "node node_modules/.bin/webpack --config webpack.config.prod.js",
     "dev": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
   "engines": {
@@ -25,6 +25,7 @@
     "babel-preset-stage-1": "^6.16.0",
     "bcrypt": "^0.8.7",
     "body-parser": "~1.15.2",
+    "compression": "^1.6.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.3.3",
     "ejs": "^2.5.3",
