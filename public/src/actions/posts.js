@@ -87,16 +87,18 @@ export function resetPostFields() {
   return {
     type: RESET_POST_FIELDS
   }
-};
+}
+;
 
 
 export function createPost(props, tokenFromStorage) {
-  //const request = axios.post(`${ROOT_URL}/posts`, props);
   const request = axios({
     method: 'post',
     data: props,
     url: `${ROOT_URL}/posts`,
-   headers: {'Authorization': `Bearer ${tokenFromStorage}`}
+    headers: {
+      'Authorization': `Bearer ${tokenFromStorage}`
+    }
   });
 
   return {
@@ -123,13 +125,15 @@ export function resetNewPost() {
   return {
     type: RESET_NEW_POST
   }
-};
+}
+;
 
 export function resetDeletedPost() {
   return {
     type: RESET_DELETED_POST
   }
-};
+}
+;
 
 export function fetchPost(id) {
   const request = axios.get(`${ROOT_URL}/posts/${id}`);
@@ -159,13 +163,16 @@ export function resetActivePost() {
   return {
     type: RESET_ACTIVE_POST
   }
-};
+}
+
 
 export function deletePost(id, tokenFromStorage) {
   const request = axios({
     method: 'delete',
     url: `${ROOT_URL}/posts/${id}`,
-   headers: {'Authorization': `Bearer ${tokenFromStorage}`}
+    headers: {
+      'Authorization': `Bearer ${tokenFromStorage}`
+    }
   });
   return {
     type: DELETE_POST,

@@ -1,5 +1,46 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { forgotPwd, forgotPwdSuccess, forgotPwdFailure, resetUserFields } from '../actions/users';
+import { reduxForm, Field, SubmissionError } from 'redux-form';
+import { connect } from 'react-redux';
+import renderField from './renderField';
+
+
+//Client side validation
+function validate(values) {
+  var errors = {};
+  var hasErrors = false;
+  if (!values.email || values.email.trim() === '') {
+    errors.email = 'Enter email';
+    hasErrors = true;
+  }
+  return hasErrors && errors;
+}
+
+
+//For any field errors upon submission (i.e. not instant check)
+const validateAndForgotPwd = (values, dispatch) => {
+  return dispatch(forgotPwd(values))
+    .then((result) => {
+      //Note: Error's "data" is in result.payload.response.data
+      // success's "data" is in result.payload.data
+      if (!result.payload.response) { //1st onblur
+        return;
+      }
+
+      let {data, status} = result.payload.response;
+      //if status is not 200 or any one of the fields exist, then there is a field error
+      if (response.payload.status != 200) {
+        //let other components know of error by updating the redux` state
+        dispatch(forgotPwdFailure(data));
+        throw data; //throw error
+      } else {
+        //let other components know that everything is fine by updating the redux` state
+        dispatch(forgotPwdSuccess(data)); //ps: this is same as dispatching RESET_USER_FIELDS
+      }
+    });
+
+};
 
 class ForgotPwdForm extends Component {
   static contextTypes = {
@@ -9,44 +50,39 @@ class ForgotPwdForm extends Component {
   componentWillMount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
-     this.props.resetMe();
+    this.props.resetMe();
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if(nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-  //     this.context.router.push('/');
-  //   }
-
-  //   //error
-  //   //Throw error if it was not already thrown (check this.props.user.error to see if alert was already shown)
-  //   //If u dont check this.props.user.error, u may throw error multiple times due to redux-form's validation errors
-  //   if(nextProps.user.status === 'signin' && !nextProps.user.user && nextProps.user.error && !this.props.user.error) {
-  //     alert(nextProps.user.error.message);
-  //   }
-  // }
 
   render() {
-    const {forgotPwd, asyncValidating, fields: {email}, handleSubmit, submitting, user } = this.props;
+    const { handleSubmit, submitting } = this.props;
 
     return (
       <div className="container">
-      <form onSubmit={handleSubmit(forgotPwd.bind(this))}>
-
-        <div className={`form-group ${email.touched && email.invalid ? 'has-error' : ''}`}>
-          <label className="control-label">Email*</label>
-          <input type="email" className="form-control" {...email} />
-          <div className="help-block">
-            {email.touched ? email.error : ''}
-          </div>
-        </div>
-        <button type="submit" className="btn btn-primary"  disabled={submitting} >Submit</button>
-        <Link to="/" className="btn btn-error">Cancel</Link>
-      </form>
-
+        <form onSubmit={ handleSubmit(validateAndForgotPwd) }>
+          <Field
+                 name="email"
+                 type="email"
+                 component={ renderField }
+                 label="Email*" />
+          <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={ submitting }>
+            Submit
+          </button>
+          <Link
+                to="/"
+                className="btn btn-error"> Cancel
+          </Link>
+        </form>
       </div>
 
-    );
+      );
   }
 }
 
-export default ForgotPwdForm;
+export default reduxForm({
+  form: 'ForgotPwdForm', // a unique identifier for this form
+  validate, // <--- validation function given to redux-form
+})(ForgotPwdForm)

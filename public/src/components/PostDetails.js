@@ -16,7 +16,6 @@ class PostDetails extends Component {
     this.props.fetchPost(this.props.postId);
   }
 
-
   render() {
     const { post, loading, error } = this.props.activePost;
     if (loading) {

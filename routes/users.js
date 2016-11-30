@@ -41,7 +41,8 @@ function isUserUnique(reqBody, cb) {
       'email': new RegExp(["^", email, "$"].join(""), "i")
     }]
   }, function(err, user) {
-    if (err) throw err;
+    if (err)
+      throw err;
 
     if (!user) {
       cb();
@@ -104,7 +105,8 @@ router.post('/users/signin', function(req, res) {
       createdAt: 0
     }) //make sure to not return password (although it is hashed using bcrypt)
     .exec(function(err, user) {
-      if (err) throw err;
+      if (err)
+        throw err;
 
       if (!user) {
         return res.status(404).json({
@@ -149,7 +151,7 @@ router.post('/users/signup', function(req, res, next) {
 
   isUserUnique(body, function(err) {
     if (err) {
-      res.status(403).json(err);
+      return res.status(403).json(err);
     }
 
     var hash = bcrypt.hashSync(body.password.trim(), 10);
@@ -162,8 +164,10 @@ router.post('/users/signup', function(req, res, next) {
       isEmailVerified: false
     });
 
+
     user.save(function(err, user) {
-      if (err) throw err;
+      if (err)
+        throw err;
 
       email.sendWelcomeEmail(user, req.headers.host); //send welcome email w/ verification token
 
@@ -188,7 +192,7 @@ router.post('/users/validate/fields', function(req, res, next) {
 
   isUserUnique(body, function(err) {
     if (err) {
-      res.status(403).json(err);
+      return res.status(403).json(err);
     } else {
       return res.json({});
     }
@@ -208,13 +212,15 @@ router.get('/me/from/token', function(req, res, next) {
 
   // decode token
   jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
-    if (err) throw err;
+    if (err)
+      throw err;
 
     //return user using the id from w/in JWTToken
     User.findById({
       '_id': user._id
     }, function(err, user) {
-      if (err) throw err;
+      if (err)
+        throw err;
 
       user = utils.getCleanUser(user); //dont pass password and stuff
 
@@ -237,7 +243,8 @@ router.get('/resendValidationEmail', expressJwt({
   User.findById({
     '_id': req.user._id
   }, function(err, user) {
-    if (err) throw err;
+    if (err)
+      throw err;
 
     //send welcome email w/ verification token
     email.sendWelcomeEmail(user, req.headers.host, function(err) {
@@ -254,30 +261,39 @@ router.get('/resendValidationEmail', expressJwt({
 
 
 router.post(
-  '/updateEmail',
-  expressJwt({
-    secret: process.env.JWT_SECRET
-  }),
-  function(req, res, next) {
+  '/updateEmail', function(req, res, next) {
+    if (!req.user) {
+      return res.status(401).json({
+        message: 'Permission Denied!'
+      });
+    }
 
     var newEmail = req.body.email && req.body.email.trim();
 
-    User.findOneAndUpdate({
-      '_id': req.user._id
-    }, {
-      email: newEmail
-    }, {
-      new: true
-    }, function(err, user) {
-      if (err) throw err;
+    isUserUnique(req.body, function(err) {
+      if (err) {
+        return res.status(403).json(err);
+      }
+      User.findOneAndUpdate({
+        '_id': req.user._id
+      }, {
+        email: newEmail
+      }, {
+        new: true
+      }, function(err, user) {
+        if (err)
+          throw err;
 
-      console.dir(user.toJSON());
-      //send welcome email w/ verification token
-      email.sendWelcomeEmail(user, req.headers.host);
+        //send welcome email w/ verification token
+        email.sendWelcomeEmail(user, req.headers.host);
 
-      res.json({message: 'Email was updated'});
+        res.json({
+          message: 'Email was updated'
+        });
 
+      });
     });
+
   });
 
 

@@ -45,7 +45,20 @@ router.get('/posts', function(req, res, next) {
 
 });
 
-router.post('/posts', expressJwt({secret: process.env.JWT_SECRET}), function(req, res, next) {
+router.post('/posts', function(req, res, next) {
+  var user = req.user;
+  if (!user) {
+    return res.status(401).json({
+      message: 'Permission Denied!'
+    });
+  } else if (!user.isEmailVerified) {
+    return res.status(401).json({
+      message: 'Permission Denied! Please verify your email.'
+    });
+  }
+
+  console.dir(req.user);
+
   var body = req.body;
   var title = body.title;
   var categories = body.categories;
@@ -55,10 +68,12 @@ router.post('/posts', expressJwt({secret: process.env.JWT_SECRET}), function(req
   //This is demo field-validation error upon submission. 
   if (title === 'test' && categories === 'test' && content === 'test') {
     return res.status(403).json({
-      title: 'Title Error',
-      categories: 'Categories Error',
-      content: 'Content Error',
-      submitmessage: 'Ultimate Error!'
+      message: {
+        title: 'Title Error - Cant use "test" in all fields!',
+        categories: 'Categories Error',
+        content: 'Content Error',
+        submitmessage: 'Final Error near the submit button!'
+      }
     });
   }
 
@@ -72,10 +87,10 @@ router.post('/posts', expressJwt({secret: process.env.JWT_SECRET}), function(req
     title: title,
     categories: categories.split(','),
     content: content,
-    authorName: req.user ? req.user.name : null,
-    authorUsername: req.user ? req.user.username : null,
-    authorId: req.user ? req.user._id : null,
-    authorImage: req.user ? req.user.image: null
+    authorName: req.user.name,
+    authorUsername: req.user.username,
+    authorId: req.user._id,
+    authorImage: req.user.image
   });
 
 
@@ -100,14 +115,22 @@ router.get('/posts/:id', function(req, res, next) {
         message: 'Could not retrieve post w/ that id'
       });
     }
-    if(!post) {
-    	return res.status(404).json({message: 'Post not found'})
+    if (!post) {
+      return res.status(404).json({
+        message: 'Post not found'
+      })
     }
     res.json(post);
   });
 });
 
-router.delete('/posts/:id', expressJwt({secret: process.env.JWT_SECRET}), function(req, res, next) {
+router.delete('/posts/:id', function(req, res, next) {
+  if (!req.user || !req.user.isEmailVerified) {
+    return res.status(401).json({
+      message: 'Permission Denied!'
+    });
+  }
+
   var id = req.params.id;
   if (id.length != 24) {
     return res.json({
@@ -116,10 +139,13 @@ router.delete('/posts/:id', expressJwt({secret: process.env.JWT_SECRET}), functi
   }
   var id = mongoose.Types.ObjectId(req.params.id); //convert to objectid
   Post.findByIdAndRemove(id, function(err, post) {
-    if (err) throw err;
+    if (err)
+      throw err;
 
-    if(!post) {
-    	return res.status(404).json({message: 'Could not delete post'});
+    if (!post) {
+      return res.status(404).json({
+        message: 'Could not delete post'
+      });
     }
 
     res.json({

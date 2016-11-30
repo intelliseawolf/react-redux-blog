@@ -1,5 +1,67 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { reduxForm, Field, SubmissionError } from 'redux-form';
+import renderField from './renderField';
+import renderTextArea from './renderTextArea';
+import { validatePostFields, validatePostFieldsSuccess, validatePostFieldsFailure } from '../actions/posts';
+import { createPost, createPostSuccess, createPostFailure, resetNewPost } from '../actions/posts';
+
+//Client side validation
+function validate(values) {
+  const errors = {};
+
+  if (!values.title || values.title.trim() === '') {
+    errors.title = 'Enter a Title';
+  }
+  if (!values.categories || values.categories.trim() === '') {
+    errors.categories = 'Enter categories';
+  }
+  if (!values.content || values.content.trim() === '') {
+    errors.content = 'Enter some content';
+  }
+
+  return errors;
+}
+
+//For instant async server validation
+const asyncValidate = (values, dispatch) => {
+  return dispatch(validatePostFields(values))
+    .then((result) => {
+      //Note: Error's "data" is in result.payload.response.data
+      // success's "data" is in result.payload.data
+      if (!result.payload.response) { //1st onblur
+        return;
+      }
+
+      let {data, status} = result.payload.response;
+      //if status is not 200 or any one of the fields exist, then there is a field error
+      if (response.payload.status != 200 || data.title || data.categories || data.description) {
+        //let other components know of error by updating the redux` state
+        dispatch(validatePostFieldsFailure(data));
+        throw data; //throw error
+      } else {
+        //let other components know that everything is fine by updating the redux` state
+        dispatch(validatePostFieldsSuccess(data)); //ps: this is same as dispatching RESET_USER_FIELDS
+      }
+    });
+};
+
+//For any field errors upon submission (i.e. not instant check)
+const validateAndCreatePost = (values, dispatch) => {
+  return dispatch(createPost(values, sessionStorage.getItem('jwtToken')))
+    .then(result => {
+      // Note: Error's "data" is in result.payload.response.data (inside "response")
+      // success's "data" is in result.payload.data
+      if (result.payload.response && result.payload.response.status !== 200) {
+        dispatch(createPostFailure(result.payload.response.data));
+        throw new SubmissionError(result.payload.response.data);
+      }
+      //let other components know that everything is fine by updating the redux` state
+      dispatch(createPostSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
+    });
+}
+
+
 
 class PostsForm extends Component {
   static contextTypes = {
@@ -9,111 +71,67 @@ class PostsForm extends Component {
   componentWillMount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
-     this.props.resetMe();
+    this.props.resetMe();
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.newPost.post && !nextProps.newPost.error) {
+    if (nextProps.newPost.post && !nextProps.newPost.error) {
       this.context.router.push('/');
     }
   }
 
   renderError(newPost) {
-    if(newPost && newPost.error && newPost.error.message) {
+    if (newPost && newPost.error && newPost.error.message) {
       return (
         <div className="alert alert-danger">
-          {newPost ? newPost.error.message : ''}
+          { newPost ? newPost.error.message : '' }
         </div>
-      );
+        );
     } else {
       return <span></span>
     }
   }
-
   render() {
-    const {asyncValidating, fields: { title, categories, content }, handleSubmit, submitting, newPost } = this.props;
-
+    const {handleSubmit, submitting, newPost} = this.props;
     return (
-      <div className="container">
-      {this.renderError(newPost)}
-      <form onSubmit={handleSubmit(this.props.createPost.bind(this))}>
-        <div className={`form-group ${title.touched && title.invalid ? 'has-error' : ''}`}>
-          <label className="control-label">Title*</label>
-          <input type="text" className="form-control" {...title} />
-          <div className="help-block">
-            {title.touched ? title.error : ''}
+      <div className='container'>
+        { this.renderError(newPost) }
+        <form onSubmit={ handleSubmit(validateAndCreatePost) }>
+          <Field
+                 name="title"
+                 type="text"
+                 component={ renderField }
+                 label="Title*" />
+          <Field
+                 name="categories"
+                 type="text"
+                 component={ renderField }
+                 label="Categories*" />
+          <Field
+                 name="content"
+                 component={ renderTextArea }
+                 label="Content*" />
+          <div>
+            <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={ submitting }>
+              Submit
+            </button>
+            <Link
+                  to="/"
+                  className="btn btn-error"> Cancel
+            </Link>
           </div>
-          <div className="help-block">
-            {asyncValidating === 'title'? 'validating..': ''}
-          </div>
-        </div>
-
-        <div className={`form-group ${categories.touched && categories.invalid ? 'has-error' : ''}`}>
-          <label className="control-label">Categories*</label>
-          <input type="text" className="form-control" {...categories} />
-          <div className="help-block">
-            {categories.touched ? categories.error : ''}
-          </div>
-        </div>
-
-        <div className={`form-group ${content.touched && content.invalid ? 'has-error' : ''}`}>
-          <label className="control-label">Content*</label>
-          <textarea className="form-control" {...content} />
-          <div className="help-block">
-            {content.touched ? content.error : ''}
-          </div>
-        </div>
-
-        <button type="submit" className="btn btn-primary"  disabled={submitting} >Submit</button>
-        <Link to="/" className="btn btn-error">Cancel</Link>
-      </form>
-
-
-        <br/>
-        <br/>
-        <div className="alert alert-warning">
-          NOTE: The app now has JWT Authentication turned on. <b>Please *Sign up* using some dummy data to create new posts</b>
-        </div> 
-      <br/>
-      <br/>
-      <br/>
-
-      <div className="panel panel-default">
-      <div className="panel-heading"><h3>Check out Form Validations!</h3></div>
-      <div className="panel-body">
-        <b>Learn how to implement it by going through: <a href="https://medium.com/@rajaraodv/adding-a-robust-form-validation-to-react-redux-apps-616ca240c124" target="_blank">Adding A Robust Form Validation To React Redux Apps</a></b> 
-        <ol>
-         <li><h4>Client Side Validation:</h4>
-              1. Click on <b>Title</b> field and leave it empty.
-              <br/>2. Then click on another field(to trigger blur).
-              <br/> <b>Result: "Enter a Title"</b>
-              <br/>
-         </li>
-
-         <li><h4>"Instant" Server Side Validation:</h4>
-              Calls server w/ field values when a field is blurred (even before submitting the form).
-              <br/>1. Create a post
-              <br/>2. Try to create another w/ the same <b>Title</b>
-              <br/>3. Then click on Categories field (to trigger blur). 
-
-               <br/> <b>Result: You'll get error from the server saying "Title is not unique"</b>
-        </li>
-
-         <li><h4>"onSubmit" Server Side Validation:</h4>
-              This is the common scenario where the server throws some error when user clicks on submit button.
-              <br/>1. Enter <b>test</b> in all the above fields . 
-              <br/>2. Press the Submit button. 
-              <br/> <b>Result: Errors below every field</b>
-               <br/><i>Note: The server is hardcoded to return this error for demo purposes</i>
-        </li>        
-        </ol>
-        </div>
+        </form>
       </div>
-
-      </div>
-
-    );
+    )
   }
 }
 
-export default PostsForm;
+
+export default reduxForm({
+  form: 'PostsForm', // a unique identifier for this form
+  validate, // <--- validation function given to redux-form
+  asyncValidate
+})(PostsForm)

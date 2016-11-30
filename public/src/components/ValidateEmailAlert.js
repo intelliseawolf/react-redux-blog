@@ -26,11 +26,11 @@ class ValidateEmailAlert extends Component {
 
 
   getAlertMessage() {
-    const resendEmailError = this.props.resendEmail.error;
-    const validationError = this.props.user.error;
+    const resendEmailError = this.props.resendEmail.error && this.props.resendEmail.error.message;
+    const validationError = this.props.user.error &&  this.props.user.error.message;
 
     if(resendEmailError || validationError) {
-      return resendEmailError.message || validationError.message;
+      return resendEmailError || validationError;
     } else if(this.props.user.user && !this.props.user.user.isEmailVerified) {
       if(this.props.resendEmail.sentAgain) {//if the user has pressed the 'resend' button
         return 'Resent Email. Please verify';

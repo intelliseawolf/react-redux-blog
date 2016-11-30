@@ -14,7 +14,7 @@ export default function(state = INITIAL_STATE, action) {
     case UPDATE_EMAIL_SUCCESS:
     return { ...state, emailUpdated: true, error: null, loading: false};
     case UPDATE_EMAIL_FAILURE:
-    error = action.payload.data || {message: action.payload.message};//2nd one is network or server down errors       
+    error = action.payload || {message: action.payload.message};//2nd one is network or server down errors       
     return { ...state, emailUpdated: false, error: error, loading: false};
     case RESET_UPDATE_EMAIL_STATE:
     return { ...state, emailUpdated: false, error: null, loading: false};

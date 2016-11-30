@@ -6,10 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var router = express.Router();
-var jwt    = require('jsonwebtoken'); 
+var jwt = require('jsonwebtoken');
 
 //routes
-var users   = require('./routes/users'); 
+var users = require('./routes/users');
 var posts = require('./routes/posts');
 
 var app = express();
@@ -33,29 +33,33 @@ var staticPath = 'public';
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 
 //middleware that checks if JWT token exists and verifies it if it does exist.
 //In all the future routes, this helps to know if the request is authenticated or not.
 app.use(function(req, res, next) {
-
   // check header or url parameters or post parameters for token
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  var token = req.headers['authorization'];
+  if (!token) return next();
 
-  // decode token
-  if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, function(err, user) {      
-      if (err) {
-        return res.status(401).json({ success: false, message: 'Failed to authenticate token.' });    
-      } else {
-        req.user = user;    
-        next();
-      }
-    });
-  } else {
-    next();
-  }
+  token = token.replace('Bearer ', '');
+
+
+  jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+    if (err) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please register Log in using a valid email to submit posts'
+      });
+    } else {
+      req.user = user;
+      next();
+    }
+  });
+
 });
 
 
@@ -90,14 +94,17 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   console.dir(err);
   res.status(err.status || 500);
-  if(err.status === 500) {
+  if (err.status === 500) {
     console.error(err.stack);
-    res.json({error: 'Internal Server Error'});
-  }
-  else if(err.status === 404) {
-    res.render('error');    //render error page
+    res.json({
+      error: 'Internal Server Error'
+    });
+  } else if (err.status === 404) {
+    res.render('error'); //render error page
   } else {
-    res.json({error: err.message})
+    res.json({
+      error: err.message
+    })
   }
 });
 

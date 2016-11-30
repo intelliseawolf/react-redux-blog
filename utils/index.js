@@ -8,7 +8,8 @@ function generateToken(user) {
     username: user.username,
     admin: user.admin,
     _id: user._id.toString(),
-    image: user.image
+    image: user.image,
+    isEmailVerified: user.isEmailVerified //used to prevent creating posts w/o verifying emails
   };
 
   return token = jwt.sign(u, process.env.JWT_SECRET, {
@@ -56,6 +57,8 @@ function validateSignUpForm(values, callback) {
 
 //strips internal fields like password and verifyEmailToken etc
 function getCleanUser(user) {
+  if(!user) return {};
+
   var u = user.toJSON();
   return {
     _id: u._id,

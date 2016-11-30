@@ -20,7 +20,7 @@ function sendWelcomeEmail(user, host, finalCB) {
       function(token, done) {
         user.verifyEmailToken = token;
         user.verifyEmailTokenExpires = Date.now() + 3600000 * 24; // 24 hours
-
+        user.isEmailVerified = false; 
         user.save(function(err) {
           done(err, user);
         });
