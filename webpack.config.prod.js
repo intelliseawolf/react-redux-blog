@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var CompressionPlugin = require('compression-webpack-plugin');
 
 
 module.exports = {
@@ -10,6 +11,7 @@ module.exports = {
     publicPath: '/',
     filename: 'bundle.js'
   },
+  devtool: "source-map",
   module: {
     loaders: [{
       exclude: /node_modules/,
@@ -17,18 +19,29 @@ module.exports = {
     }]
   },
   plugins: [
-    new webpack.DefinePlugin({
+    new webpack.DefinePlugin({ //<--key to reduce React's size
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-  new webpack.optimize.DedupePlugin(),
-  new webpack.optimize.UglifyJsPlugin(),
-  new webpack.optimize.AggressiveMergingPlugin()
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8
+    })
   ],
 
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    "alias": {
+      "react": "preact-compat",
+      "react-dom": "preact-compat"
+    }
   },
   devServer: {
     historyApiFallback: true,

@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
-var compression = require('compression');
+//var compression = require('compression');
 
 //routes
 var users = require('./routes/users');
@@ -18,7 +18,14 @@ var app = express();
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-app.use(compression());
+//app.use(compression());
+
+app.get('*.js', function (req, res, next) {
+  req.url = req.url + '.gz';
+  res.set('Content-Encoding', 'gzip');
+  next();
+});
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

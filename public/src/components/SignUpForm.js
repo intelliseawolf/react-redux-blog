@@ -107,6 +107,7 @@ class SignUpForm extends Component {
   }
 
   render() {
+    debugger;
     const {asyncValidating, handleSubmit, submitting, asyncValidate, validate} = this.props;
     return (
       <div className='container'>
